@@ -15,9 +15,10 @@ jobs:
       - name: Build docs
         run: npm ci && npm run docs:build
 
-      - name: Publish generated content to GitHub Pages
-        uses: tsunematsu21/actions-publish-gh-pages@v1.0.1
-        with:
-          dir: dist
-          branch: gh-pages
-          token: ${{ secrets.ACCESS_TOKEN }}
+    - name: Deploy to gh-pages
+        uses: s0/git-publish-subdir-action@v2.4.0
+        env:
+            REPO: self
+            BRANCH: gh-pages
+            FOLDER: docs
+            GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}

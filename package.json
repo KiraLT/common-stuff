@@ -1,6 +1,6 @@
 {
     "name": "common-stuff",
-    "version": "1.0.0-alpha.0",
+    "version": "1.0.0-alpha.1",
     "description": "Collection of common helpers and utils for both JavaScript and NodeJS with TypeScript support",
     "main": "lib/index.js",
     "scripts": {
@@ -13,7 +13,9 @@
         "prettify": "prettier --write \"{src,spec}/**/*.ts\"",
         "release": "release-it"
     },
-    "files": ["lib/**/*"],
+    "files": [
+        "lib/**/*"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/KiraLT/common-stuff.git"

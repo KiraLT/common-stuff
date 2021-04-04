@@ -15,7 +15,7 @@ jobs:
       - name: Build docs
         run: npm ci && npm run docs:build
 
-    - name: Deploy to gh-pages
+      - name: Deploy to gh-pages
         uses: s0/git-publish-subdir-action@v2.4.0
         env:
             REPO: self

@@ -1,4 +1,4 @@
-import { truncate, getWords } from '../src'
+import { truncate, extractWords } from '../src'
 
 describe('truncate', () => {
     it('truncates string', () => {
@@ -9,7 +9,7 @@ describe('truncate', () => {
 
 describe('getWords', () => {
     it('extract words from text', () => {
-        expect(getWords('Hell_o "WĄRLD", [with-unicode]!')).toEqual([
+        expect(extractWords('Hell_o "WĄRLD", [with-unicode]!')).toEqual([
             'Hell_o',
             'WĄRLD',
             'with',

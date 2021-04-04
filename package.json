@@ -44,7 +44,8 @@
     },
     "release-it": {
         "git": {
-            "tag": true
+            "tag": true,
+            "tagName": "v${version}"
         },
         "npm": {
             "publish": false

@@ -4,7 +4,7 @@
  * Key can return any nested data struture, supports number, booleans, arrays.
  *
  * Usage:
- * ```
+ * ```typescript
  * // Sort by object key
  * arr.sort(sortByCb(v => v.myKey))
  * // Sort by number in reversed order
@@ -12,6 +12,8 @@
  * // Sort by object key, then by boolean value in revered order
  * arr.sort(sortByCb(v => [v.myKey, !v.boolValue])
  * ```
+ *
+ * @category Array
  */
 export function sortByCb<T>(
     key: (item: T) => unknown = (v) => v
@@ -61,6 +63,8 @@ export function sortByCb<T>(
  * // Sort by object key, then by boolean value in revered order
  * arr.sort(sortByCb(v => [v.myKey, !v.boolValue])
  * ```
+ *
+ * @category Array
  */
 export function sortBy<T>(
     arr: readonly T[],
@@ -93,6 +97,8 @@ export function sortBy<T>(
  *  >>> range(8,2,-2)
  *  [8, 6, 4]
  *  ```
+ *
+ * @category Array
  */
 export function generateRange(stop: number): number[]
 export function generateRange(

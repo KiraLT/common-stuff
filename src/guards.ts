@@ -1,5 +1,7 @@
 /**
  * Checks if value is `number`, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function isNumber(value: unknown): value is number {
     return typeof value === 'number'
@@ -7,6 +9,8 @@ export function isNumber(value: unknown): value is number {
 
 /**
  * Checks if value is `boolean`, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function isBoolean(value: unknown): value is boolean {
     return typeof value === 'boolean'
@@ -14,6 +18,8 @@ export function isBoolean(value: unknown): value is boolean {
 
 /**
  * Checks if value is `number`, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function isString(value: unknown): value is string {
     return typeof value === 'string'
@@ -21,6 +27,8 @@ export function isString(value: unknown): value is string {
 
 /**
  * Checks if value is `array`, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function isArray<T = unknown>(value: unknown): value is Array<T> {
     return value instanceof Array
@@ -28,6 +36,8 @@ export function isArray<T = unknown>(value: unknown): value is Array<T> {
 
 /**
  * Checks if value is not undefined, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function notUndefined<T>(value: T | undefined): value is T {
     return value !== undefined
@@ -35,6 +45,8 @@ export function notUndefined<T>(value: T | undefined): value is T {
 
 /**
  * Checks if value is not `null`, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function notNull<T>(value: T | null): value is T {
     return value !== null
@@ -42,6 +54,8 @@ export function notNull<T>(value: T | null): value is T {
 
 /**
  * Checks if value is not `null` or `undefined`, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function notNullOrUndefined<T>(value: T | null | undefined): value is T {
     return value != null
@@ -49,10 +63,13 @@ export function notNullOrUndefined<T>(value: T | null | undefined): value is T {
 
 /**
  * Checks if value is plain object, supports typescript safeguard.
+ *
+ * @category Guard
  */
 export function isPlainObject<T = Record<keyof any, unknown>>(
     value: unknown
 ): value is T {
+
     const isObject = (v: unknown): v is object =>
         String(v) === '[object Object]'
 

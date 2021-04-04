@@ -14,7 +14,13 @@ export function hashCode(value: unknown): number {
 }
 
 /**
- * Generates GUID
+ * Generates v4 like [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) (Universally unique identifier).
+ *
+ * Example: `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`
+ *
+ * > Be aware that UUID uniqueness relies heavily on the underlying random number generator (RNG).
+ * > The solution above uses Math.random() for brevity, however Math.random() is not guaranteed to be a high-quality RNG.
+ * > For a more robust solution, consider using the [uuid](https://github.com/uuidjs/uuid) module, which uses higher quality RNG APIs.
  */
 export function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
@@ -28,7 +34,7 @@ export function generateUUID() {
 }
 
 /**
- * Encodes given value with base64 algorithm
+ * Encodes given value with [Base64](https://en.wikipedia.org/wiki/Base64) algorithm.
  */
 export function base64Decode(value: string): string {
     return decodeURIComponent(
@@ -42,7 +48,7 @@ export function base64Decode(value: string): string {
 }
 
 /**
- * Decodes base64 encoded value
+ * Decodes [Base64](https://en.wikipedia.org/wiki/Base64) encoded value.
  */
 export function base64Encode(value: string): string {
     return btoa(

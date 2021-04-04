@@ -1,3 +1,8 @@
+/**
+ * Truncates string
+ *
+ * @category String
+ */
 export function truncate(
     value: string,
     length: number,
@@ -10,7 +15,12 @@ export function truncate(
     }
 }
 
-export function getWords(value: string): string[] {
+/**
+ * Extract words from text.
+ *
+ * @category String
+ */
+export function extractWords(value: string): string[] {
     return value
         .split(/[ -./\\()"',;<>~!@#$%^&*|+=[\]{}`~?:]+/)
         .filter((v) => v !== '')

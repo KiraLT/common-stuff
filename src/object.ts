@@ -2,6 +2,8 @@ import { isPlainObject } from '.'
 
 /**
  * Compares two values, supports array, dates and objects
+ *
+ * @category Object
  */
 export function isEqual(a: unknown, b: unknown): boolean {
     if (a instanceof Date && b instanceof Date) {

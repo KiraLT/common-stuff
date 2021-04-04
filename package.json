@@ -1,6 +1,6 @@
 {
     "name": "common-stuff",
-    "version": "1.0.0-alpha.2",
+    "version": "1.0.0-alpha.3",
     "description": "Collection of common helpers and utils for both JavaScript and NodeJS with TypeScript support",
     "main": "lib/index.js",
     "scripts": {

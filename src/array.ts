@@ -66,19 +66,19 @@ export function sortByCb<T>(
  *
  * @category Array
  */
+export function sortBy<T>(arr: T[], key?: (item: T) => unknown): T[]
 export function sortBy<T>(
     arr: readonly T[],
     key?: (item: T) => unknown
 ): readonly T[]
-export function sortBy<T>(arr: T[], key?: (item: T) => unknown): T[]
-export function sortBy<T>(
-    arr: readonly T[],
+export function sortBy<T, A extends ReadonlyArray<T>>(
+    arr: A,
     key: (item: T) => unknown = (v) => v
-): T[] {
+): A {
     return arr
         .map((v, i) => [v, i] as const)
         .sort(sortByCb(([v, i]) => [key(v), i]))
-        .map((v) => v[0])
+        .map((v) => v[0]) as any
 }
 
 /**
@@ -99,8 +99,31 @@ export function sortBy<T>(
  *  ```
  *
  * @category Array
+ * @param stop an integer number specifying at which position to stop (not included)
  */
 export function generateRange(stop: number): number[]
+/**
+  * Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.
+ *
+ * _Example:_
+ * ```
+ *  >>> range(4)
+ *  [0, 1, 2, 3]
+ *  >>> range(3,6)
+ *  [3, 4, 5]
+ *  >>> range(0,10,2)
+ *  [0, 2, 4, 6, 8]
+ *  >>> range(10,0,-1)
+ *  [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+ *  >>> range(8,2,-2)
+ *  [8, 6, 4]
+ *  ```
+ *
+ * @category Array
+ * @param start an integer number specifying at which position to start
+ * @param stop an integer number specifying at which position to stop (not included)
+ * @param step an integer number specifying the incrementation
+ */
 export function generateRange(
     start: number,
     stop: number,

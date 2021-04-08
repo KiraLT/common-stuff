@@ -50,3 +50,10 @@ describe('truncate', () => {
         ).toBeFalsy()
     })
 })
+
+describe('truncate', () => {
+    it('compares strings', () => {
+        expect(isEqual('aa', 'aa')).toBeTruthy()
+        expect(isEqual('aa', 'a')).toBeFalsy()
+    })
+})

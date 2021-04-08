@@ -1,9 +1,14 @@
 import { isPlainObject } from '.'
 
 /**
- * Compares two values, supports array, dates and objects
+ * Compares two values.
+ *
+ * Supported types: all primitives, `null`, `undefined`, `array`, `object`, `Date`
  *
  * @category Object
+ * @param a any value to compare
+ * @param b any value to compare
+ * @returns `true` if values are equal
  */
 export function isEqual(a: unknown, b: unknown): boolean {
     if (a instanceof Date && b instanceof Date) {
@@ -28,4 +33,20 @@ export function isEqual(a: unknown, b: unknown): boolean {
     }
 
     return a === b
+}
+
+/**
+ * Converts object to entries and map's it with provided callback.
+ *
+ * @param obj `Record` like object
+ * @param callback map callback, accepts entry pair (`[key, value]`) and should also return entry pair
+ * @returns new mapped object
+ */
+export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(obj: Record<K, V>, callback: (entry: [key: K, value: V]) => [RK, RV]): Record<RK, RV> {
+    const entries = Object.entries(obj) as Array<[K, V]>
+
+    return entries.map(callback).reduce((prev, [key, value]) => {
+        prev[key] = value
+        return prev
+    }, {} as Record<RK, RV>)
 }

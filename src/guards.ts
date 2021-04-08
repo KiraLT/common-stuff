@@ -69,7 +69,6 @@ export function notNullOrUndefined<T>(value: T | null | undefined): value is T {
 export function isPlainObject<T = Record<keyof any, unknown>>(
     value: unknown
 ): value is T {
-
     const isObject = (v: unknown): v is object =>
         String(v) === '[object Object]'
 

@@ -3,18 +3,20 @@
     "version": "1.0.0-alpha.3",
     "description": "Collection of common helpers and utils for both JavaScript and NodeJS with TypeScript support",
     "main": "lib/index.js",
+    "module": "esnext/index.js",
     "scripts": {
         "test": "jest spec",
-        "build": "npm run build-node",
+        "build": "npm run build-node && npm run build-esnext",
         "build-node": "tsc",
-        "build-browser": "tsc",
+        "build-esnext": "tsc --module esnext --outDir esnext",
         "docs:build": "typedoc --out docs --theme minimal src/index.ts",
         "docs:dev": "typedoc --out docs --theme minimal src/index.ts --watch",
         "prettify": "prettier --write \"{src,spec}/**/*.ts\"",
         "release": "release-it"
     },
     "files": [
-        "lib/**/*"
+        "lib/**/*",
+        "esnext/**/*"
     ],
     "repository": {
         "type": "git",

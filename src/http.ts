@@ -102,6 +102,7 @@ export type HttpStatusMessage = typeof httpStatusCodes[keyof typeof httpStatusCo
  * ```
  *
  * @category Http
+ * @tutorial https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
  */
 export const httpStatusMessages: Record<HttpStatusMessage, HttpStatusCode> = Object.entries(httpStatusCodes).reduce((prev, [key, value]) => {
     prev[value] = parseInt(key) as HttpStatusCode
@@ -155,7 +156,11 @@ export class HttpError extends Error {
         const statusCode = typeof status === 'number' ? status : httpStatusMessages[status]
 
         if (statusCode == null) {
-            throw new Error('Incorrec status message')
+            throw new Error('Incorrect status message')
+        }
+
+        if (!(statusCode in httpStatusCodes)) {
+            throw new Error('Incorrect status code')
         }
 
         super(message ?? (httpStatusCodes as Record<number, string>)[statusCode] ?? '')

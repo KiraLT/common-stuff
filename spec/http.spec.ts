@@ -35,4 +35,9 @@ describe('HttpError', () => {
     it('supports status text input', () => {
         expect(new HttpError('Not Found').status).toBe(404)
     })
+
+    it('validates status input', () => {
+        expect(() => new HttpError('Not Found2' as any)).toThrow('Incorrect status message')
+        expect(() => new HttpError(951 as any)).toThrow('Incorrect status code')
+    })
 })

@@ -4,7 +4,8 @@ import {
     isBoolean,
     isNumber,
     isString,
-    notNullOrUndefined,
+    isError,
+    isNot
 } from '../src'
 
 describe('isPlainObject', () => {
@@ -56,11 +57,14 @@ describe('isString', () => {
     })
 })
 
-describe('notNullOrUndefined', () => {
-    it('checks if is array', () => {
-        expect(notNullOrUndefined('')).toBeTruthy()
-        expect(notNullOrUndefined(0)).toBeTruthy()
-        expect(notNullOrUndefined(null)).toBeFalsy()
-        expect(notNullOrUndefined(undefined)).toBeFalsy()
+describe('isError', () => {
+    it('checks if is error', () => {
+        expect(isError(new Error('abc'))).toBeTruthy()
+        expect(isError(new Object('abc'))).toBeFalsy()
+    })
+
+    it('supports negative filtering', () => {
+        const err = new Error('ab')
+        expect(['a', 'b', err].filter(isNot(isError))).toEqual(['a', 'b'])
     })
 })

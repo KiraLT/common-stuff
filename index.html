@@ -2704,6 +2704,24 @@ img {
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
+		<li class=" tsd-kind-class">
+			<a href="classes/httperror.html" class="tsd-kind-icon">Http<wbr>Error</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="modules.html#httpstatuscode" class="tsd-kind-icon">Http<wbr>Status<wbr>Code</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="modules.html#httpstatusmessage" class="tsd-kind-icon">Http<wbr>Status<wbr>Message</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="modules.html#httpcodes" class="tsd-kind-icon">http<wbr>Codes</a>
+		</li>
+		<li class=" tsd-kind-variable">
+			<a href="modules.html#httpmessages" class="tsd-kind-icon">http<wbr>Messages</a>
+		</li>
+		<li class=" tsd-kind-function tsd-has-type-parameter">
+			<a href="modules.html#asserterror" class="tsd-kind-icon">assert<wbr>Error</a>
+		</li>
 		<li class=" tsd-kind-function">
 			<a href="modules.html#base64decode" class="tsd-kind-icon">base64<wbr>Decode</a>
 		</li>
@@ -2745,6 +2763,9 @@ img {
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="modules.html#isstring" class="tsd-kind-icon">is<wbr>String</a>
+		</li>
+		<li class=" tsd-kind-function tsd-has-type-parameter">
+			<a href="modules.html#maprecord" class="tsd-kind-icon">map<wbr>Record</a>
 		</li>
 		<li class=" tsd-kind-function tsd-has-type-parameter">
 			<a href="modules.html#notnull" class="tsd-kind-icon">not<wbr>Null</a>
@@ -2807,6 +2828,26 @@ img {
 			<section class="tsd-panel tsd-index-panel">
 				<div class="tsd-index-content">
 					<section class="tsd-index-section ">
+						<h3>Http Classes</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-class"><a href="classes/httperror.html" class="tsd-kind-icon">Http<wbr>Error</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Http Type aliases</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-type-alias"><a href="modules.html#httpstatuscode" class="tsd-kind-icon">Http<wbr>Status<wbr>Code</a></li>
+							<li class="tsd-kind-type-alias"><a href="modules.html#httpstatusmessage" class="tsd-kind-icon">Http<wbr>Status<wbr>Message</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
+						<h3>Http Variables</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-variable"><a href="modules.html#httpcodes" class="tsd-kind-icon">http<wbr>Codes</a></li>
+							<li class="tsd-kind-variable"><a href="modules.html#httpmessages" class="tsd-kind-icon">http<wbr>Messages</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
 						<h3>Array Functions</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function"><a href="modules.html#generaterange" class="tsd-kind-icon">generate<wbr>Range</a></li>
@@ -2830,12 +2871,14 @@ img {
 						</ul>
 						<h3>Other Functions</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#asserterror" class="tsd-kind-icon">assert<wbr>Error</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#base64decode" class="tsd-kind-icon">base64<wbr>Decode</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#base64encode" class="tsd-kind-icon">base64<wbr>Encode</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#formatbytes" class="tsd-kind-icon">format<wbr>Bytes</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#generateuuid" class="tsd-kind-icon">generateUUID</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#getfileparts" class="tsd-kind-icon">get<wbr>File<wbr>Parts</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#hashcode" class="tsd-kind-icon">hash<wbr>Code</a></li>
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#maprecord" class="tsd-kind-icon">map<wbr>Record</a></li>
 						</ul>
 						<h3>String Functions</h3>
 						<ul class="tsd-index-list">
@@ -2843,6 +2886,289 @@ img {
 							<li class="tsd-kind-function"><a href="modules.html#truncate" class="tsd-kind-icon">truncate</a></li>
 						</ul>
 					</section>
+				</div>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Http Type aliases</h2>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="httpstatuscode" class="tsd-anchor"></a>
+				<h3>Http<wbr>Status<wbr>Code</h3>
+				<div class="tsd-signature tsd-kind-icon">Http<wbr>Status<wbr>Code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-symbol">typeof </span><a href="modules.html#httpcodes" class="tsd-signature-type" data-tsd-kind="Variable">httpCodes</a></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/http.ts#L85">src/http.ts:85</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>HTTP status code union type</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>tutorial</dt>
+						<dd><p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">https://developer.mozilla.org/en-US/docs/Web/HTTP/Status</a></p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="httpstatusmessage" class="tsd-anchor"></a>
+				<h3>Http<wbr>Status<wbr>Message</h3>
+				<div class="tsd-signature tsd-kind-icon">Http<wbr>Status<wbr>Message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="modules.html#httpcodes" class="tsd-signature-type" data-tsd-kind="Variable">httpCodes</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-symbol">typeof </span><a href="modules.html#httpcodes" class="tsd-signature-type" data-tsd-kind="Variable">httpCodes</a><span class="tsd-signature-symbol">]</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/http.ts#L93">src/http.ts:93</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>HTTP status messages union type</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>tutorial</dt>
+						<dd><p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">https://developer.mozilla.org/en-US/docs/Web/HTTP/Status</a></p>
+						</dd>
+					</dl>
+				</div>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Http Variables</h2>
+			<section class="tsd-panel tsd-member tsd-kind-variable">
+				<a name="httpcodes" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> http<wbr>Codes</h3>
+				<div class="tsd-signature tsd-kind-icon">http<wbr>Codes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>100<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Continue&quot;</span><span class="tsd-signature-symbol">; </span>101<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Switching Protocols&quot;</span><span class="tsd-signature-symbol">; </span>102<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Processing&quot;</span><span class="tsd-signature-symbol">; </span>103<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Early Hints&quot;</span><span class="tsd-signature-symbol">; </span>200<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;OK&quot;</span><span class="tsd-signature-symbol">; </span>201<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Created&quot;</span><span class="tsd-signature-symbol">; </span>202<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Accepted&quot;</span><span class="tsd-signature-symbol">; </span>203<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Non-Authoritative Information&quot;</span><span class="tsd-signature-symbol">; </span>204<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;No Content&quot;</span><span class="tsd-signature-symbol">; </span>205<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Reset Content&quot;</span><span class="tsd-signature-symbol">; </span>206<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Partial Content&quot;</span><span class="tsd-signature-symbol">; </span>207<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Multi-Status&quot;</span><span class="tsd-signature-symbol">; </span>208<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Already Reported&quot;</span><span class="tsd-signature-symbol">; </span>226<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;IM Used&quot;</span><span class="tsd-signature-symbol">; </span>300<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Multiple Choices&quot;</span><span class="tsd-signature-symbol">; </span>301<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Moved Permanently&quot;</span><span class="tsd-signature-symbol">; </span>302<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Found&quot;</span><span class="tsd-signature-symbol">; </span>303<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;See Other&quot;</span><span class="tsd-signature-symbol">; </span>304<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Modified&quot;</span><span class="tsd-signature-symbol">; </span>305<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Use Proxy&quot;</span><span class="tsd-signature-symbol">; </span>307<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Temporary Redirect&quot;</span><span class="tsd-signature-symbol">; </span>308<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Permanent Redirect&quot;</span><span class="tsd-signature-symbol">; </span>400<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Bad Request&quot;</span><span class="tsd-signature-symbol">; </span>401<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unauthorized&quot;</span><span class="tsd-signature-symbol">; </span>402<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Payment Required&quot;</span><span class="tsd-signature-symbol">; </span>403<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Forbidden&quot;</span><span class="tsd-signature-symbol">; </span>404<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Found&quot;</span><span class="tsd-signature-symbol">; </span>405<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Method Not Allowed&quot;</span><span class="tsd-signature-symbol">; </span>406<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Acceptable&quot;</span><span class="tsd-signature-symbol">; </span>407<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Proxy Authentication Required&quot;</span><span class="tsd-signature-symbol">; </span>408<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Request Timeout&quot;</span><span class="tsd-signature-symbol">; </span>409<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Conflict&quot;</span><span class="tsd-signature-symbol">; </span>410<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Gone&quot;</span><span class="tsd-signature-symbol">; </span>411<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Length Required&quot;</span><span class="tsd-signature-symbol">; </span>412<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Precondition Failed&quot;</span><span class="tsd-signature-symbol">; </span>413<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Payload Too Large&quot;</span><span class="tsd-signature-symbol">; </span>414<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;URI Too Long&quot;</span><span class="tsd-signature-symbol">; </span>415<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unsupported Media Type&quot;</span><span class="tsd-signature-symbol">; </span>416<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Range Not Satisfiable&quot;</span><span class="tsd-signature-symbol">; </span>417<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Expectation Failed&quot;</span><span class="tsd-signature-symbol">; </span>418<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;I&#x27;m a Teapot&quot;</span><span class="tsd-signature-symbol">; </span>421<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Misdirected Request&quot;</span><span class="tsd-signature-symbol">; </span>422<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unprocessable Entity&quot;</span><span class="tsd-signature-symbol">; </span>423<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Locked&quot;</span><span class="tsd-signature-symbol">; </span>424<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Failed Dependency&quot;</span><span class="tsd-signature-symbol">; </span>425<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Too Early&quot;</span><span class="tsd-signature-symbol">; </span>426<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Upgrade Required&quot;</span><span class="tsd-signature-symbol">; </span>428<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Precondition Required&quot;</span><span class="tsd-signature-symbol">; </span>429<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Too Many Requests&quot;</span><span class="tsd-signature-symbol">; </span>431<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Request Header Fields Too Large&quot;</span><span class="tsd-signature-symbol">; </span>451<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unavailable For Legal Reasons&quot;</span><span class="tsd-signature-symbol">; </span>500<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Internal Server Error&quot;</span><span class="tsd-signature-symbol">; </span>501<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Implemented&quot;</span><span class="tsd-signature-symbol">; </span>502<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Bad Gateway&quot;</span><span class="tsd-signature-symbol">; </span>503<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Service Unavailable&quot;</span><span class="tsd-signature-symbol">; </span>504<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Gateway Timeout&quot;</span><span class="tsd-signature-symbol">; </span>505<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;HTTP Version Not Supported&quot;</span><span class="tsd-signature-symbol">; </span>506<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Variant Also Negotiates&quot;</span><span class="tsd-signature-symbol">; </span>507<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Insufficient Storage&quot;</span><span class="tsd-signature-symbol">; </span>508<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Loop Detected&quot;</span><span class="tsd-signature-symbol">; </span>509<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Bandwidth Limit Exceeded&quot;</span><span class="tsd-signature-symbol">; </span>510<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Extended&quot;</span><span class="tsd-signature-symbol">; </span>511<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Network Authentication Required&quot;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/http.ts#L13">src/http.ts:13</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>HTTP codes with status text.</p>
+					</div>
+					<p><em>Example:</em></p>
+					<pre><code><span style="color: #001080">httpCodes</span><span style="color: #000000">[</span><span style="color: #098658">301</span><span style="color: #000000">]</span>
+<span style="color: #A31515">&#039;Moved Permanently&#039;</span>
+</code></pre>
+					<dl class="tsd-comment-tags">
+						<dt>tutorial</dt>
+						<dd><p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Status">https://developer.mozilla.org/en-US/docs/Web/HTTP/Status</a></p>
+						</dd>
+					</dl>
+				</div>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter">
+							<h5>100<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Continue&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>101<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Switching Protocols&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>102<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Processing&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>103<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Early Hints&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>200<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;OK&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>201<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Created&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>202<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Accepted&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>203<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Non-Authoritative Information&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>204<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;No Content&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>205<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Reset Content&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>206<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Partial Content&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>207<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Multi-Status&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>208<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Already Reported&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>226<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;IM Used&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>300<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Multiple Choices&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>301<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Moved Permanently&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>302<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Found&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>303<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;See Other&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>304<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Modified&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>305<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Use Proxy&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>307<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Temporary Redirect&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>308<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Permanent Redirect&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>400<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Bad Request&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>401<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unauthorized&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>402<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Payment Required&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>403<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Forbidden&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>404<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Found&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>405<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Method Not Allowed&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>406<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Acceptable&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>407<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Proxy Authentication Required&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>408<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Request Timeout&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>409<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Conflict&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>410<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Gone&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>411<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Length Required&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>412<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Precondition Failed&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>413<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Payload Too Large&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>414<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;URI Too Long&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>415<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unsupported Media Type&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>416<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Range Not Satisfiable&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>417<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Expectation Failed&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>418<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;I&#x27;m a Teapot&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>421<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Misdirected Request&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>422<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unprocessable Entity&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>423<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Locked&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>424<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Failed Dependency&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>425<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Too Early&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>426<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Upgrade Required&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>428<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Precondition Required&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>429<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Too Many Requests&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>431<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Request Header Fields Too Large&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>451<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Unavailable For Legal Reasons&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>500<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Internal Server Error&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>501<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Implemented&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>502<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Bad Gateway&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>503<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Service Unavailable&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>504<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Gateway Timeout&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>505<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;HTTP Version Not Supported&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>506<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Variant Also Negotiates&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>507<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Insufficient Storage&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>508<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Loop Detected&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>509<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Bandwidth Limit Exceeded&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>510<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Not Extended&quot;</span></h5>
+						</li>
+						<li class="tsd-parameter">
+							<h5>511<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">&quot;Network Authentication Required&quot;</span></h5>
+						</li>
+					</ul>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-variable">
+				<a name="httpmessages" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> http<wbr>Messages</h3>
+				<div class="tsd-signature tsd-kind-icon">http<wbr>Messages<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="modules.html#httpstatusmessage" class="tsd-signature-type" data-tsd-kind="Type alias">HttpStatusMessage</a><span class="tsd-signature-symbol">, </span><a href="modules.html#httpstatuscode" class="tsd-signature-type" data-tsd-kind="Type alias">HttpStatusCode</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> = ...</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/http.ts#L106">src/http.ts:106</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>HTTP messages mappings with corresponding status codes.</p>
+					</div>
+					<p><em>Example:</em></p>
+					<pre><code><span style="color: #001080">httpMessages</span><span style="color: #000000">[</span><span style="color: #A31515">&#039;Moved Permanently&#039;</span><span style="color: #000000">]</span>
+<span style="color: #098658">301</span>
+</code></pre>
 				</div>
 			</section>
 		</section>
@@ -2859,7 +3185,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/array.ts#L103">array.ts:103</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/array.ts#L104">src/array.ts:104</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2883,6 +3209,9 @@ img {
 						<ul class="tsd-parameters">
 							<li>
 								<h5>stop: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>an integer number specifying at which position to stop (not included)</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -2890,19 +3219,45 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/array.ts#L104">array.ts:104</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/array.ts#L127">src/array.ts:127</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.</p>
+							</div>
+							<p><em>Example:</em></p>
+							<pre><code><span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">)</span>
+<span style="color: #000000"> [</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">]</span>
+<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">)</span>
+<span style="color: #000000"> [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
+<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+<span style="color: #000000"> [</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">]</span>
+<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,-</span><span style="color: #098658">1</span><span style="color: #000000">)</span>
+<span style="color: #000000"> [</span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">]</span>
+<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">8</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+<span style="color: #000000"> [</span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]</span>
+</code></pre>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>start: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>an integer number specifying at which position to start</p>
+								</div>
 							</li>
 							<li>
 								<h5>stop: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>an integer number specifying at which position to stop (not included)</p>
+								</div>
 							</li>
 							<li>
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> step: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>an integer number specifying the incrementation</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></h4>
@@ -2913,14 +3268,14 @@ img {
 				<a name="sortby" class="tsd-anchor"></a>
 				<h3>sort<wbr>By</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">sort<wbr>By&lt;T&gt;<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, key<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
 					<li class="tsd-signature tsd-kind-icon">sort<wbr>By&lt;T&gt;<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, key<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">sort<wbr>By&lt;T&gt;<span class="tsd-signature-symbol">(</span>arr<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, key<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/array.ts#L69">array.ts:69</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/array.ts#L69">src/array.ts:69</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2938,47 +3293,6 @@ img {
 <span style="color: #001080">arr</span><span style="color: #000000">.</span><span style="color: #795E26">sort</span><span style="color: #000000">(</span><span style="color: #795E26">sortByCb</span><span style="color: #000000">(</span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">myKey</span><span style="color: #000000">, !</span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">boolValue</span><span style="color: #000000">])</span>
 </code></pre>
 						</div>
-						<h4 class="tsd-type-parameters-title">Type parameters</h4>
-						<ul class="tsd-type-parameters">
-							<li>
-								<h4>T</h4>
-							</li>
-						</ul>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>arr: <span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-							<li>
-								<h5><span class="tsd-flag ts-flagOptional">Optional</span> key: <span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">unknown</span></h5>
-								<ul class="tsd-parameters">
-									<li class="tsd-parameter-signature">
-										<ul class="tsd-signatures tsd-kind-type-literal">
-											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
-										</ul>
-										<ul class="tsd-descriptions">
-											<li class="tsd-description">
-												<h4 class="tsd-parameters-title">Parameters</h4>
-												<ul class="tsd-parameters">
-													<li>
-														<h5>item: <span class="tsd-signature-type">T</span></h5>
-													</li>
-												</ul>
-												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
-					</li>
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/array.ts#L73">array.ts:73</a></li>
-							</ul>
-						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
@@ -3014,6 +3328,47 @@ img {
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
 					</li>
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/array.ts#L70">src/array.ts:70</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>arr: <span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> key: <span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">unknown</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>item: <span class="tsd-signature-type">T</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">readonly </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
@@ -3026,7 +3381,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/array.ts#L18">array.ts:18</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/array.ts#L18">src/array.ts:18</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3112,7 +3467,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L33">guards.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L33">src/guards.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3146,7 +3501,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L15">guards.ts:15</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L15">src/guards.ts:15</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3174,7 +3529,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L6">guards.ts:6</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L6">src/guards.ts:6</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3202,7 +3557,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L69">guards.ts:69</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L69">src/guards.ts:69</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3236,7 +3591,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L24">guards.ts:24</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L24">src/guards.ts:24</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3264,7 +3619,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L51">guards.ts:51</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L51">src/guards.ts:51</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3298,7 +3653,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L60">guards.ts:60</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L60">src/guards.ts:60</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3332,7 +3687,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/guards.ts#L42">guards.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/guards.ts#L42">src/guards.ts:42</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3369,30 +3724,84 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/object.ts#L8">object.ts:8</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/object.ts#L13">src/object.ts:13</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
-								<p>Compares two values, supports array, dates and objects</p>
+								<p>Compares two values.</p>
 							</div>
+							<p>Supported types: all primitives, <code>null</code>, <code>undefined</code>, <code>array</code>, <code>object</code>, <code>Date</code></p>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
 								<h5>a: <span class="tsd-signature-type">unknown</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>any value to compare</p>
+								</div>
 							</li>
 							<li>
 								<h5>b: <span class="tsd-signature-type">unknown</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>any value to compare</p>
+								</div>
 							</li>
 						</ul>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						<p><code>true</code> if values are equal</p>
 					</li>
 				</ul>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Other Functions</h2>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="asserterror" class="tsd-anchor"></a>
+				<h3>assert<wbr>Error</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">assert<wbr>Error&lt;T, E&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/errors.ts#L8">src/errors.ts:8</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Checks if given value is <code>Error</code> if it&#39;s subclass and then throw it.</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>throws</dt>
+								<dd><p><code>value</code> if it is an instance of <code>Error</code></p>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+							<li>
+								<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span></h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>value: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">E</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>any value</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+						<p><code>value</code> if it is not an instance of <code>Error</code></p>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="base64decode" class="tsd-anchor"></a>
 				<h3>base64<wbr>Decode</h3>
@@ -3403,7 +3812,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/encoding.ts#L39">encoding.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/encoding.ts#L39">src/encoding.ts:39</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3431,7 +3840,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/encoding.ts#L53">encoding.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/encoding.ts#L53">src/encoding.ts:53</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3459,7 +3868,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/files.ts#L4">files.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/files.ts#L4">src/files.ts:4</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3490,7 +3899,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/encoding.ts#L25">encoding.ts:25</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/encoding.ts#L25">src/encoding.ts:25</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3518,7 +3927,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/files.ts#L22">files.ts:22</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/files.ts#L22">src/files.ts:22</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3549,7 +3958,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/encoding.ts#L4">encoding.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/encoding.ts#L4">src/encoding.ts:4</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3567,6 +3976,77 @@ img {
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="maprecord" class="tsd-anchor"></a>
+				<h3>map<wbr>Record</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">map<wbr>Record&lt;K, V, RK, RV&gt;<span class="tsd-signature-symbol">(</span>obj<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>entry<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">RK</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RV</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RK</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RV</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/object.ts#L45">src/object.ts:45</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Converts object to entries and map&#39;s it with provided callback.</p>
+							</div>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>K<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></h4>
+							</li>
+							<li>
+								<h4>V</h4>
+							</li>
+							<li>
+								<h4>RK<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></h4>
+							</li>
+							<li>
+								<h4>RV</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>obj: <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p><code>Record</code> like object</p>
+								</div>
+							</li>
+							<li>
+								<h5>callback: <span class="tsd-signature-symbol">(</span>entry<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">RK</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RV</span><span class="tsd-signature-symbol">]</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>map callback, accepts entry pair (<code>[key, value]</code>) and should also return entry pair</p>
+								</div>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>entry<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">RK</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RV</span><span class="tsd-signature-symbol">]</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>entry: <span class="tsd-signature-symbol">[</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">]</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">RK</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RV</span><span class="tsd-signature-symbol">]</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">RK</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">RV</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						<p>new mapped object</p>
+					</li>
+				</ul>
+			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>String Functions</h2>
@@ -3580,7 +4060,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/string.ts#L23">string.ts:23</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/string.ts#L23">src/string.ts:23</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3608,7 +4088,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/9e68e6d/src/string.ts#L6">string.ts:6</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/1a62eb4/src/string.ts#L6">src/string.ts:6</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3637,6 +4117,10 @@ img {
 			<div class="container">
 				<h2>Legend</h2>
 				<div class="tsd-legend-group">
+					<ul class="tsd-legend">
+						<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+						<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+					</ul>
 				</div>
 			</div>
 		</footer>

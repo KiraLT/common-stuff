@@ -1,6 +1,7 @@
 # Common stuff 🔨
 
 [![CodeQL](https://github.com/KiraLT/common-stuff/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/KiraLT/common-stuff/actions/workflows/codeql-analysis.yml)
+[![codecov](https://codecov.io/gh/KiraLT/common-stuff/branch/main/graph/badge.svg?token=E599EPAOPM)](https://codecov.io/gh/KiraLT/common-stuff)
 [![Dependencies](https://david-dm.org/KiraLT/common-stuff.svg)](https://david-dm.org/KiraLT/common-stuff)
 [![npm version](https://badge.fury.io/js/common-stuff.svg)](https://www.npmjs.com/package/common-stuff)
 

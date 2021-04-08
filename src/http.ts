@@ -10,7 +10,7 @@
  * @category Http
  * @tutorial https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
  */
-export const httpCodes = {
+export const httpStatusCodes = {
     100: 'Continue',
     101: 'Switching Protocols',
     102: 'Processing',
@@ -82,7 +82,7 @@ export const httpCodes = {
  * @category Http
  * @tutorial https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
  */
-export type HttpStatusCode = keyof typeof httpCodes
+export type HttpStatusCode = keyof typeof httpStatusCodes
 
 /**
  * HTTP status messages union type
@@ -90,7 +90,7 @@ export type HttpStatusCode = keyof typeof httpCodes
  * @category Http
  * @tutorial https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
  */
-export type HttpStatusMessage = typeof httpCodes[keyof typeof httpCodes]
+export type HttpStatusMessage = typeof httpStatusCodes[keyof typeof httpStatusCodes]
 
 /**
  * HTTP messages mappings with corresponding status codes.
@@ -103,7 +103,7 @@ export type HttpStatusMessage = typeof httpCodes[keyof typeof httpCodes]
  *
  * @category Http
  */
-export const httpMessages: Record<HttpStatusMessage, HttpStatusCode> = Object.entries(httpCodes).reduce((prev, [key, value]) => {
+export const httpStatusMessages: Record<HttpStatusMessage, HttpStatusCode> = Object.entries(httpStatusCodes).reduce((prev, [key, value]) => {
     prev[value] = parseInt(key) as HttpStatusCode
     return prev
 }, {} as Record<HttpStatusMessage, HttpStatusCode>)
@@ -152,13 +152,13 @@ export class HttpError extends Error {
             expose: boolean
         }
     ) {
-        const statusCode = typeof status === 'number' ? status : httpMessages[status]
+        const statusCode = typeof status === 'number' ? status : httpStatusMessages[status]
 
         if (statusCode == null) {
             throw new Error('Incorrec status message')
         }
 
-        super(message ?? (httpCodes as Record<number, string>)[statusCode] ?? '')
+        super(message ?? (httpStatusCodes as Record<number, string>)[statusCode] ?? '')
         this.status = statusCode
         this.expose = properties?.expose ?? status < 500
     }

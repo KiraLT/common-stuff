@@ -1,4 +1,4 @@
-import { isEqual } from '../src'
+import { isEqual, mapRecord, flatMapRecord, filterRecord } from '../src'
 
 describe('isEqual', () => {
     it('compares strings', () => {
@@ -48,5 +48,38 @@ describe('isEqual', () => {
                 { a: [{ b: [9, 1] }, 3, { a: false }] }
             )
         ).toBeFalsy()
+    })
+})
+
+describe('mapRecord', () => {
+    it('swaps entries', () => {
+        expect(mapRecord({ a: 'b' }, ([k, v]) => [v, k])).toEqual({ b: 'a' })
+    })
+})
+
+describe('flatMapRecord', () => {
+    it('create multiple items', () => {
+        expect(
+            flatMapRecord({ a: 'b' }, ([k, v]) => [
+                [k, v],
+                [`${k}2`, v],
+            ])
+        ).toEqual({ a: 'b', a2: 'b' })
+    })
+
+    it('filters items', () => {
+        expect(
+            flatMapRecord({ a: 'b', b: 'c' }, ([k, v]) =>
+                k === 'a' ? [[k, v]] : []
+            )
+        ).toEqual({ a: 'b' })
+    })
+})
+
+describe('filterRecord', () => {
+    it('filters entries', () => {
+        expect(
+            filterRecord({ a: 'b', b: 'c' }, ([k, v]) => k === 'b' && v === 'c')
+        ).toEqual({ b: 'c' })
     })
 })

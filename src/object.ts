@@ -47,6 +47,7 @@ export function isEqual(a: unknown, b: unknown): boolean {
  * >> {'a': 2}
  * ```
  *
+ * @category Object
  * @param obj `Record` like object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return list of entry pairs
  * @returns new mapped object
@@ -77,6 +78,7 @@ export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  * >> {'b': 'a'}
  * ```
  *
+ * @category Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return entry pair
  * @returns new mapped object
@@ -98,6 +100,7 @@ export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  * >> {'a': 2}
  * ```
  *
+ * @category Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should booleean value
  * @returns new filtered object

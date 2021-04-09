@@ -1,9 +1,13 @@
 import { HttpStatusCodes, HttpStatusReasons } from './codes'
 
-const codeToReason = Object.entries(HttpStatusCodes).reduce((prev, [key, value]) => {
-    prev[value as number] = HttpStatusReasons[key as keyof typeof HttpStatusReasons]
-    return prev
-}, {} as Record<number, string>)
+const codeToReason = Object.entries(HttpStatusCodes).reduce(
+    (prev, [key, value]) => {
+        prev[value as number] =
+            HttpStatusReasons[key as keyof typeof HttpStatusReasons]
+        return prev
+    },
+    {} as Record<number, string>
+)
 
 /**
  * HTTP error class with status code
@@ -36,6 +40,7 @@ export class HttpError extends Error {
     public status: number
 
     /**
+     * @throws `Error` if status is not supported
      * @param status HTTP [status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
      * @param message error message, if not provided message from [[httpCodes]] is used
      * @param properties additional configuration
@@ -54,7 +59,7 @@ export class HttpError extends Error {
             throw new Error('Incorrect status code')
         }
 
-        super(message ?? (codeToReason[status] ?? ''))
+        super(message ?? codeToReason[status] ?? '')
         this.status = status
         this.expose = properties?.expose ?? status < 500
     }

@@ -54,7 +54,9 @@ export function isString<T>(value: T | string): value is string {
  *
  * @category Guard
  */
-export function isArray<T>(value: T | Array<T> | ReadonlyArray<T>): value is Array<T> {
+export function isArray<T>(
+    value: T | Array<T> | ReadonlyArray<T>
+): value is Array<T> {
     return value instanceof Array
 }
 
@@ -126,7 +128,9 @@ export function isNull<T>(value: T | null): value is null {
  *
  * @category Guard
  */
-export function isNullOrUndefined<T>(value: T | null | undefined): value is null | undefined {
+export function isNullOrUndefined<T>(
+    value: T | null | undefined
+): value is null | undefined {
     return value == null
 }
 
@@ -135,7 +139,7 @@ export function isNullOrUndefined<T>(value: T | null | undefined): value is null
  *
  * Supports following types:
  * * Object - `false` if object is empty
- * * Arrays - `false` if array is empty
+ * * Array - `false` if array is empty
  * * Boolean - `false` if boolean is `false`
  * * Number - `false` if string is `''`
  * * Number - `false` if number is `0`
@@ -173,7 +177,7 @@ export function isEmpty<T>(value: T): boolean {
 /**
  * Inverse guard
  *
- * const data = [new Error('sample'), 1, 2].filter(P.isNot(P.isError)) // [1,2]
+ * const data = [new Error('Error'), 1, 2].filter(isNot(isError)) // [1,2]
  *
  * @param guard - guard function
  * @category Guard

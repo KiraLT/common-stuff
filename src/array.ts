@@ -103,7 +103,7 @@ export function sortBy<T, A extends ReadonlyArray<T>>(
  */
 export function generateRange(stop: number): number[]
 /**
-  * Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.
+ * Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.
  *
  * _Example:_
  * ```

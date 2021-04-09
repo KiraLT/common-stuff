@@ -1,6 +1,6 @@
 import { isEqual } from '../src'
 
-describe('truncate', () => {
+describe('isEqual', () => {
     it('compares strings', () => {
         expect(isEqual('aa', 'aa')).toBeTruthy()
         expect(isEqual('aa', 'a')).toBeFalsy()
@@ -48,12 +48,5 @@ describe('truncate', () => {
                 { a: [{ b: [9, 1] }, 3, { a: false }] }
             )
         ).toBeFalsy()
-    })
-})
-
-describe('truncate', () => {
-    it('compares strings', () => {
-        expect(isEqual('aa', 'aa')).toBeTruthy()
-        expect(isEqual('aa', 'a')).toBeFalsy()
     })
 })

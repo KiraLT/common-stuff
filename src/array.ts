@@ -154,3 +154,139 @@ export function generateRange(
 
     return result
 }
+
+/**
+ * Calls a defined callback function on each element of an array. Then, flattens the result into
+ * a new array.
+ * This is identical to a map followed by flat with depth 1.
+ *
+ * Use [Array.flatMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap) if possible or polyfill grobaly:
+ *
+ * ```
+ * Array.prototype.flatMap = function(callback) {
+ *     return flatMap(this, callback)
+ * }
+ * ```
+ *
+ * _Examples:_
+ * ```
+ * const arr1 = [1, 2, 3, 4]
+ *
+ * arr1.map(x => [x * 2])
+ * // [[2], [4], [6], [8]]
+ *
+ * flatMap(arr1, x => [x * 2])
+ * // [2, 4, 6, 8]
+ *
+ * // only one level is flattened
+ * flatMap(arr1, x => [[x * 2]])
+ * // [[2], [4], [6], [8]]
+ * ```
+ *
+ * @category Array
+ * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
+ * @param array any array
+ * @param callback A function that accepts up to three arguments. The flatMap method calls the callback function one time for each element in the array.
+ */
+export function flatMap<T, U>(
+    array: T[],
+    callback: (item: T, index: number, array: T[]) => U | readonly U[]
+): U[]
+export function flatMap<T, U>(
+    array: readonly T[],
+    callback: (item: T, index: number, array: readonly T[]) => U | readonly U[]
+): readonly U[]
+export function flatMap<T, U>(
+    array: readonly T[],
+    callback: (item: T, index: number, array: T[]) => U | readonly U[]
+): readonly U[] {
+    return array.reduce(
+        (acc, v, index) => acc.concat(callback(v, index, array as T[])),
+        [] as U[]
+    )
+}
+
+type FlatArray<Arr, Depth extends number> = {
+    done: Arr
+    recur: Arr extends ReadonlyArray<infer InnerArr>
+        ? FlatArray<
+              InnerArr,
+              [
+                  -1,
+                  0,
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9,
+                  10,
+                  11,
+                  12,
+                  13,
+                  14,
+                  15,
+                  16,
+                  17,
+                  18,
+                  19,
+                  20
+              ][Depth]
+          >
+        : Arr
+}[Depth extends -1 ? 'done' : 'recur']
+
+/**
+ * Returns a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+ *
+ * Use [Array.flat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat) if possible or polyfill globally:
+ *
+ * ```
+ * Array.prototype.flat = function(depth) {
+ *     return flatten(this as any, depth)
+ * }
+ * ```
+ *
+ * _Examples:_
+ * ```
+ * flatten([1, 2, [3, 4]])
+ * // [1, 2, 3, 4]
+ *
+ * flatten([1, 2, [3, 4, [5, 6]]])
+ * // [1, 2, 3, 4, [5, 6]]
+ *
+ * flatten([1, 2, [3, 4, [5, 6]]], 2)
+ * // [1, 2, 3, 4, 5, 6]
+ * ```
+ *
+ * @category Array
+ * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
+ * @param depth The maximum recursion depth
+ */
+export function flatten<A extends unknown[], D extends number = 1>(
+    array: A,
+    depth?: D
+): FlatArray<A, D>[]
+export function flatten<A extends readonly unknown[], D extends number = 1>(
+    array: A,
+    depth?: D
+): readonly FlatArray<A, D>[]
+export function flatten<A extends readonly unknown[], D extends number = 1>(
+    array: A,
+    depth?: D
+): FlatArray<A, D>[] {
+    const d = depth ?? 1
+
+    if (d > 0) {
+        return array.reduce<unknown[]>(
+            (acc, val) =>
+                acc.concat(val instanceof Array ? flatten(val, d - 1) : val),
+            []
+        ) as FlatArray<A, D>[]
+    }
+
+    return array.slice() as FlatArray<A, D>[]
+}

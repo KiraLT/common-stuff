@@ -1,4 +1,4 @@
-import { sortBy, generateRange } from '../src'
+import { sortBy, generateRange, flatMap, flatten } from '../src'
 
 describe('sortBy', () => {
     it('is stable', () => {
@@ -73,5 +73,34 @@ describe('generateRange', () => {
         expect(generateRange(8, 2, 2)).toEqual([])
         expect(generateRange(1, 5, -1)).toEqual([])
         expect(generateRange(1, 5, -2)).toEqual([])
+    })
+})
+
+describe('flatMap', () => {
+    it('flattens response', () => {
+        expect(flatMap([1, 2, 3, 4], (x) => [x * 2])).toEqual([2, 4, 6, 8])
+    })
+
+    it('only one level is flattened', () => {
+        expect(flatMap([1, 2, 3, 4], (x) => [[x * 2]])).toEqual([
+            [2],
+            [4],
+            [6],
+            [8],
+        ])
+    })
+})
+
+describe('flatten', () => {
+    it('flattens array', () => {
+        expect(flatten([1, 2, [3, 4]])).toEqual([1, 2, 3, 4])
+    })
+
+    it('flattens one level by default', () => {
+        expect(flatten([1, 2, [3, 4, [5, 6]]])).toEqual([1, 2, 3, 4, [5, 6]])
+    })
+
+    it('supports custom depth', () => {
+        expect(flatten([1, 2, [3, 4, [5, 6]]], 2)).toEqual([1, 2, 3, 4, 5, 6])
     })
 })

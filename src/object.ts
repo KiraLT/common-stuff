@@ -111,3 +111,59 @@ export function filterRecord<K extends keyof any, V>(
 ): Record<K, V> {
     return flatMapRecord(obj, (v) => (callback(v) ? [v] : []))
 }
+
+/**
+ * Merges `source` to `target` recursively
+ *
+ * @category Object
+ */
+export function merge<T>(
+    target: unknown,
+    source: unknown,
+    options?: {
+        /**
+         * When `source` has `null` or `undefined` value, do not overwrite `target`
+         */
+        skipNulls: false
+        /**
+         * Array merge policy, defaul is `overwrite`
+         *
+         * Available policies:
+         * * `overwrite` - always replace `target` array with `source`
+         * * `merge` - merge `target` and `source` array values
+         * * `(target, source) => source` - custom array merge function
+         */
+        arrayPolicy:
+            | 'overwrite'
+            | 'merge'
+            | ((target: unknown, source: unknown) => unknown)
+    }
+): T {
+    const { skipNulls = false, arrayPolicy = 'overwrite' } = options ?? {}
+
+    if (isPlainObject(target) && isPlainObject(source)) {
+        return (Object.entries(source).reduce(
+            (prev, [key, value]) => {
+                prev[key] = merge(prev[key], value)
+                return prev
+            },
+            { ...target }
+        ) as any) as T
+    }
+
+    if (target instanceof Array && source instanceof Array) {
+        if (arrayPolicy === 'merge') {
+            return (target.concat(source) as any) as T
+        } else if (typeof arrayPolicy === 'function') {
+            return (arrayPolicy(target, source) as any) as T
+        } else {
+            return (source as any) as T
+        }
+    }
+
+    if (skipNulls && source == null) {
+        return target as T
+    }
+
+    return source as T
+}

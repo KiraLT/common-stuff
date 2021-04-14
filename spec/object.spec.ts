@@ -1,4 +1,4 @@
-import { isEqual, mapRecord, flatMapRecord, filterRecord } from '../src'
+import { isEqual, mapRecord, flatMapRecord, filterRecord, merge } from '../src'
 
 describe('isEqual', () => {
     it('compares strings', () => {
@@ -81,5 +81,21 @@ describe('filterRecord', () => {
         expect(
             filterRecord({ a: 'b', b: 'c' }, ([k, v]) => k === 'b' && v === 'c')
         ).toEqual({ b: 'c' })
+    })
+})
+
+describe('merge', () => {
+    it('merges objects', () => {
+        expect(merge({ a: 1 }, { b: 2 })).toEqual({ a: 1, b: 2 })
+    })
+
+    it('merges recursive objects', () => {
+        expect(
+            merge({ a: 1, c: { a: 1 } }, { a: { b: 2 }, b: 2, c: { b: 1 } })
+        ).toEqual({ a: { b: 2 }, b: 2, c: { a: 1, b: 1 } })
+    })
+
+    it('overwrites arrays', () => {
+        expect(merge({ a: [1, 2], b: 3 }, { a: [1] })).toEqual({ a: [1], b: 3 })
     })
 })

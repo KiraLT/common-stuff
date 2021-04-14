@@ -2,6 +2,22 @@
     "name": "common-stuff",
     "version": "1.0.0-alpha.4",
     "description": "Collection of common helpers and utils for both JavaScript and NodeJS with TypeScript support",
+    "keywords": [
+        "common stuff",
+        "utility",
+        "javascript",
+        "typescript",
+        "functional",
+        "library",
+        "list",
+        "object",
+        "string",
+        "array",
+        "es6",
+        "helper",
+        "merge",
+        "sort"
+    ],
     "main": "lib/index.js",
     "module": "esnext/index.js",
     "scripts": {

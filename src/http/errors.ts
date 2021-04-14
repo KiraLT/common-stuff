@@ -26,7 +26,6 @@ const codeToReason = Object.entries(HttpStatusCodes).reduce(
  * throw new HttpError(HttpStatusCodes.INTERNAL_SERVER_ERROR, 'Missing configuration', {expose: true})
  * ```
  *
- * @category Errors
  * @category Http
  */
 export class HttpError extends Error {

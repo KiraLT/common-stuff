@@ -14,6 +14,8 @@
  * ```
  *
  * @category Array
+ * @param key a function to execute to decide the order
+ * @returns `array.sort` compatible callback
  */
 export function sortByCb<T>(
     key: (item: T) => unknown = (v) => v
@@ -57,14 +59,17 @@ export function sortByCb<T>(
  * Usage:
  * ```
  * // Sort by object key
- * arr.sort(sortByCb(v => v.myKey))
+ * sortBy(arr, v => v.myKey))
  * // Sort by number in reversed order
- * arr.sort(sortByCb(v => v.numberKey * -1))
+ * sortBy(arr, v => v.numberKey * -1))
  * // Sort by object key, then by boolean value in revered order
- * arr.sort(sortByCb(v => [v.myKey, !v.boolValue])
+ * sortBy(arr, v => [v.myKey, !v.boolValue])
  * ```
  *
  * @category Array
+ * @param arr any array
+ * @param key a function to execute to decide the order
+ * @returns sorted array copy
  */
 export function sortBy<T>(arr: T[], key?: (item: T) => unknown): T[]
 export function sortBy<T>(
@@ -100,6 +105,7 @@ export function sortBy<T, A extends ReadonlyArray<T>>(
  *
  * @category Array
  * @param stop an integer number specifying at which position to stop (not included)
+ * @returns generated array by range
  */
 export function generateRange(stop: number): number[]
 /**
@@ -123,6 +129,7 @@ export function generateRange(stop: number): number[]
  * @param start an integer number specifying at which position to start
  * @param stop an integer number specifying at which position to stop (not included)
  * @param step an integer number specifying the incrementation
+ * @returns generated array by range
  */
 export function generateRange(
     start: number,
@@ -168,7 +175,7 @@ export function generateRange(
  * }
  * ```
  *
- * _Examples:_
+ * _Example:_
  * ```
  * const arr1 = [1, 2, 3, 4]
  *
@@ -250,7 +257,7 @@ type FlatArray<Arr, Depth extends number> = {
  * }
  * ```
  *
- * _Examples:_
+ * _Example:_
  * ```
  * flatten([1, 2, [3, 4]])
  * // [1, 2, 3, 4]

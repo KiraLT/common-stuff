@@ -5,21 +5,21 @@
 [![Dependencies](https://david-dm.org/KiraLT/common-stuff.svg)](https://david-dm.org/KiraLT/common-stuff)
 [![npm version](https://badge.fury.io/js/common-stuff.svg)](https://www.npmjs.com/package/common-stuff)
 
-> Collection of common helpers and utils for both JavaScript and NodeJS with **TypeScript** support and **zero dependencies**.
+JavaScript and NodeJS are missing a lot of core functionalities. The goal of this library to bring a variety of useful helpers on both NodeJS & Browser with strong **TypeScript** typing and **zero dependencies**.
 
-<p align="center">
-    <a href="https://kiralt.github.io/common-stuff/" target="_blank">Documentation 📘</a>
-</p>
+Missing something? Create [feature request](https://github.com/KiraLT/common-stuff/issues/new)!
+
+Read [Documentation 📘](https://kiralt.github.io/common-stuff/)
 
 ## Installation
 
-To use with node:
+Install with NPM/Yarn:
 
 ```bash
 $ npm install common-stuff
 ```
 
-## Usage
+Import what you need:
 
 ```typescript
 import { isEqual } from 'common-stuff'
@@ -30,3 +30,24 @@ if (isEqual({'a': 1}, {'a': 1})) {
 ```
 
 > In a browser always import only what is necessary to take full advantage of [tree shaking](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking).
+
+## Examples
+
+### Using Http helpers
+
+```typescript
+import { HttpError, HttpStatusCodes } from 'common-stuff'
+
+app.get('/', function (req, res) {
+    throw new HttpError(HttpStatusCodes.NOT_FOUND)
+})
+
+app.use(function (err, req, res, next) {
+    if (err instanceof HttpError) {
+        console.error(err.message)
+
+        return res.status(err.status).send(err.message)
+    }
+    next()
+})
+```

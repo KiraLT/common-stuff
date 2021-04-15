@@ -16,7 +16,8 @@
         "es6",
         "helper",
         "merge",
-        "sort"
+        "sort",
+        "lodash"
     ],
     "main": "lib/index.js",
     "module": "esnext/index.js",

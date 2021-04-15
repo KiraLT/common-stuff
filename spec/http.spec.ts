@@ -1,4 +1,4 @@
-import { HttpError, HttpStatusCodes, HttpStatusReasons } from '../src'
+import { HttpError, HttpStatusCodes, HttpStatusReasons, generateCookie, parseCookies } from '../src'
 
 describe('httpStatusCodes', () => {
     it('just works', () => {
@@ -42,5 +42,25 @@ describe('HttpError', () => {
 
     it('validates status input', () => {
         expect(() => new HttpError(951 as any)).toThrow('Incorrect status code')
+    })
+})
+
+describe('generateCookie', () => {
+    it('generates cookie', () => {
+        expect(generateCookie('a', 'b')).toBe('a=b')
+    })
+
+    it('escapes value', () => {
+        expect(generateCookie('=', '=')).toBe(`${encodeURIComponent('=')}=${encodeURIComponent('=')}`)
+    })
+
+    it('supports expiration', () => {
+        expect(generateCookie('a', 'b', {expires: 1})).toMatch(/^a=b;expires=.*GMT$/)
+    })
+})
+
+describe('parseCookies', () => {
+    it('just works', () => {
+        expect(HttpStatusReasons.NOT_FOUND).toBe('Not Found')
     })
 })

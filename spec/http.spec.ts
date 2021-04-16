@@ -1,4 +1,4 @@
-import { HttpError, HttpStatusCodes, HttpStatusReasons, generateCookie, parseCookies } from '../src'
+import { HttpError, HttpStatusCodes, HttpStatusReasons, generateCookie, parseCookies, decodeHtml, encodeHtml } from '../src'
 
 describe('httpStatusCodes', () => {
     it('just works', () => {
@@ -51,7 +51,7 @@ describe('generateCookie', () => {
     })
 
     it('escapes value', () => {
-        expect(generateCookie('=', '=')).toBe(`${encodeURIComponent('=')}=${encodeURIComponent('=')}`)
+        expect(generateCookie('=', '=')).toBe('%3D=%3D')
     })
 
     it('supports expiration', () => {
@@ -60,7 +60,19 @@ describe('generateCookie', () => {
 })
 
 describe('parseCookies', () => {
-    it('just works', () => {
-        expect(HttpStatusReasons.NOT_FOUND).toBe('Not Found')
+    it('parses cookie string', () => {
+        expect(parseCookies('%3D=%3D')).toEqual({'=': '='})
+    })
+})
+
+describe('encodeHtml', () => {
+    it('encodes HTML', () => {
+        expect(encodeHtml('< > " \' &')).toBe('&lt; &gt; &quot; &apos; &amp;')
+    })
+})
+
+describe('decodeHtml', () => {
+    it('decodes HTML', () => {
+        expect(decodeHtml('&lt; &gt; &quot; &apos; &amp;')).toBe('< > " \' &')
     })
 })

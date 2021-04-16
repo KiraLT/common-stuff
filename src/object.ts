@@ -167,3 +167,25 @@ export function merge<T>(
 
     return source as T
 }
+
+/**
+ * Return a clone of given value
+ *
+ * @category Object
+ * @param value any value
+ * @param recursive should recursive values (object and array) be cloned
+ */
+export function clone<T>(value: T, recursive = true): T {
+    if (isPlainObject(value)) {
+        return Object.entries(value).reduce((prev, [k, v]) => {
+            prev[k] = recursive ? clone(v) : v
+            return prev
+        }, {} as Record<keyof any, unknown>) as any as T
+    }
+
+    if (value instanceof Array) {
+        return value.map(v => recursive ? clone(v) : v) as any as T
+    }
+
+    return value
+}

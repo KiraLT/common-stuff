@@ -58,7 +58,7 @@ export function isEqual(a: unknown, b: unknown): boolean {
  */
 export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
     obj: Record<K, V>,
-    callback: (entry: [key: K, value: V]) => Array<[RK, RV]>
+    callback: (entry: [K, V]) => Array<[RK, RV]>
 ): Record<RK, RV> {
     const entries = Object.entries(obj) as Array<[K, V]>
 
@@ -89,7 +89,7 @@ export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  */
 export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
     obj: Record<K, V>,
-    callback: (entry: [key: K, value: V]) => [RK, RV]
+    callback: (entry: [K, V]) => [RK, RV]
 ): Record<RK, RV> {
     return flatMapRecord(obj, (v) => [callback(v)])
 }
@@ -111,7 +111,7 @@ export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  */
 export function filterRecord<K extends keyof any, V>(
     obj: Record<K, V>,
-    callback: (entry: [key: K, value: V]) => boolean
+    callback: (entry: [K, V]) => boolean
 ): Record<K, V> {
     return flatMapRecord(obj, (v) => (callback(v) ? [v] : []))
 }

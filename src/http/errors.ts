@@ -75,5 +75,8 @@ export class HttpError extends Error {
         this.status = status
         this.expose = properties?.expose ?? status < 500
         this.publicMessage = this.expose ? privateMessage : defaultMessage
+
+        // Fix instanceof bug: https://github.com/microsoft/TypeScript/issues/22585
+        Object.setPrototypeOf(this, HttpError.prototype)
     }
 }

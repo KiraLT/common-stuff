@@ -21,6 +21,11 @@ describe('httpStatusMessages', () => {
 })
 
 describe('HttpError', () => {
+    // Typescript bug: https://github.com/microsoft/TypeScript/issues/22585
+    it('supports instanceof', () => {
+        expect(new HttpError(404) instanceof HttpError).toBeTruthy()
+    })
+
     it('has status', () => {
         expect(new HttpError(404).status).toBe(404)
     })

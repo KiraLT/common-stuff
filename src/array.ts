@@ -297,3 +297,25 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
 
     return array.slice() as FlatArray<A, D>[]
 }
+
+/**
+ * Splits an array into groups the length of size. If array can't be split evenly, the final chunk will be the remaining elements.
+ *
+ * _Example:_
+ * ```
+ * chunk([1, 2, 3, 4, 5], 2)
+ * // [[1, 2], [3, 4], [5]]
+ * ```
+ *
+ * @param size Chunk maximum size
+ */
+export function chunk<T>(array: T[], size: number): T[][]
+export function chunk<T>(array: ReadonlyArray<T>, size: number): ReadonlyArray<ReadonlyArray<T>>
+export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
+    return array.reduce((acc, _, i) => {
+        if (i % size === 0) {
+            acc.push(array.slice(i, i + size))
+        }
+        return acc
+    }, [] as T[][])
+}

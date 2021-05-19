@@ -27,8 +27,10 @@ export function generateCookie(
 
     return [
         `${encodeURIComponent(name)}=${encodeURIComponent(value)}`,
-        expires ? `expires=${new Date(expires * 864e5).toUTCString()}` : ''
-    ].filter(v => !!v).join(';')
+        expires ? `expires=${new Date(expires * 864e5).toUTCString()}` : '',
+    ]
+        .filter((v) => !!v)
+        .join(';')
 }
 
 /**

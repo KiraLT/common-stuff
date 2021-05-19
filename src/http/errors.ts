@@ -24,6 +24,12 @@ const codeToReason = Object.entries(HttpStatusCodes).reduce(
  *
  * // Throw 500 error and expose custom message to user
  * throw new HttpError(HttpStatusCodes.INTERNAL_SERVER_ERROR, 'Missing configuration', {expose: true})
+ *
+ * // Handle HttpError
+ * if (err instanceof HttpError) {
+ *     console.log(err.message)
+ *     return err.publicMessage
+ * }
  * ```
  *
  * @category Http
@@ -39,9 +45,14 @@ export class HttpError extends Error {
     public status: number
 
     /**
+     * `this.message` if `this.status` is `true` else message from [[HttpStatusReasons]] is used
+     */
+    public publicMessage: string
+
+    /**
      * @throws `Error` if status is not supported
      * @param status HTTP [status code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
-     * @param message error message, if not provided message from [[httpCodes]] is used
+     * @param message error message, if not provided message from [[HttpStatusReasons]] is used
      * @param properties additional configuration
      */
     constructor(
@@ -57,9 +68,12 @@ export class HttpError extends Error {
         if (!(status in codeToReason)) {
             throw new Error('Incorrect status code')
         }
+        const defaultMessage = codeToReason[status] ?? ''
+        const privateMessage = message ?? defaultMessage
 
-        super(message ?? codeToReason[status] ?? '')
+        super(privateMessage)
         this.status = status
         this.expose = properties?.expose ?? status < 500
+        this.publicMessage = this.expose ? privateMessage : defaultMessage
     }
 }

@@ -11,8 +11,12 @@ import { isPlainObject } from '.'
  * @returns `true` if values are equal
  */
 export function isEqual(a: unknown, b: unknown): boolean {
+    if (a === b) {
+        return true
+    }
+
     if (a instanceof Date && b instanceof Date) {
-        return isEqual(a.getTime(), b.getTime())
+        return a.getTime() === b.getTime()
     }
 
     if (a instanceof Array && b instanceof Array) {
@@ -32,7 +36,7 @@ export function isEqual(a: unknown, b: unknown): boolean {
         return entriesA.every(([k, v]) => isEqual(v, b[k]))
     }
 
-    return a === b
+    return false
 }
 
 /**
@@ -177,14 +181,14 @@ export function merge<T>(
  */
 export function clone<T>(value: T, recursive = true): T {
     if (isPlainObject(value)) {
-        return Object.entries(value).reduce((prev, [k, v]) => {
+        return (Object.entries(value).reduce((prev, [k, v]) => {
             prev[k] = recursive ? clone(v) : v
             return prev
-        }, {} as Record<keyof any, unknown>) as any as T
+        }, {} as Record<keyof any, unknown>) as any) as T
     }
 
     if (value instanceof Array) {
-        return value.map(v => recursive ? clone(v) : v) as any as T
+        return (value.map((v) => (recursive ? clone(v) : v)) as any) as T
     }
 
     return value

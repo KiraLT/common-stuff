@@ -1,4 +1,4 @@
-import { truncate, extractWords } from '../src'
+import { truncate, extractWords, camelCase, pascalCase } from '../src'
 
 describe('truncate', () => {
     it('truncates string', () => {
@@ -7,7 +7,7 @@ describe('truncate', () => {
     })
 })
 
-describe('getWords', () => {
+describe('extractWords', () => {
     it('extract words from text', () => {
         expect(extractWords('Hell_o "WĄRLD", [with-unicode]!')).toEqual([
             'Hell_o',
@@ -15,5 +15,17 @@ describe('getWords', () => {
             'with',
             'unicode',
         ])
+    })
+})
+
+describe('camelCase', () => {
+    it('truncates string', () => {
+        expect(camelCase('--foo bar')).toEqual('fooBar')
+    })
+})
+
+describe('pascalCase', () => {
+    it('truncates string', () => {
+        expect(pascalCase('--foo bar')).toEqual('FooBar')
     })
 })

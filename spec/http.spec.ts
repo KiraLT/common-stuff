@@ -1,4 +1,12 @@
-import { HttpError, HttpStatusCodes, HttpStatusReasons, generateCookie, parseCookies, decodeHtml, encodeHtml } from '../src'
+import {
+    HttpError,
+    HttpStatusCodes,
+    HttpStatusReasons,
+    generateCookie,
+    parseCookies,
+    decodeHtml,
+    encodeHtml,
+} from '../src'
 
 describe('httpStatusCodes', () => {
     it('just works', () => {
@@ -22,7 +30,7 @@ describe('HttpError', () => {
         expect(new HttpError(404, '404').message).toBe('404')
     })
 
-    it('has expose', () => {
+    it('auto expose', () => {
         expect(new HttpError(404).expose).toBeTruthy()
         expect(new HttpError(500).expose).toBeFalsy()
     })
@@ -34,6 +42,13 @@ describe('HttpError', () => {
         expect(
             new HttpError(500, undefined, { expose: true }).expose
         ).toBeTruthy()
+    })
+
+    it('has public message', () => {
+        expect(new HttpError(404).publicMessage).toBe('Not Found')
+        expect(new HttpError(404, '404').publicMessage).toBe('404')
+        expect(new HttpError(404, '404', { expose: false }).publicMessage).toBe('Not Found')
+        expect(new HttpError(500, '500').publicMessage).toBe('Internal Server Error')
     })
 
     it('supports status text input', () => {
@@ -55,13 +70,15 @@ describe('generateCookie', () => {
     })
 
     it('supports expiration', () => {
-        expect(generateCookie('a', 'b', {expires: 1})).toMatch(/^a=b;expires=.*GMT$/)
+        expect(generateCookie('a', 'b', { expires: 1 })).toMatch(
+            /^a=b;expires=.*GMT$/
+        )
     })
 })
 
 describe('parseCookies', () => {
     it('parses cookie string', () => {
-        expect(parseCookies('%3D=%3D')).toEqual({'=': '='})
+        expect(parseCookies('%3D=%3D')).toEqual({ '=': '=' })
     })
 })
 

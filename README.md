@@ -5,7 +5,7 @@
 ![npm](https://img.shields.io/npm/dt/common-stuff)
 [![npm version](https://badge.fury.io/js/common-stuff.svg)](https://www.npmjs.com/package/common-stuff)
 
-JavaScript and NodeJS are missing a lot of core functionalities. The goal of this library to bring a variety of useful helpers on both NodeJS & Browser with strong **TypeScript** typing and **zero dependencies**.
+JavaScript and NodeJS are missing a lot of core functionalities. The goal of this library is to bring a variety of useful helpers on both NodeJS & Browser with strong **TypeScript** typing and **zero dependencies**.
 
 Missing something? Create [feature request](https://github.com/KiraLT/common-stuff/issues/new)!
 

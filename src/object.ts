@@ -106,7 +106,7 @@ export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  *
  * @category Object
  * @param obj `Record` like plain object
- * @param callback map callback, accepts entry pair (`[key, value]`) and should booleean value
+ * @param callback map callback, accepts entry pair (`[key, value]`) and should boolean value
  * @returns new filtered object
  */
 export function filterRecord<K extends keyof any, V>(
@@ -119,6 +119,12 @@ export function filterRecord<K extends keyof any, V>(
 /**
  * Merges `source` to `target` recursively
  *
+ * _Example_:
+ * ```
+ * merge({ a: 1 }, { b: 2 }))
+ * // { a: 1, b: 2 }
+ * ```
+ *
  * @category Object
  */
 export function merge<T>(
@@ -130,7 +136,7 @@ export function merge<T>(
          */
         skipNulls: false
         /**
-         * Array merge policy, defaul is `overwrite`
+         * Array merge policy, default is `overwrite`
          *
          * Available policies:
          * * `overwrite` - always replace `target` array with `source`

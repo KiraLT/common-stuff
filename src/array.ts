@@ -1,7 +1,7 @@
 /**
  * Creates sort callback which can be used for `array.sort` input.
  * A custom key function can be supplied to customize the sort order.
- * Key can return any nested data struture, supports number, booleans, arrays.
+ * Key can return any nested data structure, supports number, booleans, arrays.
  *
  * Usage:
  * ```typescript
@@ -54,7 +54,7 @@ export function sortByCb<T>(
 /**
  * Stable sort using provided callback without modifications.
  * A custom key function can be supplied to customize the sort order.
- * Key can return any nested data struture, supports number, booleans, arrays, objects.
+ * Key can return any nested data structure, supports number, booleans, arrays, objects.
  *
  * Usage:
  * ```
@@ -167,7 +167,7 @@ export function generateRange(
  * a new array.
  * This is identical to a map followed by flat with depth 1.
  *
- * Use [Array.flatMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap) if possible or polyfill grobaly:
+ * Use [Array.flatMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap) if possible or polyfill globally:
  *
  * ```
  * Array.prototype.flatMap = function(callback) {

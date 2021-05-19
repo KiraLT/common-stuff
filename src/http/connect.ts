@@ -8,7 +8,7 @@ type RespLike = {
 type NextLike = (err?: any) => void
 
 /**
- * Creates [connect](https://www.npmjs.com/package/connect) style error handle compactible with ExpressJS and other similar framewroks.
+ * Creates [connect](https://www.npmjs.com/package/connect) style error handle compatible with ExpressJS and other similar frameworks.
  *
  * _Example:_
  * ```

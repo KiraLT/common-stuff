@@ -9,7 +9,7 @@ describe('formatBytes', () => {
         expect(formatBytes(-158)).toEqual('0 Bytes')
     })
 
-    it('support decimaps', () => {
+    it('support decimals', () => {
         expect(formatBytes(1688, 1)).toEqual('1.6 KB')
     })
 

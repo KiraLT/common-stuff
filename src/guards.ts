@@ -177,7 +177,11 @@ export function isEmpty<T>(value: T): boolean {
 /**
  * Inverse guard
  *
- * const data = [new Error('Error'), 1, 2].filter(isNot(isError)) // [1,2]
+ * _Example:_
+ * ```
+ * [new Error('Error'), 1, 2].filter(isNot(isError))
+ * // [1, 2]
+ * ```
  *
  * @param guard - guard function
  * @category Guard
@@ -190,6 +194,15 @@ export function isNot<T, S extends T>(
 
 /**
  * Checks if value is plain object, acts as a typescript safeguard.
+ *
+ * _Example:_
+ * ```
+ * isPlainObject({a: 1})
+ * // true
+ *
+ * isPlainObject([1])
+ * // false
+ * ```
  *
  * @category Guard
  */
@@ -216,6 +229,13 @@ export function isPlainObject<T = Record<keyof any, unknown>>(
 
 /**
  * Checks if given value is `Error` if it's subclass and then throw it.
+ *
+ * _Example:_
+ * ```
+ * const value = new Error()
+ * const value2 = assertError(value)
+ * // throws error
+ * ```
  *
  * @category Guard
  * @param value any value

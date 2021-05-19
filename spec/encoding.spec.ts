@@ -1,7 +1,7 @@
 import { hashCode, base64Decode, base64Encode, generateUUID } from '../src'
 
 describe('generateHash', () => {
-    it('henerates object hash', () => {
+    it('generates object hash', () => {
         expect(hashCode({ a: ['b', '1'] })).toBe(-336400960)
     })
 })

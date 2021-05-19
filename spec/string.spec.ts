@@ -19,13 +19,13 @@ describe('extractWords', () => {
 })
 
 describe('camelCase', () => {
-    it('truncates string', () => {
+    it('changes string', () => {
         expect(camelCase('--foo bar')).toEqual('fooBar')
     })
 })
 
 describe('pascalCase', () => {
-    it('truncates string', () => {
+    it('changes string', () => {
         expect(pascalCase('--foo bar')).toEqual('FooBar')
     })
 })

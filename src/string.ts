@@ -1,6 +1,12 @@
 /**
  * Truncates string
  *
+ * _Example:_
+ * ```
+ * truncate('Hello world', 8)
+ * // Hello...
+ * ```
+ *
  * @category String
  */
 export function truncate(
@@ -17,6 +23,12 @@ export function truncate(
 
 /**
  * Extract words from text.
+ *
+ * _Example:_
+ * ```
+ * extractWords('Hello-world!')
+ * // ['Hello', 'world']
+ * ```
  *
  * @category String
  */

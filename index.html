@@ -2776,8 +2776,14 @@ img {
 		<li class=" tsd-kind-function">
 			<a href="modules.html#getfileparts" class="tsd-kind-icon">get<wbr>File<wbr>Parts</a>
 		</li>
+		<li class=" tsd-kind-function tsd-has-type-parameter">
+			<a href="modules.html#groupby" class="tsd-kind-icon">group<wbr>By</a>
+		</li>
 		<li class=" tsd-kind-function">
 			<a href="modules.html#hashcode" class="tsd-kind-icon">hash<wbr>Code</a>
+		</li>
+		<li class=" tsd-kind-function tsd-has-type-parameter">
+			<a href="modules.html#indexby" class="tsd-kind-icon">index<wbr>By</a>
 		</li>
 		<li class=" tsd-kind-function tsd-has-type-parameter">
 			<a href="modules.html#isarray" class="tsd-kind-icon">is<wbr>Array</a>
@@ -2923,9 +2929,12 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Array Functions</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#chunk" class="tsd-kind-icon">chunk</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#flatmap" class="tsd-kind-icon">flat<wbr>Map</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#flatten" class="tsd-kind-icon">flatten</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#generaterange" class="tsd-kind-icon">generate<wbr>Range</a></li>
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#groupby" class="tsd-kind-icon">group<wbr>By</a></li>
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#indexby" class="tsd-kind-icon">index<wbr>By</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#sortby" class="tsd-kind-icon">sort<wbr>By</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#sortbycb" class="tsd-kind-icon">sort<wbr>ByCb</a></li>
 						</ul>
@@ -2969,7 +2978,6 @@ img {
 							<li class="tsd-kind-function"><a href="modules.html#base64decode" class="tsd-kind-icon">base64<wbr>Decode</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#base64encode" class="tsd-kind-icon">base64<wbr>Encode</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#camelcase" class="tsd-kind-icon">camel<wbr>Case</a></li>
-							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#chunk" class="tsd-kind-icon">chunk</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#formatbytes" class="tsd-kind-icon">format<wbr>Bytes</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#generatecookie" class="tsd-kind-icon">generate<wbr>Cookie</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#generateuuid" class="tsd-kind-icon">generateUUID</a></li>
@@ -2989,6 +2997,77 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Array Functions</h2>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="chunk" class="tsd-anchor"></a>
+				<h3>chunk</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">chunk&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">chunk&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L308">src/array.ts:308</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Splits an array into groups the length of size. If array can&#39;t be split evenly, the final chunk will be the remaining elements.</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">chunk</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">], </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+<span style="color: #008000">// [[1, 2], [3, 4], [5]]</span>
+</code></pre>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>array: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+							<li>
+								<h5>size: <span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<p>Chunk maximum size</p>
+								</div>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L309">src/array.ts:309</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>array: <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li>
+								<h5>size: <span class="tsd-signature-type">number</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
 				<a name="flatmap" class="tsd-anchor"></a>
 				<h3>flat<wbr>Map</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
@@ -2999,7 +3078,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L193">src/array.ts:193</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L195">src/array.ts:195</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3086,7 +3165,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L197">src/array.ts:197</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L199">src/array.ts:199</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3146,7 +3225,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L270">src/array.ts:270</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L272">src/array.ts:272</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3201,7 +3280,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L274">src/array.ts:274</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L276">src/array.ts:276</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3237,7 +3316,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L107">src/array.ts:107</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L109">src/array.ts:109</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3275,7 +3354,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L130">src/array.ts:130</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L132">src/array.ts:132</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3325,6 +3404,223 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="groupby" class="tsd-anchor"></a>
+				<h3>group<wbr>By</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">group<wbr>By&lt;T, G&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, keyCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">group<wbr>By&lt;T, G&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, keyCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L332">src/array.ts:332</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Groups an array based on callback return value</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">groupBy</span><span style="color: #000000">([</span><span style="color: #098658">6.1</span><span style="color: #000000">, </span><span style="color: #098658">4.2</span><span style="color: #000000">, </span><span style="color: #098658">6.3</span><span style="color: #000000">], </span><span style="color: #267F99">Math</span><span style="color: #000000">.</span><span style="color: #795E26">floor</span><span style="color: #000000">)</span>
+<span style="color: #008000">// [ [4, [4.2]], [6, [6.1, 6.3]] ]</span>
+
+<span style="color: #795E26">groupBy</span><span style="color: #000000">([</span><span style="color: #A31515">&#039;one&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;two&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;three&#039;</span><span style="color: #000000">], </span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #795E26">includes</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">)])</span>
+<span style="color: #008000">// [ [[5, false], [&#039;three&#039;]], [[3, false], [&#039;one&#039;, &#039;two&#039;]] ]</span>
+</code></pre>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+							<li>
+								<h4>G</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>array: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+							<li>
+								<h5>keyCallback: <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">G</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">G</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>value: <span class="tsd-signature-type">T</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">G</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L333">src/array.ts:333</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+							<li>
+								<h4>G</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>array: <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li>
+								<h5>keyCallback: <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">G</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">G</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>value: <span class="tsd-signature-type">T</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">G</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">G</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="indexby" class="tsd-anchor"></a>
+				<h3>index<wbr>By</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">index<wbr>By&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, keyCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li class="tsd-signature tsd-kind-icon">index<wbr>By&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, keyCallback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L359">src/array.ts:359</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Creates indexed object by provided callback</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">indexBy</span><span style="color: #000000">([</span><span style="color: #A31515">&#039;one&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;two&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;three&#039;</span><span style="color: #000000">], </span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">length</span><span style="color: #000000">)</span>
+<span style="color: #008000">// { &#039;5&#039;: [&#039;three&#039;], &#039;3&#039;: [&#039;one&#039;, &#039;two&#039;] }</span>
+</code></pre>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>array: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+							<li>
+								<h5>keyCallback: <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>value: <span class="tsd-signature-type">T</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L360">src/array.ts:360</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>array: <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li>
+								<h5>keyCallback: <span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter-signature">
+										<ul class="tsd-signatures tsd-kind-type-literal">
+											<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></li>
+										</ul>
+										<ul class="tsd-descriptions">
+											<li class="tsd-description">
+												<h4 class="tsd-parameters-title">Parameters</h4>
+												<ul class="tsd-parameters">
+													<li>
+														<h5>value: <span class="tsd-signature-type">T</span></h5>
+													</li>
+												</ul>
+												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h4>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
 				<a name="sortby" class="tsd-anchor"></a>
 				<h3>sort<wbr>By</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
@@ -3335,7 +3631,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L72">src/array.ts:72</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L74">src/array.ts:74</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3401,7 +3697,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L73">src/array.ts:73</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L75">src/array.ts:75</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3451,7 +3747,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L19">src/array.ts:19</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/array.ts#L21">src/array.ts:21</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3544,7 +3840,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L234">src/guards.ts:234</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L234">src/guards.ts:234</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3597,7 +3893,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L253">src/guards.ts:253</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L253">src/guards.ts:253</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3631,7 +3927,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L254">src/guards.ts:254</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L254">src/guards.ts:254</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3660,7 +3956,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L53">src/guards.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L53">src/guards.ts:53</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3701,7 +3997,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L25">src/guards.ts:25</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L25">src/guards.ts:25</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3742,7 +4038,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L141">src/guards.ts:141</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L141">src/guards.ts:141</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3784,7 +4080,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L72">src/guards.ts:72</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L72">src/guards.ts:72</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3828,7 +4124,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L180">src/guards.ts:180</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L180">src/guards.ts:180</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3911,7 +4207,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L106">src/guards.ts:106</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L106">src/guards.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3955,7 +4251,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L123">src/guards.ts:123</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L123">src/guards.ts:123</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3999,7 +4295,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L11">src/guards.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L11">src/guards.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4040,7 +4336,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L199">src/guards.ts:199</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L199">src/guards.ts:199</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4084,7 +4380,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L39">src/guards.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L39">src/guards.ts:39</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4125,7 +4421,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L89">src/guards.ts:89</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/guards.ts#L89">src/guards.ts:89</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4172,7 +4468,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/html.ts#L33">src/http/html.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/http/html.ts#L33">src/http/html.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4202,7 +4498,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/html.ts#L22">src/http/html.ts:22</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/http/html.ts#L22">src/http/html.ts:22</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4232,7 +4528,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/helpers.ts#L46">src/http/helpers.ts:46</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/http/helpers.ts#L46">src/http/helpers.ts:46</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4273,7 +4569,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/logging.ts#L29">src/logging.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/logging.ts#L29">src/logging.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4306,7 +4602,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L181">src/object.ts:181</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/object.ts#L181">src/object.ts:181</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4349,7 +4645,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L106">src/object.ts:106</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/object.ts#L106">src/object.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4421,7 +4717,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L57">src/object.ts:57</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/object.ts#L57">src/object.ts:57</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4501,7 +4797,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L13">src/object.ts:13</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/object.ts#L13">src/object.ts:13</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4540,7 +4836,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L86">src/object.ts:86</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/object.ts#L86">src/object.ts:86</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4620,7 +4916,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L123">src/object.ts:123</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/object.ts#L123">src/object.ts:123</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4694,7 +4990,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L43">src/encoding.ts:43</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/encoding.ts#L43">src/encoding.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4722,7 +5018,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L57">src/encoding.ts:57</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/encoding.ts#L57">src/encoding.ts:57</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4750,7 +5046,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L49">src/string.ts:49</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/string.ts#L49">src/string.ts:49</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4777,77 +5073,6 @@ img {
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
-				<a name="chunk" class="tsd-anchor"></a>
-				<h3>chunk</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">chunk&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span>, size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></li>
-					<li class="tsd-signature tsd-kind-icon">chunk&lt;T&gt;<span class="tsd-signature-symbol">(</span>array<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span>, size<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L305">src/array.ts:305</a></li>
-							</ul>
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Splits an array into groups the length of size. If array can&#39;t be split evenly, the final chunk will be the remaining elements.</p>
-							</div>
-							<dl class="tsd-comment-tags">
-								<dt>example</dt>
-								<dd><pre><code><span style="color: #795E26">chunk</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">], </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
-<span style="color: #008000">// [[1, 2], [3, 4], [5]]</span>
-</code></pre>
-								</dd>
-							</dl>
-						</div>
-						<h4 class="tsd-type-parameters-title">Type parameters</h4>
-						<ul class="tsd-type-parameters">
-							<li>
-								<h4>T</h4>
-							</li>
-						</ul>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>array: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-							<li>
-								<h5>size: <span class="tsd-signature-type">number</span></h5>
-								<div class="tsd-comment tsd-typography">
-									<p>Chunk maximum size</p>
-								</div>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">[]</span></h4>
-					</li>
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L306">src/array.ts:306</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-type-parameters-title">Type parameters</h4>
-						<ul class="tsd-type-parameters">
-							<li>
-								<h4>T</h4>
-							</li>
-						</ul>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>array: <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-							</li>
-							<li>
-								<h5>size: <span class="tsd-signature-type">number</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="formatbytes" class="tsd-anchor"></a>
 				<h3>format<wbr>Bytes</h3>
@@ -4858,7 +5083,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/files.ts#L10">src/files.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/files.ts#L10">src/files.ts:10</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4896,7 +5121,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/helpers.ts#L15">src/http/helpers.ts:15</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/http/helpers.ts#L15">src/http/helpers.ts:15</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4956,7 +5181,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L29">src/encoding.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/encoding.ts#L29">src/encoding.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4990,7 +5215,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/files.ts#L36">src/files.ts:36</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/files.ts#L36">src/files.ts:36</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -5030,7 +5255,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L4">src/encoding.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/encoding.ts#L4">src/encoding.ts:4</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -5058,7 +5283,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L67">src/string.ts:67</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/string.ts#L67">src/string.ts:67</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -5098,7 +5323,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L33">src/string.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/string.ts#L33">src/string.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -5133,7 +5358,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L11">src/string.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/d5d43cb/src/string.ts#L11">src/string.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

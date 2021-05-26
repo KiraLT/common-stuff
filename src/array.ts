@@ -303,6 +303,7 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
  * // [[1, 2], [3, 4], [5]]
  * ```
  * @param size Chunk maximum size
+ * @category Array
  */
 export function chunk<T>(array: T[], size: number): T[][]
 export function chunk<T>(array: ReadonlyArray<T>, size: number): ReadonlyArray<ReadonlyArray<T>>
@@ -326,6 +327,7 @@ export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
  * groupBy(['one', 'two', 'three'], v => [v.length, v.includes('a')])
  * // [ [[5, false], ['three']], [[3, false], ['one', 'two']] ]
  * ```
+ * @category Array
  */
 export function groupBy<T, G>(array: T[], keyCallback: (value: T) => G): [G, T[]][]
 export function groupBy<T, G>(array: ReadonlyArray<T>, keyCallback: (value: T) => G): ReadonlyArray<[G, T[]]>
@@ -352,6 +354,7 @@ export function groupBy<T, G>(array: ReadonlyArray<T>, keyCallback: (value: T) =
  * indexBy(['one', 'two', 'three'], v => v.length)
  * // { '5': ['three'], '3': ['one', 'two'] }
  * ```
+ * @category Array
  */
 export function indexBy<T>(array: T[], keyCallback: (value: T) => string | number): Record<string, T[]>
 export function indexBy<T>(array: ReadonlyArray<T>, keyCallback: (value: T) => string | number): Record<string, ReadonlyArray<T>>

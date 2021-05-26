@@ -2931,6 +2931,7 @@ img {
 						<h3>Guard Functions</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#asserterror" class="tsd-kind-icon">assert<wbr>Error</a></li>
+							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#ensurearray" class="tsd-kind-icon">ensure<wbr>Array</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#isarray" class="tsd-kind-icon">is<wbr>Array</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#isboolean" class="tsd-kind-icon">is<wbr>Boolean</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#isempty" class="tsd-kind-icon">is<wbr>Empty</a></li>
@@ -2968,7 +2969,6 @@ img {
 							<li class="tsd-kind-function"><a href="modules.html#base64encode" class="tsd-kind-icon">base64<wbr>Encode</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#camelcase" class="tsd-kind-icon">camel<wbr>Case</a></li>
 							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#chunk" class="tsd-kind-icon">chunk</a></li>
-							<li class="tsd-kind-function tsd-has-type-parameter"><a href="modules.html#ensurearray" class="tsd-kind-icon">ensure<wbr>Array</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#formatbytes" class="tsd-kind-icon">format<wbr>Bytes</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#generatecookie" class="tsd-kind-icon">generate<wbr>Cookie</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#generateuuid" class="tsd-kind-icon">generateUUID</a></li>
@@ -2998,7 +2998,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L198">src/array.ts:198</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L193">src/array.ts:193</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3012,8 +3012,9 @@ img {
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #795E26">flatMap</span><span style="color: #000000">(</span><span style="color: #0000FF">this</span><span style="color: #000000">, </span><span style="color: #001080">callback</span><span style="color: #000000">)</span>
 <span style="color: #000000">}</span>
 </code></pre>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">arr1</span><span style="color: #000000"> = [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">arr1</span><span style="color: #000000"> = [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]</span>
 
 <span style="color: #001080">arr1</span><span style="color: #000000">.</span><span style="color: #795E26">map</span><span style="color: #000000">(</span><span style="color: #001080">x</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">x</span><span style="color: #000000"> * </span><span style="color: #098658">2</span><span style="color: #000000">])</span>
 <span style="color: #008000">// [[2], [4], [6], [8]]</span>
@@ -3025,7 +3026,7 @@ img {
 <span style="color: #795E26">flatMap</span><span style="color: #000000">(</span><span style="color: #001080">arr1</span><span style="color: #000000">, </span><span style="color: #001080">x</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [[</span><span style="color: #001080">x</span><span style="color: #000000"> * </span><span style="color: #098658">2</span><span style="color: #000000">]])</span>
 <span style="color: #008000">// [[2], [4], [6], [8]]</span>
 </code></pre>
-							<dl class="tsd-comment-tags">
+								</dd>
 								<dt>tutorial</dt>
 								<dd><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap</a></p>
 								</dd>
@@ -3084,7 +3085,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L202">src/array.ts:202</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L197">src/array.ts:197</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3144,7 +3145,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L276">src/array.ts:276</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L270">src/array.ts:270</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3156,8 +3157,9 @@ img {
 <span style="color: #000000">    </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #795E26">flatten</span><span style="color: #000000">(</span><span style="color: #0000FF">this</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #267F99">any</span><span style="color: #000000">, </span><span style="color: #001080">depth</span><span style="color: #000000">)</span>
 <span style="color: #000000">}</span>
 </code></pre>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">flatten</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]])</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">flatten</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]])</span>
 <span style="color: #008000">// [1, 2, 3, 4]</span>
 
 <span style="color: #795E26">flatten</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, [</span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">]]])</span>
@@ -3166,7 +3168,7 @@ img {
 <span style="color: #795E26">flatten</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, [</span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">]]], </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
 <span style="color: #008000">// [1, 2, 3, 4, 5, 6]</span>
 </code></pre>
-							<dl class="tsd-comment-tags">
+								</dd>
 								<dt>tutorial</dt>
 								<dd><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat</a></p>
 								</dd>
@@ -3198,7 +3200,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L280">src/array.ts:280</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L274">src/array.ts:274</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3234,25 +3236,28 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L110">src/array.ts:110</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L107">src/array.ts:107</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,-</span><span style="color: #098658">1</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">8</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,-</span><span style="color: #098658">1</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">8</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -3269,25 +3274,28 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L134">src/array.ts:134</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L130">src/array.ts:130</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,-</span><span style="color: #098658">1</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">]</span>
-<span style="color: #000000"> &gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">8</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
-<span style="color: #000000"> [</span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">4</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">3</span><span style="color: #000000">,</span><span style="color: #098658">6</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">,</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">10</span><span style="color: #000000">,</span><span style="color: #098658">0</span><span style="color: #000000">,-</span><span style="color: #098658">1</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">10</span><span style="color: #000000">, </span><span style="color: #098658">9</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">7</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">]</span>
+<span style="color: #000000">&gt;&gt;&gt; </span><span style="color: #795E26">range</span><span style="color: #000000">(</span><span style="color: #098658">8</span><span style="color: #000000">,</span><span style="color: #098658">2</span><span style="color: #000000">,-</span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+<span style="color: #000000">[</span><span style="color: #098658">8</span><span style="color: #000000">, </span><span style="color: #098658">6</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -3326,7 +3334,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L74">src/array.ts:74</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L72">src/array.ts:72</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3335,14 +3343,17 @@ img {
 									A custom key function can be supplied to customize the sort order.
 								Key can return any nested data structure, supports number, booleans, arrays, objects.</p>
 							</div>
-							<p>Usage:</p>
-							<pre><code><span style="color: #008000">// Sort by object key</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #008000">// Sort by object key</span>
 <span style="color: #795E26">sortBy</span><span style="color: #000000">(</span><span style="color: #001080">arr</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">myKey</span><span style="color: #000000">))</span>
 <span style="color: #008000">// Sort by number in reversed order</span>
 <span style="color: #795E26">sortBy</span><span style="color: #000000">(</span><span style="color: #001080">arr</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">numberKey</span><span style="color: #000000"> * -</span><span style="color: #098658">1</span><span style="color: #000000">))</span>
 <span style="color: #008000">// Sort by object key, then by boolean value in revered order</span>
 <span style="color: #795E26">sortBy</span><span style="color: #000000">(</span><span style="color: #001080">arr</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">myKey</span><span style="color: #000000">, !</span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">boolValue</span><span style="color: #000000">])</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3389,7 +3400,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L75">src/array.ts:75</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L73">src/array.ts:73</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3439,7 +3450,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L20">src/array.ts:20</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L19">src/array.ts:19</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3448,14 +3459,17 @@ img {
 									A custom key function can be supplied to customize the sort order.
 								Key can return any nested data structure, supports number, booleans, arrays.</p>
 							</div>
-							<p>Usage:</p>
-							<pre><code class="language-typescript"><span style="color: #008000">// Sort by object key</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #008000">// Sort by object key</span>
 <span style="color: #001080">arr</span><span style="color: #000000">.</span><span style="color: #795E26">sort</span><span style="color: #000000">(</span><span style="color: #795E26">sortByCb</span><span style="color: #000000">(</span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">myKey</span><span style="color: #000000">))</span>
 <span style="color: #008000">// Sort by number in reversed order</span>
 <span style="color: #001080">arr</span><span style="color: #000000">.</span><span style="color: #795E26">sort</span><span style="color: #000000">(</span><span style="color: #795E26">sortByCb</span><span style="color: #000000">(</span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">numberKey</span><span style="color: #000000"> * -</span><span style="color: #098658">1</span><span style="color: #000000">))</span>
 <span style="color: #008000">// Sort by object key, then by boolean value in revered order</span>
 <span style="color: #001080">arr</span><span style="color: #000000">.</span><span style="color: #795E26">sort</span><span style="color: #000000">(</span><span style="color: #795E26">sortByCb</span><span style="color: #000000">(</span><span style="color: #001080">v</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">myKey</span><span style="color: #000000">, !</span><span style="color: #001080">v</span><span style="color: #000000">.</span><span style="color: #001080">boolValue</span><span style="color: #000000">])</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3529,19 +3543,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L245">src/guards.ts:245</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L234">src/guards.ts:234</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if given value is <code>Error</code> if it&#39;s subclass and then throw it.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">value</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">()</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">value</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">()</span>
 <span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">value2</span><span style="color: #000000"> = </span><span style="color: #795E26">assertError</span><span style="color: #000000">(</span><span style="color: #001080">value</span><span style="color: #000000">)</span>
 <span style="color: #008000">// throws error</span>
 </code></pre>
-							<dl class="tsd-comment-tags">
+								</dd>
 								<dt>throws</dt>
 								<dd><p><code>value</code> if it is an instance of <code>Error</code></p>
 								</dd>
@@ -3571,6 +3586,70 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
+				<a name="ensurearray" class="tsd-anchor"></a>
+				<h3>ensure<wbr>Array</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">ensure<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
+					<li class="tsd-signature tsd-kind-icon">ensure<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L253">src/guards.ts:253</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Returns original value if it is array or wraps it to array.</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">ensureArray</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;hello&#039;</span><span style="color: #000000">)</span>
+<span style="color: #008000">// [&#039;hello&#039;]</span>
+<span style="color: #795E26">ensureArray</span><span style="color: #000000">([</span><span style="color: #A31515">&#039;hello&#039;</span><span style="color: #000000">])</span>
+<span style="color: #008000">// [&#039;hello&#039;]</span>
+</code></pre>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>value: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
+					</li>
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L254">src/guards.ts:254</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>value: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
 				<a name="isarray" class="tsd-anchor"></a>
 				<h3>is<wbr>Array</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
@@ -3580,17 +3659,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L57">src/guards.ts:57</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L53">src/guards.ts:53</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is <code>array</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[[</span><span style="color: #098658">1</span><span style="color: #000000">], [</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">], </span><span style="color: #0000FF">false</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isArray</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[[</span><span style="color: #098658">1</span><span style="color: #000000">], [</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">], </span><span style="color: #0000FF">false</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isArray</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [[</span><span style="color: #098658">1</span><span style="color: #000000">], [</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">]]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3618,17 +3700,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L27">src/guards.ts:27</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L25">src/guards.ts:25</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is <code>boolean</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #0000FF">false</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isBoolean</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #0000FF">false</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isBoolean</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [</span><span style="color: #0000FF">true</span><span style="color: #000000">, </span><span style="color: #0000FF">false</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3656,7 +3741,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L149">src/guards.ts:149</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L141">src/guards.ts:141</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3698,20 +3783,23 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L77">src/guards.ts:77</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L72">src/guards.ts:72</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is instance of <code>Error</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;error&#039;</span><span style="color: #000000">), </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isError</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;error&#039;</span><span style="color: #000000">), </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isError</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;error&#039;</span><span style="color: #000000">)]</span>
 
 <span style="color: #000000">[</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;error&#039;</span><span style="color: #000000">), </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #795E26">isNot</span><span style="color: #000000">(</span><span style="color: #001080">isError</span><span style="color: #000000">))</span>
 <span style="color: #000000">&gt; [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3739,17 +3827,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L189">src/guards.ts:189</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L180">src/guards.ts:180</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Inverse guard</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Error&#039;</span><span style="color: #000000">), </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #795E26">isNot</span><span style="color: #000000">(</span><span style="color: #001080">isError</span><span style="color: #000000">))</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Error</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Error&#039;</span><span style="color: #000000">), </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #795E26">isNot</span><span style="color: #000000">(</span><span style="color: #001080">isError</span><span style="color: #000000">))</span>
 <span style="color: #008000">// [1, 2]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3819,20 +3910,23 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L113">src/guards.ts:113</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L106">src/guards.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is <code>null</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [</span><span style="color: #0000FF">undefined</span><span style="color: #000000">]</span>
 
 <span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #795E26">isNot</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">))</span>
 <span style="color: #000000">&gt; [</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3860,20 +3954,23 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L131">src/guards.ts:131</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L123">src/guards.ts:123</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is not <code>null</code> or <code>undefined</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">]</span>
 
 <span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #795E26">isNot</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">))</span>
 <span style="color: #000000">&gt; [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3901,17 +3998,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L12">src/guards.ts:12</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L11">src/guards.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is <code>number</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isNumber</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isNumber</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3939,20 +4039,23 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L209">src/guards.ts:209</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L199">src/guards.ts:199</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is plain object, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">isPlainObject</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">})</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">isPlainObject</span><span style="color: #000000">({</span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">})</span>
 <span style="color: #008000">// true</span>
 
 <span style="color: #795E26">isPlainObject</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">])</span>
 <span style="color: #008000">// false</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -3980,17 +4083,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L42">src/guards.ts:42</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L39">src/guards.ts:39</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is <code>string</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #0000FF">false</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isString</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">, </span><span style="color: #0000FF">false</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isString</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -4018,20 +4124,23 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L95">src/guards.ts:95</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/guards.ts#L89">src/guards.ts:89</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Checks if value is <code>undefined</code>, acts as a typescript safeguard.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt; [</span><span style="color: #0000FF">undefined</span><span style="color: #000000">]</span>
 
 <span style="color: #000000">[</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #0000FF">undefined</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">].</span><span style="color: #795E26">filter</span><span style="color: #000000">(</span><span style="color: #795E26">isNot</span><span style="color: #000000">(</span><span style="color: #001080">isUndefined</span><span style="color: #000000">))</span>
 <span style="color: #000000">&gt; [</span><span style="color: #0000FF">null</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -4062,7 +4171,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/http/html.ts#L33">src/http/html.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/html.ts#L33">src/http/html.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4092,7 +4201,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/http/html.ts#L22">src/http/html.ts:22</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/html.ts#L22">src/http/html.ts:22</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4122,17 +4231,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/http/helpers.ts#L48">src/http/helpers.ts:48</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/helpers.ts#L46">src/http/helpers.ts:46</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Parses cookies string</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">parseCookies</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">cookie</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">parseCookies</span><span style="color: #000000">(</span><span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">cookie</span><span style="color: #000000">)</span>
 <span style="color: #008000">// {session: &#039;26e761be168533cbf0742f8c295176c7&#039;}</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -4160,18 +4272,21 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/logging.ts#L31">src/logging.ts:31</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/logging.ts#L29">src/logging.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Creates dummy logger object which ignores all logs</p>
 							</div>
-							<p><em>Example</em>:</p>
-							<pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">logger</span><span style="color: #000000"> = </span><span style="color: #795E26">createDummyLogger</span><span style="color: #000000">()</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">logger</span><span style="color: #000000"> = </span><span style="color: #795E26">createDummyLogger</span><span style="color: #000000">()</span>
 <span style="color: #001080">logger</span><span style="color: #000000">.</span><span style="color: #795E26">info</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Hello world&#039;</span><span style="color: #000000">)</span>
 <span style="color: #008000">// Nothing will be logged</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-returns-title">Returns <a href="interfaces/logger.html" class="tsd-signature-type" data-tsd-kind="Interface">Logger</a></h4>
 					</li>
@@ -4190,7 +4305,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/object.ts#L188">src/object.ts:188</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L181">src/object.ts:181</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4233,17 +4348,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/object.ts#L112">src/object.ts:112</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L106">src/object.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Filter object by provided callback.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">filterRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000"> === </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">filterRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000"> === </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
 <span style="color: #000000">&gt;&gt; {</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -4302,19 +4420,22 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/object.ts#L59">src/object.ts:59</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L57">src/object.ts:57</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Converts object to entries, map&#39;s it with provided callback and flattens entry list.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">flatMapRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [[</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]])</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">flatMapRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [[</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]])</span>
 <span style="color: #000000">&gt;&gt; {</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">}</span>
 <span style="color: #795E26">flatMapRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">3</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">v</span><span style="color: #000000"> === </span><span style="color: #098658">2</span><span style="color: #000000"> ? [[</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]] : [])</span>
 <span style="color: #000000">&gt;&gt; {</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -4379,7 +4500,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/object.ts#L13">src/object.ts:13</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L13">src/object.ts:13</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4418,19 +4539,22 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/object.ts#L90">src/object.ts:90</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L86">src/object.ts:86</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Converts object to entries and map&#39;s it with provided callback.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">mapRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">v</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000"> * </span><span style="color: #098658">2</span><span style="color: #000000">])</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">mapRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">v</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000"> * </span><span style="color: #098658">2</span><span style="color: #000000">])</span>
 <span style="color: #000000">&gt;&gt; {</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #098658">4</span><span style="color: #000000">}</span>
 <span style="color: #795E26">mapRecord</span><span style="color: #000000">({</span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #000000">}, ([</span><span style="color: #001080">k</span><span style="color: #000000">, </span><span style="color: #001080">v</span><span style="color: #000000">]) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> [</span><span style="color: #001080">v</span><span style="color: #000000">, </span><span style="color: #001080">k</span><span style="color: #000000">])</span>
 <span style="color: #000000">&gt;&gt; {</span><span style="color: #A31515">&#039;b&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;a&#039;</span><span style="color: #000000">}</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -4495,17 +4619,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/object.ts#L130">src/object.ts:130</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/object.ts#L123">src/object.ts:123</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Merges <code>source</code> to <code>target</code> recursively</p>
 							</div>
-							<p><em>Example</em>:</p>
-							<pre><code><span style="color: #795E26">merge</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000"> }, { </span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000"> }))</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">merge</span><span style="color: #000000">({ </span><span style="color: #001080">a:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000"> }, { </span><span style="color: #001080">b:</span><span style="color: #000000"> </span><span style="color: #098658">2</span><span style="color: #000000"> }))</span>
 <span style="color: #008000">// { a: 1, b: 2 }</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -4566,7 +4693,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/encoding.ts#L39">src/encoding.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L43">src/encoding.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4594,7 +4721,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/encoding.ts#L53">src/encoding.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L57">src/encoding.ts:57</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4622,17 +4749,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/string.ts#L52">src/string.ts:52</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L49">src/string.ts:49</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Convert a dash/dot/underscore/space separated string to camelCase</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">camelCase</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo-bar&#039;</span><span style="color: #000000">);</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">camelCase</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo-bar&#039;</span><span style="color: #000000">);</span>
 <span style="color: #008000">// &#039;fooBar&#039;</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -4657,17 +4787,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L312">src/array.ts:312</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L305">src/array.ts:305</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Splits an array into groups the length of size. If array can&#39;t be split evenly, the final chunk will be the remaining elements.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">chunk</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">], </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">chunk</span><span style="color: #000000">([</span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #098658">2</span><span style="color: #000000">, </span><span style="color: #098658">3</span><span style="color: #000000">, </span><span style="color: #098658">4</span><span style="color: #000000">, </span><span style="color: #098658">5</span><span style="color: #000000">], </span><span style="color: #098658">2</span><span style="color: #000000">)</span>
 <span style="color: #008000">// [[1, 2], [3, 4], [5]]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
@@ -4692,7 +4825,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/array.ts#L313">src/array.ts:313</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/array.ts#L306">src/array.ts:306</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -4714,70 +4847,6 @@ img {
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-has-type-parameter">
-				<a name="ensurearray" class="tsd-anchor"></a>
-				<h3>ensure<wbr>Array</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-has-type-parameter">
-					<li class="tsd-signature tsd-kind-icon">ensure<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></li>
-					<li class="tsd-signature tsd-kind-icon">ensure<wbr>Array&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L263">src/guards.ts:263</a></li>
-							</ul>
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Returns original value if it is array or wraps it to array.</p>
-							</div>
-							<dl class="tsd-comment-tags">
-								<dt>example</dt>
-								<dd><pre><code><span style="color: #795E26">ensureArray</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;hello&#039;</span><span style="color: #000000">)</span>
-<span style="color: #008000">// [&#039;hello&#039;]</span>
-<span style="color: #795E26">ensureArray</span><span style="color: #000000">([</span><span style="color: #A31515">&#039;hello&#039;</span><span style="color: #000000">])</span>
-<span style="color: #008000">// [&#039;hello&#039;]</span>
-</code></pre>
-								</dd>
-							</dl>
-						</div>
-						<h4 class="tsd-type-parameters-title">Type parameters</h4>
-						<ul class="tsd-type-parameters">
-							<li>
-								<h4>T</h4>
-							</li>
-						</ul>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>value: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">[]</span></h4>
-					</li>
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/guards.ts#L264">src/guards.ts:264</a></li>
-							</ul>
-						</aside>
-						<h4 class="tsd-type-parameters-title">Type parameters</h4>
-						<ul class="tsd-type-parameters">
-							<li>
-								<h4>T</h4>
-							</li>
-						</ul>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>value: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ReadonlyArray</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="formatbytes" class="tsd-anchor"></a>
 				<h3>format<wbr>Bytes</h3>
@@ -4788,17 +4857,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/files.ts#L10">src/files.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/files.ts#L10">src/files.ts:10</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Converts bytes number to string representation (e.g. <code>15.25 GB</code>)</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">formatBytes</span><span style="color: #000000">(</span><span style="color: #098658">1648</span><span style="color: #000000"> * </span><span style="color: #098658">9884</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">formatBytes</span><span style="color: #000000">(</span><span style="color: #098658">1648</span><span style="color: #000000"> * </span><span style="color: #098658">9884</span><span style="color: #000000">)</span>
 <span style="color: #008000">// &#039;15.53 MB&#039;</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -4823,20 +4895,23 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/http/helpers.ts#L16">src/http/helpers.ts:16</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/http/helpers.ts#L15">src/http/helpers.ts:15</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Generates cookie string</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #008000">// Create a cookie, valid across the entire site:</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #008000">// Create a cookie, valid across the entire site:</span>
 <span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">cookie</span><span style="color: #000000"> = </span><span style="color: #795E26">generateCookie</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;name&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;value&#039;</span><span style="color: #000000">)</span>
 
 <span style="color: #008000">// Create a cookie that expires 7 days from now, valid across the entire site:</span>
 <span style="color: #001080">document</span><span style="color: #000000">.</span><span style="color: #001080">cookie</span><span style="color: #000000"> = </span><span style="color: #795E26">generateCookie</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;name&#039;</span><span style="color: #000000">, </span><span style="color: #A31515">&#039;value&#039;</span><span style="color: #000000">, { </span><span style="color: #001080">expires:</span><span style="color: #000000"> </span><span style="color: #098658">7</span><span style="color: #000000"> })</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -4880,19 +4955,25 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/encoding.ts#L25">src/encoding.ts:25</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L29">src/encoding.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Generates v4 like <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a> (Universally unique identifier).</p>
 							</div>
-							<p>Example: <code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</code></p>
 							<blockquote>
 								<p>Be aware that UUID uniqueness relies heavily on the underlying random number generator (RNG).
 									The solution above uses Math.random() for brevity, however Math.random() is not guaranteed to be a high-quality RNG.
 								For a more robust solution, consider using the <a href="https://github.com/uuidjs/uuid">uuid</a> module, which uses higher quality RNG APIs.</p>
 							</blockquote>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">generateUUID</span><span style="color: #000000">()</span>
+<span style="color: #008000">// &#039;8e07ef4a-0d1f-45c2-b06b-9495e869b299&#039;</span>
+</code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 					</li>
@@ -4908,7 +4989,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/files.ts#L36">src/files.ts:36</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/files.ts#L36">src/files.ts:36</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4917,13 +4998,16 @@ img {
 									and ext is empty or begins with a period and contains at most one period.
 								Leading periods on the basename are ignored.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">getFileParts</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;file.txt&#039;</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">getFileParts</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;file.txt&#039;</span><span style="color: #000000">)</span>
 <span style="color: #008000">// [&#039;file&#039;, &#039;.txt&#039;]</span>
 
 <span style="color: #795E26">getFileParts</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;.cshrc&#039;</span><span style="color: #000000">)</span>
 <span style="color: #008000">// [&#039;.cshrc&#039;, &#039;&#039;]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -4945,7 +5029,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/encoding.ts#L4">src/encoding.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/encoding.ts#L4">src/encoding.ts:4</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4973,17 +5057,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/string.ts#L71">src/string.ts:71</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L67">src/string.ts:67</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Convert a dash/dot/underscore/space separated string to PascalCase</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">pascalCase</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo-bar&#039;</span><span style="color: #000000">);</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">pascalCase</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;foo-bar&#039;</span><span style="color: #000000">);</span>
 <span style="color: #008000">// &#039;FooBar&#039;</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -5010,17 +5097,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/string.ts#L35">src/string.ts:35</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L33">src/string.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Extract words from text.</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">extractWords</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Hello-world!&#039;</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">extractWords</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Hello-world!&#039;</span><span style="color: #000000">)</span>
 <span style="color: #008000">// [&#039;Hello&#039;, &#039;world&#039;]</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
@@ -5042,17 +5132,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/852be38/src/string.ts#L12">src/string.ts:12</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/45d6855/src/string.ts#L11">src/string.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
 							<div class="lead">
 								<p>Truncates string</p>
 							</div>
-							<p><em>Example:</em></p>
-							<pre><code><span style="color: #795E26">truncate</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Hello world&#039;</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">)</span>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">truncate</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;Hello world&#039;</span><span style="color: #000000">, </span><span style="color: #098658">8</span><span style="color: #000000">)</span>
 <span style="color: #008000">// Hello...</span>
 </code></pre>
+								</dd>
+							</dl>
 						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">

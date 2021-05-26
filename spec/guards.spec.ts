@@ -10,6 +10,7 @@ import {
     isUndefined,
     isNullOrUndefined,
     isEmpty,
+    ensureArray
 } from '../src'
 
 describe('isPlainObject', () => {
@@ -123,5 +124,16 @@ describe('isEmpty', () => {
 
     it('supports other', () => {
         expect(isEmpty(new Date())).toBeFalsy()
+    })
+})
+
+describe('ensureArray', () => {
+    it('returns original value if array', () => {
+        const value = [1]
+        expect(ensureArray(value)).toBe(value)
+    })
+
+    it('wraps to array if value is not an array', () => {
+        expect(ensureArray(1)).toEqual([1])
     })
 })

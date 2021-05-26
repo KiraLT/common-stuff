@@ -248,3 +248,20 @@ export function assertError<T, E extends Error>(value: T | E): T {
     }
     return value
 }
+
+/**
+ * Returns original value if it is array or wraps it to array.
+ *
+ * @example
+ * ```
+ * ensureArray('hello')
+ * // ['hello']
+ * ensureArray(['hello'])
+ * // ['hello']
+ * ```
+ */
+export function ensureArray<T>(value: T | T[]): T[]
+export function ensureArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>
+export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
+    return value instanceof Array ? value : [value];
+}

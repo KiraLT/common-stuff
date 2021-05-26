@@ -1,3 +1,5 @@
+import { hashCode } from '.'
+
 /**
  * Creates sort callback which can be used for `array.sort` input.
  * A custom key function can be supplied to customize the sort order.
@@ -311,4 +313,58 @@ export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
         }
         return acc
     }, [] as T[][])
+}
+
+/**
+ * Groups an array based on callback return value
+ *
+ * @example
+ * ```
+ * groupBy([6.1, 4.2, 6.3], Math.floor)
+ * // [ [4, [4.2]], [6, [6.1, 6.3]] ]
+ *
+ * groupBy(['one', 'two', 'three'], v => [v.length, v.includes('a')])
+ * // [ [[5, false], ['three']], [[3, false], ['one', 'two']] ]
+ * ```
+ */
+export function groupBy<T, G>(array: T[], keyCallback: (value: T) => G): [G, T[]][]
+export function groupBy<T, G>(array: ReadonlyArray<T>, keyCallback: (value: T) => G): ReadonlyArray<[G, T[]]>
+export function groupBy<T, G>(array: ReadonlyArray<T>, keyCallback: (value: T) => G): [G, T[]][] {
+    return Object.values(array.reduce((prev, cur) => {
+        const key = keyCallback(cur)
+        const keyHash = hashCode(keyCallback(cur))
+
+        if (keyHash in prev) {
+            prev[keyHash]?.[1].push(cur)
+        } else {
+            prev[keyHash] = [key, [cur]]
+        }
+
+        return prev
+    }, {} as Record<number, [G, T[]]>))
+}
+
+/**
+ * Creates indexed object by provided callback
+ *
+ * @example
+ * ```
+ * indexBy(['one', 'two', 'three'], v => v.length)
+ * // { '5': ['three'], '3': ['one', 'two'] }
+ * ```
+ */
+export function indexBy<T>(array: T[], keyCallback: (value: T) => string | number): Record<string, T[]>
+export function indexBy<T>(array: ReadonlyArray<T>, keyCallback: (value: T) => string | number): Record<string, ReadonlyArray<T>>
+export function indexBy<T>(array: ReadonlyArray<T>, keyCallback: (value: T) => string | number): Record<string, T[]> {
+    return array.reduce((prev, cur) => {
+        const key = keyCallback(cur)
+
+        if (key in prev) {
+            prev[key]?.push(cur)
+        } else {
+            prev[key] = [cur]
+        }
+
+        return prev
+    }, {} as Record<string, T[]>)
 }

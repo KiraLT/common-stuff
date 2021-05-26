@@ -1,4 +1,4 @@
-import { sortBy, generateRange, flatMap, flatten } from '../src'
+import { sortBy, generateRange, flatMap, flatten, groupBy, indexBy } from '../src'
 
 describe('sortBy', () => {
     it('is stable', () => {
@@ -102,5 +102,30 @@ describe('flatten', () => {
 
     it('supports custom depth', () => {
         expect(flatten([1, 2, [3, 4, [5, 6]]], 2)).toEqual([1, 2, 3, 4, 5, 6])
+    })
+})
+
+describe('groupBy', () => {
+    it('groups by number', () => {
+        expect(groupBy([6.1, 4.2, 6.3], Math.floor)).toEqual([
+            [4, [4.2]],
+            [6, [6.1, 6.3]],
+        ])
+    })
+
+    it('groups by multiple conditions', () => {
+        expect(groupBy(['one', 'two', 'three'], v => [v.length, v.includes('a')])).toEqual([
+            [[5, false], ['three']],
+            [[3, false], ['one', 'two']],
+        ])
+    })
+})
+
+describe('indexBy', () => {
+    it('creates index', () => {
+        expect(indexBy(['one', 'two', 'three'], v => v.length)).toEqual({
+            '5': ['three'],
+            '3': ['one', 'two']
+        })
     })
 })

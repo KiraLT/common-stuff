@@ -3,8 +3,8 @@
  * A custom key function can be supplied to customize the sort order.
  * Key can return any nested data structure, supports number, booleans, arrays.
  *
- * Usage:
- * ```typescript
+ * @example
+ * ```
  * // Sort by object key
  * arr.sort(sortByCb(v => v.myKey))
  * // Sort by number in reversed order
@@ -12,7 +12,6 @@
  * // Sort by object key, then by boolean value in revered order
  * arr.sort(sortByCb(v => [v.myKey, !v.boolValue])
  * ```
- *
  * @category Array
  * @param key a function to execute to decide the order
  * @returns `array.sort` compatible callback
@@ -56,7 +55,7 @@ export function sortByCb<T>(
  * A custom key function can be supplied to customize the sort order.
  * Key can return any nested data structure, supports number, booleans, arrays, objects.
  *
- * Usage:
+ * @example
  * ```
  * // Sort by object key
  * sortBy(arr, v => v.myKey))
@@ -65,7 +64,6 @@ export function sortByCb<T>(
  * // Sort by object key, then by boolean value in revered order
  * sortBy(arr, v => [v.myKey, !v.boolValue])
  * ```
- *
  * @category Array
  * @param arr any array
  * @param key a function to execute to decide the order
@@ -89,20 +87,19 @@ export function sortBy<T, A extends ReadonlyArray<T>>(
 /**
  * Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.
  *
- * _Example:_
+ * @example
  * ```
- *  >>> range(4)
- *  [0, 1, 2, 3]
- *  >>> range(3,6)
- *  [3, 4, 5]
- *  >>> range(0,10,2)
- *  [0, 2, 4, 6, 8]
- *  >>> range(10,0,-1)
- *  [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
- *  >>> range(8,2,-2)
- *  [8, 6, 4]
- *  ```
- *
+ * >>> range(4)
+ * [0, 1, 2, 3]
+ * >>> range(3,6)
+ * [3, 4, 5]
+ * >>> range(0,10,2)
+ * [0, 2, 4, 6, 8]
+ * >>> range(10,0,-1)
+ * [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+ * >>> range(8,2,-2)
+ * [8, 6, 4]
+ * ```
  * @category Array
  * @param stop an integer number specifying at which position to stop (not included)
  * @returns generated array by range
@@ -111,20 +108,19 @@ export function generateRange(stop: number): number[]
 /**
  * Return an object that produces a array of numbers from start (inclusive) to stop (exclusive) by step.
  *
- * _Example:_
+ * @example
  * ```
- *  >>> range(4)
- *  [0, 1, 2, 3]
- *  >>> range(3,6)
- *  [3, 4, 5]
- *  >>> range(0,10,2)
- *  [0, 2, 4, 6, 8]
- *  >>> range(10,0,-1)
- *  [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
- *  >>> range(8,2,-2)
- *  [8, 6, 4]
- *  ```
- *
+ * >>> range(4)
+ * [0, 1, 2, 3]
+ * >>> range(3,6)
+ * [3, 4, 5]
+ * >>> range(0,10,2)
+ * [0, 2, 4, 6, 8]
+ * >>> range(10,0,-1)
+ * [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+ * >>> range(8,2,-2)
+ * [8, 6, 4]
+ * ```
  * @category Array
  * @param start an integer number specifying at which position to start
  * @param stop an integer number specifying at which position to stop (not included)
@@ -175,7 +171,7 @@ export function generateRange(
  * }
  * ```
  *
- * _Example:_
+ * @example
  * ```
  * const arr1 = [1, 2, 3, 4]
  *
@@ -189,7 +185,6 @@ export function generateRange(
  * flatMap(arr1, x => [[x * 2]])
  * // [[2], [4], [6], [8]]
  * ```
- *
  * @category Array
  * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
  * @param array any array
@@ -257,7 +252,7 @@ type FlatArray<Arr, Depth extends number> = {
  * }
  * ```
  *
- * _Example:_
+ * @example
  * ```
  * flatten([1, 2, [3, 4]])
  * // [1, 2, 3, 4]
@@ -268,7 +263,6 @@ type FlatArray<Arr, Depth extends number> = {
  * flatten([1, 2, [3, 4, [5, 6]]], 2)
  * // [1, 2, 3, 4, 5, 6]
  * ```
- *
  * @category Array
  * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
  * @param depth The maximum recursion depth
@@ -301,12 +295,11 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
 /**
  * Splits an array into groups the length of size. If array can't be split evenly, the final chunk will be the remaining elements.
  *
- * _Example:_
+ * @example
  * ```
  * chunk([1, 2, 3, 4, 5], 2)
  * // [[1, 2], [3, 4], [5]]
  * ```
- *
  * @param size Chunk maximum size
  */
 export function chunk<T>(array: T[], size: number): T[][]

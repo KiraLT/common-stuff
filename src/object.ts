@@ -42,15 +42,13 @@ export function isEqual(a: unknown, b: unknown): boolean {
 /**
  * Converts object to entries, map's it with provided callback and flattens entry list.
  *
- * _Example:_
- *
+ * @example
  * ```
  * flatMapRecord({'a': 2}, ([k, v]) => [[k, v]])
  * >> {'a': 2, 'b': 3}
  * flatMapRecord({'a': 2, 'b': 3}, ([k, v]) => v === 2 ? [[k, v]] : [])
  * >> {'a': 2}
  * ```
- *
  * @category Object
  * @param obj `Record` like object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return list of entry pairs
@@ -73,15 +71,13 @@ export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
 /**
  * Converts object to entries and map's it with provided callback.
  *
- * _Example:_
- *
+ * @example
  * ```
  * mapRecord({'a': 2}, ([k, v]) => [v, k * 2])
  * >> {'b': 4}
  * mapRecord({'a': 'b'}, ([k, v]) => [v, k])
  * >> {'b': 'a'}
  * ```
- *
  * @category Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return entry pair
@@ -97,13 +93,11 @@ export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
 /**
  * Filter object by provided callback.
  *
- * _Example:_
- *
+ * @example
  * ```
  * filterRecord({'a': 2, 'b': 3}, ([k, v]) => v === 2)
  * >> {'a': 2}
  * ```
- *
  * @category Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should boolean value
@@ -119,12 +113,11 @@ export function filterRecord<K extends keyof any, V>(
 /**
  * Merges `source` to `target` recursively
  *
- * _Example_:
+ * @example
  * ```
  * merge({ a: 1 }, { b: 2 }))
  * // { a: 1, b: 2 }
  * ```
- *
  * @category Object
  */
 export function merge<T>(

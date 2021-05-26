@@ -10,10 +10,9 @@ type NextLike = (err?: any) => void
 /**
  * Creates [connect](https://www.npmjs.com/package/connect) style error handle compatible with ExpressJS and other similar frameworks.
  *
- * _Example:_
+ * @example
  * ```
  * app.use(httpErrorHandler())
- *
  * @experimental
 ```
  */

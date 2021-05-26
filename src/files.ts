@@ -1,7 +1,7 @@
 /**
  * Converts bytes number to string representation (e.g. `15.25 GB`)
  *
- * _Example:_
+ * @example
  * ```
  * formatBytes(1648 * 9884)
  * // '15.53 MB'
@@ -24,7 +24,7 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
  * and ext is empty or begins with a period and contains at most one period.
  * Leading periods on the basename are ignored.
  *
- * _Example:_
+ * @example
  * ```
  * getFileParts('file.txt')
  * // ['file', '.txt']

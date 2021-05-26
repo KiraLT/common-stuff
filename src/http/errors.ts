@@ -12,7 +12,7 @@ const codeToReason = Object.entries(HttpStatusCodes).reduce(
 /**
  * HTTP error class with status code
  *
- * Examples:
+ * @example
  * ```
  * // Throw 404 error with default message
  * throw new HttpError(404)
@@ -31,7 +31,6 @@ const codeToReason = Object.entries(HttpStatusCodes).reduce(
  *     return err.publicMessage
  * }
  * ```
- *
  * @category Http
  */
 export class HttpError extends Error {

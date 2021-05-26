@@ -16,13 +16,17 @@ export function hashCode(value: unknown): number {
 /**
  * Generates v4 like [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) (Universally unique identifier).
  *
- * Example: `xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx`
- *
  * > Be aware that UUID uniqueness relies heavily on the underlying random number generator (RNG).
  * > The solution above uses Math.random() for brevity, however Math.random() is not guaranteed to be a high-quality RNG.
  * > For a more robust solution, consider using the [uuid](https://github.com/uuidjs/uuid) module, which uses higher quality RNG APIs.
- */
-export function generateUUID() {
+ *
+ * @example
+ * ```
+ * generateUUID()
+ * // '8e07ef4a-0d1f-45c2-b06b-9495e869b299'
+ * ```
+ **/
+export function generateUUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
         /[xy]/g,
         function (c) {

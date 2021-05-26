@@ -1,7 +1,7 @@
 /**
  * HTTP status codes
  *
- * _Example:_
+ * @example
  * ```
  * HttpStatusCodes.ACCEPTED
  * >> 202
@@ -351,7 +351,7 @@ export enum HttpStatusCodes {
 /**
  * HTTP status reason text
  *
- * _Example:_
+ * @example
  * ```
  * HttpStatusCodes.ACCEPTED
  * >> 'Accepted'

@@ -1,12 +1,11 @@
 /**
  * Truncates string
  *
- * _Example:_
+ * @example
  * ```
  * truncate('Hello world', 8)
  * // Hello...
  * ```
- *
  * @category String
  */
 export function truncate(
@@ -24,12 +23,11 @@ export function truncate(
 /**
  * Extract words from text.
  *
- * _Example:_
+ * @example
  * ```
  * extractWords('Hello-world!')
  * // ['Hello', 'world']
  * ```
- *
  * @category String
  */
 export function extractWords(value: string): string[] {
@@ -41,12 +39,11 @@ export function extractWords(value: string): string[] {
 /**
  * Convert a dash/dot/underscore/space separated string to camelCase
  *
- * _Example:_
+ * @example
  * ```
  * camelCase('foo-bar');
  * // 'fooBar'
  * ```
- *
  * @param value
  */
 export function camelCase(value: string): string {
@@ -60,12 +57,11 @@ export function camelCase(value: string): string {
 /**
  * Convert a dash/dot/underscore/space separated string to PascalCase
  *
- * _Example:_
+ * @example
  * ```
  * pascalCase('foo-bar');
  * // 'FooBar'
  * ```
- *
  * @param value
  */
 export function pascalCase(value: string): string {

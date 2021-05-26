@@ -1,7 +1,7 @@
 /**
  * Generates cookie string
  *
- * _Example:_
+ * @example
  * ```
  * // Create a cookie, valid across the entire site:
  * document.cookie = generateCookie('name', 'value')
@@ -9,7 +9,6 @@
  * // Create a cookie that expires 7 days from now, valid across the entire site:
  * document.cookie = generateCookie('name', 'value', { expires: 7 })
  * ```
- *
  * @param name cookie name
  * @param value cookie value
  */
@@ -36,12 +35,11 @@ export function generateCookie(
 /**
  * Parses cookies string
  *
- * _Example:_
+ * @example
  * ```
  * parseCookies(document.cookie)
  * // {session: '26e761be168533cbf0742f8c295176c7'}
  * ```
- *
  * @category Http
  * @param cookieString `document.cookie` value
  */

@@ -1,12 +1,11 @@
 /**
  * Checks if value is `number`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [1, 'b', 2].filter(isNumber)
  * > [1, 2]
  * ```
- *
  * @category Guard
  */
 export function isNumber<T>(value: T | number): value is number {
@@ -16,12 +15,11 @@ export function isNumber<T>(value: T | number): value is number {
 /**
  * Checks if value is `boolean`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [true, 'b', false].filter(isBoolean)
  * > [true, false]
  * ```
- *
  * @category Guard
  */
 export function isBoolean<T>(value: T | boolean): value is boolean {
@@ -31,12 +29,11 @@ export function isBoolean<T>(value: T | boolean): value is boolean {
 /**
  * Checks if value is `string`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [1, 'b', false].filter(isString)
  * > ['b']
  * ```
- *
  * @category Guard
  */
 export function isString<T>(value: T | string): value is string {
@@ -46,12 +43,11 @@ export function isString<T>(value: T | string): value is string {
 /**
  * Checks if value is `array`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [[1], ['b'], false].filter(isArray)
  * > [[1], ['b']]
  * ```
- *
  * @category Guard
  */
 export function isArray<T>(
@@ -63,7 +59,7 @@ export function isArray<T>(
 /**
  * Checks if value is instance of `Error`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [new Error('error'), 1, 5].filter(isError)
  * > [new Error('error')]
@@ -71,7 +67,6 @@ export function isArray<T>(
  * [new Error('error'), 1, 5].filter(isNot(isError))
  * > [1, 5]
  * ```
- *
  * @category Guard
  */
 export function isError<T>(data: T | Error): data is Error {
@@ -81,7 +76,7 @@ export function isError<T>(data: T | Error): data is Error {
 /**
  * Checks if value is `undefined`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [null, undefined, 1, 5].filter(isUndefined)
  * > [undefined]
@@ -89,7 +84,6 @@ export function isError<T>(data: T | Error): data is Error {
  * [null, undefined, 1, 5].filter(isNot(isUndefined))
  * > [null, 1, 5]
  * ```
- *
  * @category Guard
  */
 export function isUndefined<T>(value: T | undefined): value is undefined {
@@ -99,7 +93,7 @@ export function isUndefined<T>(value: T | undefined): value is undefined {
 /**
  * Checks if value is `null`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [null, undefined, 1, 5].filter(isUndefined)
  * > [undefined]
@@ -107,7 +101,6 @@ export function isUndefined<T>(value: T | undefined): value is undefined {
  * [null, undefined, 1, 5].filter(isNot(isUndefined))
  * > [null, 1, 5]
  * ```
- *
  * @category Guard
  */
 export function isNull<T>(value: T | null): value is null {
@@ -117,7 +110,7 @@ export function isNull<T>(value: T | null): value is null {
 /**
  * Checks if value is not `null` or `undefined`, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * [null, undefined, 1, 5].filter(isUndefined)
  * > [null, undefined]
@@ -125,7 +118,6 @@ export function isNull<T>(value: T | null): value is null {
  * [null, undefined, 1, 5].filter(isNot(isUndefined))
  * > [1, 5]
  * ```
- *
  * @category Guard
  */
 export function isNullOrUndefined<T>(
@@ -177,12 +169,11 @@ export function isEmpty<T>(value: T): boolean {
 /**
  * Inverse guard
  *
- * _Example:_
+ * @example
  * ```
  * [new Error('Error'), 1, 2].filter(isNot(isError))
  * // [1, 2]
  * ```
- *
  * @param guard - guard function
  * @category Guard
  */
@@ -195,7 +186,7 @@ export function isNot<T, S extends T>(
 /**
  * Checks if value is plain object, acts as a typescript safeguard.
  *
- * _Example:_
+ * @example
  * ```
  * isPlainObject({a: 1})
  * // true
@@ -203,7 +194,6 @@ export function isNot<T, S extends T>(
  * isPlainObject([1])
  * // false
  * ```
- *
  * @category Guard
  */
 export function isPlainObject<T = Record<keyof any, unknown>>(
@@ -230,13 +220,12 @@ export function isPlainObject<T = Record<keyof any, unknown>>(
 /**
  * Checks if given value is `Error` if it's subclass and then throw it.
  *
- * _Example:_
+ * @example
  * ```
  * const value = new Error()
  * const value2 = assertError(value)
  * // throws error
  * ```
- *
  * @category Guard
  * @param value any value
  * @returns `value` if it is not an instance of `Error`
@@ -259,6 +248,7 @@ export function assertError<T, E extends Error>(value: T | E): T {
  * ensureArray(['hello'])
  * // ['hello']
  * ```
+ * @category Guard
  */
 export function ensureArray<T>(value: T | T[]): T[]
 export function ensureArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>

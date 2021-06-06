@@ -185,4 +185,18 @@ describe('convertToNested', () => {
             },
         })
     })
+
+    it('ignore empty keys', () => {
+        expect(
+            convertToNested({
+                NODE_ENV: 'development',
+                _: 'test'
+            }, {
+                separator: '__',
+                transformKey: camelCase
+            })
+        ).toEqual({
+            nodeEnv: 'development'
+        })
+    })
 })

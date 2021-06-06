@@ -145,22 +145,22 @@ export function merge<T>(
     const { skipNulls = false, arrayPolicy = 'overwrite' } = options ?? {}
 
     if (isPlainObject(target) && isPlainObject(source)) {
-        return (Object.entries(source).reduce(
+        return Object.entries(source).reduce(
             (prev, [key, value]) => {
                 prev[key] = merge(prev[key], value)
                 return prev
             },
             { ...target }
-        ) as any) as T
+        ) as any as T
     }
 
     if (target instanceof Array && source instanceof Array) {
         if (arrayPolicy === 'merge') {
-            return (target.concat(source) as any) as T
+            return target.concat(source) as any as T
         } else if (typeof arrayPolicy === 'function') {
-            return (arrayPolicy(target, source) as any) as T
+            return arrayPolicy(target, source) as any as T
         } else {
-            return (source as any) as T
+            return source as any as T
         }
     }
 
@@ -180,15 +180,94 @@ export function merge<T>(
  */
 export function clone<T>(value: T, recursive = true): T {
     if (isPlainObject(value)) {
-        return (Object.entries(value).reduce((prev, [k, v]) => {
+        return Object.entries(value).reduce((prev, [k, v]) => {
             prev[k] = recursive ? clone(v) : v
             return prev
-        }, {} as Record<keyof any, unknown>) as any) as T
+        }, {} as Record<keyof any, unknown>) as any as T
     }
 
     if (value instanceof Array) {
-        return (value.map((v) => (recursive ? clone(v) : v)) as any) as T
+        return value.map((v) => (recursive ? clone(v) : v)) as any as T
     }
 
     return value
+}
+
+/**
+ * Parse one level object to nested structure based on key separator
+ *
+ * @example
+ * ```
+ * // ENV: config__host=0.0.0.0 config__port=3000
+ * convertToNested(process.env, { separator: '__' })
+ * // {config: { host: '0.0.0.0', port: 3000 } }
+ *
+ * // ENV: CONFIG__PRIVATE_KEY="my key"
+ * // ENV: CONFIG__PUBLIC_KEY="my key"
+ * // ENV: CONFIG__ALLOWED_IPS='["127.0.0.1", "localhost"]'
+ * convertToNested(process.env, {
+ *    separator: '__',
+ *    transformKey: camelCase
+ * }).config
+ * // { privateKey: 'my key', publicKey: 'my key', allowedIps: ['127.0.0.1', 'localhost'] }
+ * ```
+ * @category Object
+ */
+export function convertToNested<T = Record<string, unknown>>(
+    array: Record<string, unknown>,
+    options?: {
+        /**
+         * Key separator, default `.`
+         */
+        separator?: string
+        /**
+         * Key transform function, e.g. `camelCase` or `pascalCase`
+         */
+        transformKey?: (value: string) => string
+        /**
+         * Value transform function, by default `JSON.parse` is used.
+         */
+        transformValue?: (value: unknown) => unknown
+    }
+): T {
+    const sep = options?.separator ?? '.'
+    const keyTransformer = options?.transformKey ?? ((v) => v)
+    const valueTransformer =
+        options?.transformValue ??
+        ((v) => {
+            if (typeof v === 'string') {
+                try {
+                    return JSON.parse(v)
+                } catch {
+                    return v
+                }
+            }
+            return v
+        })
+
+    const createValue = (
+        [target, ...keys]: string[],
+        value: unknown
+    ): unknown => {
+        if (!target) {
+            return value
+        }
+        return {
+            [target]: createValue(keys, value),
+        }
+    }
+
+    return Object.entries(array)
+        .map(
+            ([key, value]) =>
+                [
+                    key.split(sep).map(keyTransformer),
+                    valueTransformer(value),
+                ] as const
+        )
+        .sort((a, b) => a[0].length - b[0].length)
+        .reduce(
+            (prev, [key, value]) => merge(prev, createValue(key, value)),
+            {} as T
+        )
 }

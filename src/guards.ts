@@ -253,5 +253,5 @@ export function assertError<T, E extends Error>(value: T | E): T {
 export function ensureArray<T>(value: T | T[]): T[]
 export function ensureArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>
 export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
-    return value instanceof Array ? value : [value];
+    return value instanceof Array ? value : [value]
 }

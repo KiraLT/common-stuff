@@ -1,4 +1,12 @@
-import { isEqual, mapRecord, flatMapRecord, filterRecord, merge } from '../src'
+import {
+    isEqual,
+    mapRecord,
+    flatMapRecord,
+    filterRecord,
+    merge,
+    convertToNested,
+    camelCase,
+} from '../src'
 
 describe('isEqual', () => {
     it('compares strings', () => {
@@ -97,5 +105,84 @@ describe('merge', () => {
 
     it('overwrites arrays', () => {
         expect(merge({ a: [1, 2], b: 3 }, { a: [1] })).toEqual({ a: [1], b: 3 })
+    })
+})
+
+describe('convertToNested', () => {
+    it('converts nested', () => {
+        expect(
+            convertToNested({
+                'a.b': 1,
+                'a.a': 2,
+            })
+        ).toEqual({
+            a: {
+                a: 2,
+                b: 1,
+            },
+        })
+    })
+
+    it('supports separator', () => {
+        expect(
+            convertToNested(
+                {
+                    a__b: 1,
+                    a__a: 2,
+                },
+                { separator: '__' }
+            )
+        ).toEqual({
+            a: {
+                a: 2,
+                b: 1,
+            },
+        })
+    })
+
+    it('supports custom key transformation', () => {
+        expect(
+            convertToNested(
+                {
+                    CONFIG__PRIVATE_KEY: 'a',
+                    CONFIG__PUBLIC_KEY: 'b',
+                },
+                { separator: '__', transformKey: camelCase }
+            )
+        ).toEqual({
+            config: {
+                privateKey: 'a',
+                publicKey: 'b',
+            },
+        })
+    })
+
+    it('parses JSON values', () => {
+        expect(
+            convertToNested({
+                'a.b': '[1, 2, 3]',
+                'a.a': `"abc"`,
+                'a.c': '["1", "2", "3"]',
+            })
+        ).toEqual({
+            a: {
+                a: 'abc',
+                b: [1, 2, 3],
+                c: ['1', '2', '3'],
+            },
+        })
+    })
+
+    it('longer keys applied last', () => {
+        expect(
+            convertToNested({
+                'a.b': 2,
+                a: `{"b": 1}`,
+            })
+        ).toEqual({
+            a: {
+                b: 2,
+            },
+        })
     })
 })

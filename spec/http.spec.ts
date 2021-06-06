@@ -52,8 +52,12 @@ describe('HttpError', () => {
     it('has public message', () => {
         expect(new HttpError(404).publicMessage).toBe('Not Found')
         expect(new HttpError(404, '404').publicMessage).toBe('404')
-        expect(new HttpError(404, '404', { expose: false }).publicMessage).toBe('Not Found')
-        expect(new HttpError(500, '500').publicMessage).toBe('Internal Server Error')
+        expect(new HttpError(404, '404', { expose: false }).publicMessage).toBe(
+            'Not Found'
+        )
+        expect(new HttpError(500, '500').publicMessage).toBe(
+            'Internal Server Error'
+        )
     })
 
     it('supports status text input', () => {

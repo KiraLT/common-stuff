@@ -16,7 +16,7 @@ Read [Documentation 📘](https://kiralt.github.io/common-stuff/)
 Install with NPM/Yarn:
 
 ```bash
-$ npm install common-stuff
+npm install common-stuff
 ```
 
 Import what you need:
@@ -33,7 +33,45 @@ if (isEqual({'a': 1}, {'a': 1})) {
 
 ## Examples
 
-### Using Http helpers
+### Using FP patterns
+
+```typescript
+import { sortBy, deduplicateBy, chunk, ensureArray, groupBy } from '.'
+
+const result = pipe(
+    [{ value: 4 }, { value: 6 }, { value: 8 }],
+    (v) => sortBy(v, (o) => o.value),
+    (v) => deduplicateBy(v, (o) => o.value),
+    (v) => v.map((o) => ensureArray(o.value)),
+    (v) => chunk(v, 2),
+    (v) => groupBy(v, (o) => o.length)
+)
+// [ [1, [[[ 8 ]]]],[ 2, [[[ 4 ], [ 6 ]]]] ]
+```
+
+> With arrow functions you can easily use `pipe` with any function
+
+### Parsing env variables
+
+For example we have following ENV variables:
+
+```bash
+CONFIG__PRIVATE_KEY="my key"
+CONFIG__PUBLIC_KEY="my key"
+CONFIG__ALLOWED_IPS='["127.0.0.1", "localhost"]'
+```
+
+```typescript
+import { convertToNested, camelCase } from 'common-stuff'
+
+const config = convertToNested(process.env, {
+    separator: '__',
+    transformKey: camelCase
+}).config
+// { privateKey: 'my key', publicKey: 'my key', allowedIps: ['127.0.0.1', 'localhost'] }
+```
+
+### Using Http errors
 
 ```typescript
 import { HttpError, HttpStatusCodes } from 'common-stuff'
@@ -42,7 +80,7 @@ app.get('/', function (req, res) {
     throw new HttpError(HttpStatusCodes.INTERNAL_SERVER_ERROR, 'Some secret error message')
 })
 
-// Handlle unknown errors
+// Handle unknown errors
 app.use(function (err, req, res, next) {
     if (err instanceof HttpError) {
         // Log full error message

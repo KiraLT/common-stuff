@@ -1,3 +1,4 @@
+import { Z_ASCII } from 'zlib'
 import { hashCode } from '.'
 
 /**
@@ -306,7 +307,10 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
  * @category Array
  */
 export function chunk<T>(array: T[], size: number): T[][]
-export function chunk<T>(array: ReadonlyArray<T>, size: number): ReadonlyArray<ReadonlyArray<T>>
+export function chunk<T>(
+    array: ReadonlyArray<T>,
+    size: number
+): ReadonlyArray<ReadonlyArray<T>>
 export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
     return array.reduce((acc, _, i) => {
         if (i % size === 0) {
@@ -329,21 +333,32 @@ export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
  * ```
  * @category Array
  */
-export function groupBy<T, G>(array: T[], keyCallback: (value: T) => G): [G, T[]][]
-export function groupBy<T, G>(array: ReadonlyArray<T>, keyCallback: (value: T) => G): ReadonlyArray<[G, T[]]>
-export function groupBy<T, G>(array: ReadonlyArray<T>, keyCallback: (value: T) => G): [G, T[]][] {
-    return Object.values(array.reduce((prev, cur) => {
-        const key = keyCallback(cur)
-        const keyHash = hashCode(keyCallback(cur))
+export function groupBy<T, G>(
+    array: T[],
+    keyCallback: (value: T) => G
+): [G, T[]][]
+export function groupBy<T, G>(
+    array: ReadonlyArray<T>,
+    keyCallback: (value: T) => G
+): ReadonlyArray<[G, T[]]>
+export function groupBy<T, G>(
+    array: ReadonlyArray<T>,
+    keyCallback: (value: T) => G
+): [G, T[]][] {
+    return Object.values(
+        array.reduce((prev, cur) => {
+            const key = keyCallback(cur)
+            const keyHash = hashCode(keyCallback(cur))
 
-        if (keyHash in prev) {
-            prev[keyHash]?.[1].push(cur)
-        } else {
-            prev[keyHash] = [key, [cur]]
-        }
+            if (keyHash in prev) {
+                prev[keyHash]?.[1].push(cur)
+            } else {
+                prev[keyHash] = [key, [cur]]
+            }
 
-        return prev
-    }, {} as Record<number, [G, T[]]>))
+            return prev
+        }, {} as Record<number, [G, T[]]>)
+    )
 }
 
 /**
@@ -356,9 +371,18 @@ export function groupBy<T, G>(array: ReadonlyArray<T>, keyCallback: (value: T) =
  * ```
  * @category Array
  */
-export function indexBy<T>(array: T[], keyCallback: (value: T) => string | number): Record<string, T[]>
-export function indexBy<T>(array: ReadonlyArray<T>, keyCallback: (value: T) => string | number): Record<string, ReadonlyArray<T>>
-export function indexBy<T>(array: ReadonlyArray<T>, keyCallback: (value: T) => string | number): Record<string, T[]> {
+export function indexBy<T>(
+    array: T[],
+    keyCallback: (value: T) => string | number
+): Record<string, T[]>
+export function indexBy<T>(
+    array: ReadonlyArray<T>,
+    keyCallback: (value: T) => string | number
+): Record<string, ReadonlyArray<T>>
+export function indexBy<T>(
+    array: ReadonlyArray<T>,
+    keyCallback: (value: T) => string | number
+): Record<string, T[]> {
     return array.reduce((prev, cur) => {
         const key = keyCallback(cur)
 
@@ -370,4 +394,63 @@ export function indexBy<T>(array: ReadonlyArray<T>, keyCallback: (value: T) => s
 
         return prev
     }, {} as Record<string, T[]>)
+}
+
+/**
+ * Removes duplicate values from the array.
+ *
+ * @example
+ * ```
+ * deduplicate([1, 1, 2, 3, 3])
+ * // [1, 2, 3]
+ * ```
+ * @category Array
+ */
+export function deduplicate<T>(array: T[]): T[]
+export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T>
+export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
+    return deduplicateBy(array, (v) => v)
+}
+
+/**
+ * Removes duplicate values from the array by given callback.
+ *
+ * @example
+ * ```
+ * deduplicateBy([ { a: 1 }, { a: 1 } ], v => v.a)
+ * // [ { a: 1 } ]
+ * ```
+ * @category Array
+ */
+export function deduplicateBy<T>(array: T[], key: (value: T) => unknown): T[]
+export function deduplicateBy<T>(
+    array: ReadonlyArray<T>,
+    key: (value: T) => unknown
+): ReadonlyArray<T>
+export function deduplicateBy<T>(
+    array: ReadonlyArray<T>,
+    key: (value: T) => unknown
+): ReadonlyArray<T> {
+    const prims = {
+        boolean: {} as Record<keyof any, boolean>,
+        number: {} as Record<keyof any, boolean>,
+        string: {} as Record<keyof any, boolean>,
+    }
+    type Prim = keyof typeof prims
+
+    const objs: unknown[] = []
+
+    return array.filter((rawItem) => {
+        const item = key(rawItem)
+        const type = typeof item
+        if (type in prims) {
+            if ((item as any) in prims[type as Prim]) {
+                return false
+            } else {
+                return (prims[type as Prim][item as any] = true)
+            }
+        } else {
+            return objs.includes(item) ? false : objs.push(item)
+        }
+    })
 }

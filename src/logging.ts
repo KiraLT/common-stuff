@@ -4,7 +4,7 @@
  * @example
  * ```
  * const logger: Logger = console
- * logger.info('Hello world)
+ * logger.info('Hello world')
  * ```
  * @category Logging
  */

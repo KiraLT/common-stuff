@@ -1,4 +1,13 @@
-import { sortBy, generateRange, flatMap, flatten, groupBy, indexBy } from '../src'
+import {
+    sortBy,
+    generateRange,
+    flatMap,
+    flatten,
+    groupBy,
+    indexBy,
+    deduplicate,
+    deduplicateBy,
+} from '../src'
 
 describe('sortBy', () => {
     it('is stable', () => {
@@ -58,16 +67,7 @@ describe('generateRange', () => {
     it('supports step', () => {
         expect(generateRange(0, 10, 2)).toEqual([0, 2, 4, 6, 8])
         expect(generateRange(10, 0, -1)).toEqual([
-            10,
-            9,
-            8,
-            7,
-            6,
-            5,
-            4,
-            3,
-            2,
-            1,
+            10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
         ])
         expect(generateRange(8, 2, -2)).toEqual([8, 6, 4])
         expect(generateRange(8, 2, 2)).toEqual([])
@@ -114,18 +114,76 @@ describe('groupBy', () => {
     })
 
     it('groups by multiple conditions', () => {
-        expect(groupBy(['one', 'two', 'three'], v => [v.length, v.includes('a')])).toEqual([
+        expect(
+            groupBy(['one', 'two', 'three'], (v) => [v.length, v.includes('a')])
+        ).toEqual([
             [[5, false], ['three']],
-            [[3, false], ['one', 'two']],
+            [
+                [3, false],
+                ['one', 'two'],
+            ],
         ])
     })
 })
 
 describe('indexBy', () => {
     it('creates index', () => {
-        expect(indexBy(['one', 'two', 'three'], v => v.length)).toEqual({
+        expect(indexBy(['one', 'two', 'three'], (v) => v.length)).toEqual({
             '5': ['three'],
-            '3': ['one', 'two']
+            '3': ['one', 'two'],
         })
+    })
+})
+
+describe('deduplicate', () => {
+    it('de-duplicates any type', () => {
+        const obj1 = {}
+        expect(
+            deduplicate([obj1, 1, '5', true, 5, 1, obj1, false, true])
+        ).toEqual([obj1, 1, '5', true, 5, false])
+    })
+})
+
+describe('deduplicateBy', () => {
+    it('de-duplicates any type by callback', () => {
+        const obj1 = {}
+        expect(
+            deduplicateBy(
+                [
+                    {
+                        a: obj1,
+                    },
+                    {
+                        a: 1,
+                    },
+                    {
+                        a: 5,
+                    },
+                    {
+                        a: obj1,
+                    },
+                    {
+                        a: true,
+                    },
+                    {
+                        a: 1,
+                    },
+                ],
+                (v) => v.a
+            )
+        ).toEqual([
+            {
+                a: obj1,
+            },
+            {
+                a: 1,
+            },
+            {
+                a: 5,
+            },
+            {
+                a: true,
+            },
+        ])
     })
 })

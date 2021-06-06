@@ -10,7 +10,7 @@ import {
     isUndefined,
     isNullOrUndefined,
     isEmpty,
-    ensureArray
+    ensureArray,
 } from '../src'
 
 describe('isPlainObject', () => {

@@ -36,7 +36,7 @@ if (isEqual({'a': 1}, {'a': 1})) {
 ### Using FP patterns
 
 ```typescript
-import { sortBy, deduplicateBy, chunk, ensureArray, groupBy } from 'common-stuff'
+import { pipe, sortBy, deduplicateBy, chunk, ensureArray, groupBy } from 'common-stuff'
 
 const result = pipe(
     [{ value: 4 }, { value: 6 }, { value: 8 }],

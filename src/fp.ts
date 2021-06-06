@@ -1,16 +1,17 @@
 /**
  * Perform left-to-right function composition.
  *
- * @param value The initial value.
- * @param operations the list of operations to apply.
  * @example
  * ```
- * R.pipe(
+ * pipe(
  *     [1, 2, 3, 4],
- *     R.map(x => x * 2),
- *     arr => [arr[0] + arr[1], arr[2] + arr[3]],
- * ) // => [6, 14]
+ *     arr => arr.map(v => v * 2),
+ *     arr => arr.map(v => v + 2)
+ * )
+ * // [4, 6, 8, 10]
  *```
+ * @param value The initial value.
+ * @param operations the list of operations to apply.
  * @category FP
  */
 export function pipe<A, B>(value: A, op1: (input: A) => B): B

@@ -40,7 +40,7 @@ export function generateUUID(): string {
 const keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
 
 /**
- * Encodes given value with [Base64](https://en.wikipedia.org/wiki/Base64) algorithm.
+ * Decodes [Base64](https://en.wikipedia.org/wiki/Base64) encoded value.
  */
 export function base64Decode(input: string): string {
     let output = ''
@@ -74,7 +74,7 @@ export function base64Decode(input: string): string {
 }
 
 /**
- * Decodes [Base64](https://en.wikipedia.org/wiki/Base64) encoded value.
+ * Encodes given value with [Base64](https://en.wikipedia.org/wiki/Base64) algorithm.
  */
 export function base64Encode(input: string): string {
     let output = ''

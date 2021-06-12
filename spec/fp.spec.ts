@@ -1,4 +1,4 @@
-import { pipe } from '../src'
+import { pipe, compose } from '../src'
 
 describe('pipe', () => {
     it('applies pipe', () => {
@@ -20,5 +20,15 @@ describe('pipe', () => {
                 (v) => v
             ).map((v) => v.toFixed())
         ).toEqual(['2', '6', '6'])
+    })
+})
+
+describe('compose', () => {
+    it('applies pipe', () => {
+        const func = compose(
+            value => ({value}),
+            (value: string) => parseInt(value),
+        )
+        expect(func('1')).toEqual({value: 1})
     })
 })

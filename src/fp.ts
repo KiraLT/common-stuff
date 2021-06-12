@@ -63,6 +63,57 @@ export function pipe<A, B, C, D, E, F, G, H>(
 export function pipe(
     value: unknown,
     ...operations: Array<(value: unknown) => unknown>
+): unknown
+export function pipe(
+    value: unknown,
+    ...operations: Array<(value: unknown) => unknown>
 ): unknown {
     return operations.reduce((prev, cur) => cur(prev), value)
+}
+
+export function compose<T1, T2>(
+    op1: (input: T1) => T2
+) : (input: T1) => T2
+export function compose<T1, T2, T3>(
+    op2: (input: T2) => T3,
+    op1: (input: T1) => T2
+) : (input: T1) => T3
+export function compose<T1, T2, T3, T4>(
+    op3: (input: T3) => T4,
+    op2: (input: T2) => T3,
+    op1: (input: T1) => T2
+) : (input: T1) => T4
+export function compose<T1, T2, T3, T4, T5>(
+    op4: (input: T4) => T5,
+    op3: (input: T3) => T4,
+    op2: (input: T2) => T3,
+    op1: (input: T1) => T2
+) : (input: T1) => T5
+export function compose<T1, T2, T3, T4, T5, T6>(
+    op5: (input: T5) => T6,
+    op4: (input: T4) => T5,
+    op3: (input: T3) => T4,
+    op2: (input: T2) => T3,
+    op1: (input: T1) => T2
+) : (input: T1) => T6
+export function compose<T1, T2, T3, T4, T5, T6, T7>(
+    op6: (input: T6) => T7,
+    op5: (input: T5) => T6,
+    op4: (input: T4) => T5,
+    op3: (input: T3) => T4,
+    op2: (input: T2) => T3,
+    op1: (input: T1) => T2
+) : (input: T1) => T7
+export function compose<T1, T2, T3, T4, T5, T6, T7, T8>(
+    op7: (input: T7) => T8,
+    op6: (input: T6) => T7,
+    op5: (input: T5) => T6,
+    op4: (input: T4) => T5,
+    op3: (input: T3) => T4,
+    op2: (input: T2) => T3,
+    op1: (input: T1) => T2
+) : (input: T1) => T8
+export function compose(...operations: Array<(value: unknown) => unknown>): (value: unknown) => unknown
+export function compose(...operations: Array<(value: unknown) => unknown>): (value: unknown) => unknown {
+    return (value) => pipe(value, ...[...operations].reverse())
 }

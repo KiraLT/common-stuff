@@ -7,6 +7,7 @@ import {
     indexBy,
     deduplicate,
     deduplicateBy,
+    chunk,
 } from '../src'
 
 describe('sortBy', () => {
@@ -185,5 +186,16 @@ describe('deduplicateBy', () => {
                 a: true,
             },
         ])
+    })
+})
+
+describe('chunk', () => {
+    it('chunks array', () => {
+        expect(chunk([1, 2, 3, 4], 2)).toEqual([
+            [1, 2],
+            [3, 4],
+        ])
+        expect(chunk([1, 2, 3], 2)).toEqual([[1, 2], [3]])
+        expect(chunk([], 2)).toEqual([])
     })
 })

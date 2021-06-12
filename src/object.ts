@@ -265,7 +265,7 @@ export function convertToNested<T = Record<string, unknown>>(
                     valueTransformer(value),
                 ] as const
         )
-        .filter(([keys]) => keys.every(v => !!v))
+        .filter(([keys]) => keys.every((v) => !!v))
         .sort((a, b) => a[0].length - b[0].length)
         .reduce(
             (prev, [key, value]) => merge(prev, createValue(key, value)),

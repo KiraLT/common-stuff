@@ -97,6 +97,11 @@ describe('isNullOrUndefined', () => {
 })
 
 describe('isEmpty', () => {
+    it('supports null and undefined', () => {
+        expect(isEmpty(null)).toBeFalsy()
+        expect(isEmpty(undefined)).toBeFalsy()
+    })
+
     it('supports boolean', () => {
         expect(isEmpty(false)).toBeTruthy()
         expect(isEmpty(true)).toBeFalsy()

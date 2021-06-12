@@ -6,6 +6,7 @@ import {
     merge,
     convertToNested,
     camelCase,
+    clone,
 } from '../src'
 
 describe('isEqual', () => {
@@ -108,6 +109,59 @@ describe('merge', () => {
     })
 })
 
+describe('clone', () => {
+    it('clones object', () => {
+        const obj = { a: 1 }
+
+        const objClone = clone(obj)
+        objClone.a = 10
+
+        expect(obj).toEqual({ a: 1 })
+    })
+
+    it('clones array', () => {
+        const obj = [1, 2]
+
+        const objClone = clone(obj)
+        objClone.push(3)
+
+        expect(obj).toEqual([1, 2])
+    })
+
+    it('clones recursive object', () => {
+        const obj = { a: { b: 1 } }
+
+        const objClone = clone(obj)
+        objClone.a.b = 10
+
+        expect(obj).toEqual({ a: { b: 1 } })
+    })
+
+    it('clones recursive array', () => {
+        const obj = [
+            [1, 2],
+            [3, 4],
+        ]
+
+        const objClone = clone(obj)
+        objClone[0]?.push(3)
+
+        expect(obj).toEqual([
+            [1, 2],
+            [3, 4],
+        ])
+    })
+
+    it('supports shallow clone', () => {
+        const obj = { a: { b: 1 } }
+
+        const objClone = clone(obj, false)
+        objClone.a.b = 10
+
+        expect(obj).toEqual({ a: { b: 10 } })
+    })
+})
+
 describe('convertToNested', () => {
     it('converts nested', () => {
         expect(
@@ -188,15 +242,18 @@ describe('convertToNested', () => {
 
     it('ignore empty keys', () => {
         expect(
-            convertToNested({
-                NODE_ENV: 'development',
-                _: 'test'
-            }, {
-                separator: '__',
-                transformKey: camelCase
-            })
+            convertToNested(
+                {
+                    NODE_ENV: 'development',
+                    _: 'test',
+                },
+                {
+                    separator: '__',
+                    transformKey: camelCase,
+                }
+            )
         ).toEqual({
-            nodeEnv: 'development'
+            nodeEnv: 'development',
         })
     })
 })

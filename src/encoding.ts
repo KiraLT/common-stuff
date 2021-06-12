@@ -37,7 +37,8 @@ export function generateUUID(): string {
     )
 }
 
-const keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
+const keyStr =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
 
 /**
  * Decodes [Base64](https://en.wikipedia.org/wiki/Base64) encoded value.
@@ -93,7 +94,12 @@ export function base64Encode(input: string): string {
         } else if (isNaN(chr3)) {
             enc4 = 64
         }
-        output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2) + keyStr.charAt(enc3) + keyStr.charAt(enc4)
+        output =
+            output +
+            keyStr.charAt(enc1) +
+            keyStr.charAt(enc2) +
+            keyStr.charAt(enc3) +
+            keyStr.charAt(enc4)
     }
     return output
 }
@@ -139,7 +145,9 @@ function decodeUTF8(utf8Text: string): string {
         } else {
             c2 = utf8Text.charCodeAt(i + 1)
             c3 = utf8Text.charCodeAt(i + 2)
-            str += String.fromCharCode(((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63))
+            str += String.fromCharCode(
+                ((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63)
+            )
             i += 3
         }
     }

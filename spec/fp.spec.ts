@@ -26,9 +26,9 @@ describe('pipe', () => {
 describe('compose', () => {
     it('applies pipe', () => {
         const func = compose(
-            value => ({value}),
-            (value: string) => parseInt(value),
+            (value) => ({ value }),
+            (value: string) => parseInt(value)
         )
-        expect(func('1')).toEqual({value: 1})
+        expect(func('1')).toEqual({ value: 1 })
     })
 })

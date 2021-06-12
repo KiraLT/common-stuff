@@ -22,10 +22,18 @@ describe('camelCase', () => {
     it('changes string', () => {
         expect(camelCase('--foo bar')).toEqual('fooBar')
     })
+
+    it('uppercases string after the number', () => {
+        expect(camelCase('--foo1bar')).toEqual('foo1Bar')
+    })
 })
 
 describe('pascalCase', () => {
     it('changes string', () => {
         expect(pascalCase('--foo bar')).toEqual('FooBar')
+    })
+
+    it('uppercases string after the number', () => {
+        expect(pascalCase('--foo1bar')).toEqual('Foo1Bar')
     })
 })

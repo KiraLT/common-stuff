@@ -1,4 +1,3 @@
-import { Z_ASCII } from 'zlib'
 import { hashCode } from '.'
 
 /**

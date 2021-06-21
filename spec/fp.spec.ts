@@ -1,4 +1,4 @@
-import { pipe, compose } from '../src'
+import { pipe, compose, curry, __ } from '../src'
 
 describe('pipe', () => {
     it('applies pipe', () => {
@@ -30,5 +30,28 @@ describe('compose', () => {
             (value: string) => parseInt(value)
         )
         expect(func('1')).toEqual({ value: 1 })
+    })
+})
+
+describe('curry', () => {
+    it('accepts one argument at the time', () => {
+        const myFunc = (a: number, b: string, c: boolean) => a + b + c
+        expect(curry(myFunc)(5)('5')(true)).toBe('55true')
+    })
+
+    it('accepts multiple arguments', () => {
+        const myFunc = (a: number, b: string, c: boolean) => a + b + c
+        expect(curry(myFunc)(5, '5')(true)).toBe('55true')
+    })
+
+    it('accepts all arguments', () => {
+        const myFunc = (a: number, b: string, c: boolean) => a + b + c
+        expect(curry(myFunc)(5, '5', true)).toBe('55true')
+    })
+
+    it('supports placeholder', () => {
+        const myFunc = (a: number, b: string, c: boolean) => a + b + c
+        expect(curry(myFunc)(__, '5', __)(5, true)).toBe('55true')
+        expect(curry(myFunc)(__, '5', __)(5)(true)).toBe('55true')
     })
 })

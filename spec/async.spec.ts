@@ -16,9 +16,9 @@ describe('debounce', () => {
         cb(1)
         await delay(90)
         expect(mock.mock.calls.length).toBe(0)
-    
+
         cb(2)
-    
+
         expect(mock.mock.calls.length).toBe(0)
 
         await delay(90)

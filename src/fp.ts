@@ -365,27 +365,159 @@ type Curry6<T1, T2, T3, T4, T5, T6, R> = {
     (t1: T1, t2: T2, t3: T__, t4: T__, t5: T5, t6: T__): Curry3<T3, T4, T6, R>
     (t1: T1, t2: T2, t3: T__, t4: T4, t5: T__, t6: T__): Curry3<T3, T5, T6, R>
     (t1: T1, t2: T2, t3: T3, t4: T__, t5: T__, t6: T__): Curry3<T4, T5, T6, R>
-    (t1: T__, t2: T__, t3: T__, t4: T__, t5: T5, t6: T6): Curry4<T1, T2, T3, T4, R>
-    (t1: T__, t2: T__, t3: T__, t4: T4, t5: T__, t6: T6): Curry4<T1, T2, T3, T5, R>
-    (t1: T__, t2: T__, t3: T__, t4: T4, t5: T5, t6: T__): Curry4<T1, T2, T3, T6, R>
-    (t1: T__, t2: T__, t3: T3, t4: T__, t5: T__, t6: T6): Curry4<T1, T2, T4, T5, R>
-    (t1: T__, t2: T__, t3: T3, t4: T__, t5: T5, t6: T__): Curry4<T1, T2, T4, T6, R>
-    (t1: T__, t2: T__, t3: T3, t4: T4, t5: T__, t6: T__): Curry4<T1, T2, T5, T6, R>
-    (t1: T__, t2: T2, t3: T__, t4: T__, t5: T__, t6: T6): Curry4<T1, T3, T4, T5, R>
-    (t1: T__, t2: T2, t3: T__, t4: T__, t5: T5, t6: T__): Curry4<T1, T3, T4, T6, R>
-    (t1: T__, t2: T2, t3: T__, t4: T4, t5: T__, t6: T__): Curry4<T1, T3, T5, T6, R>
-    (t1: T__, t2: T2, t3: T3, t4: T__, t5: T__, t6: T__): Curry4<T1, T4, T5, T6, R>
-    (t1: T1, t2: T__, t3: T__, t4: T__, t5: T__, t6: T6): Curry4<T2, T3, T4, T5, R>
-    (t1: T1, t2: T__, t3: T__, t4: T__, t5: T5, t6: T__): Curry4<T2, T3, T4, T6, R>
-    (t1: T1, t2: T__, t3: T__, t4: T4, t5: T__, t6: T__): Curry4<T2, T3, T5, T6, R>
-    (t1: T1, t2: T__, t3: T3, t4: T__, t5: T__, t6: T__): Curry4<T2, T4, T5, T6, R>
-    (t1: T1, t2: T2, t3: T__, t4: T__, t5: T__, t6: T__): Curry4<T3, T4, T5, T6, R>
-    (t1: T__, t2: T__, t3: T__, t4: T__, t5: T__, t6: T6): Curry5<T1, T2, T3, T4, T5, R>
-    (t1: T__, t2: T__, t3: T__, t4: T__, t5: T5, t6: T__): Curry5<T1, T2, T3, T4, T6, R>
-    (t1: T__, t2: T__, t3: T__, t4: T4, t5: T__, t6: T__): Curry5<T1, T2, T3, T5, T6, R>
-    (t1: T__, t2: T__, t3: T3, t4: T__, t5: T__, t6: T__): Curry5<T1, T2, T4, T5, T6, R>
-    (t1: T__, t2: T2, t3: T__, t4: T__, t5: T__, t6: T__): Curry5<T1, T3, T4, T5, T6, R>
-    (t1: T1, t2: T__, t3: T__, t4: T__, t5: T__, t6: T__): Curry5<T2, T3, T4, T5, T6, R>
+    (t1: T__, t2: T__, t3: T__, t4: T__, t5: T5, t6: T6): Curry4<
+        T1,
+        T2,
+        T3,
+        T4,
+        R
+    >
+    (t1: T__, t2: T__, t3: T__, t4: T4, t5: T__, t6: T6): Curry4<
+        T1,
+        T2,
+        T3,
+        T5,
+        R
+    >
+    (t1: T__, t2: T__, t3: T__, t4: T4, t5: T5, t6: T__): Curry4<
+        T1,
+        T2,
+        T3,
+        T6,
+        R
+    >
+    (t1: T__, t2: T__, t3: T3, t4: T__, t5: T__, t6: T6): Curry4<
+        T1,
+        T2,
+        T4,
+        T5,
+        R
+    >
+    (t1: T__, t2: T__, t3: T3, t4: T__, t5: T5, t6: T__): Curry4<
+        T1,
+        T2,
+        T4,
+        T6,
+        R
+    >
+    (t1: T__, t2: T__, t3: T3, t4: T4, t5: T__, t6: T__): Curry4<
+        T1,
+        T2,
+        T5,
+        T6,
+        R
+    >
+    (t1: T__, t2: T2, t3: T__, t4: T__, t5: T__, t6: T6): Curry4<
+        T1,
+        T3,
+        T4,
+        T5,
+        R
+    >
+    (t1: T__, t2: T2, t3: T__, t4: T__, t5: T5, t6: T__): Curry4<
+        T1,
+        T3,
+        T4,
+        T6,
+        R
+    >
+    (t1: T__, t2: T2, t3: T__, t4: T4, t5: T__, t6: T__): Curry4<
+        T1,
+        T3,
+        T5,
+        T6,
+        R
+    >
+    (t1: T__, t2: T2, t3: T3, t4: T__, t5: T__, t6: T__): Curry4<
+        T1,
+        T4,
+        T5,
+        T6,
+        R
+    >
+    (t1: T1, t2: T__, t3: T__, t4: T__, t5: T__, t6: T6): Curry4<
+        T2,
+        T3,
+        T4,
+        T5,
+        R
+    >
+    (t1: T1, t2: T__, t3: T__, t4: T__, t5: T5, t6: T__): Curry4<
+        T2,
+        T3,
+        T4,
+        T6,
+        R
+    >
+    (t1: T1, t2: T__, t3: T__, t4: T4, t5: T__, t6: T__): Curry4<
+        T2,
+        T3,
+        T5,
+        T6,
+        R
+    >
+    (t1: T1, t2: T__, t3: T3, t4: T__, t5: T__, t6: T__): Curry4<
+        T2,
+        T4,
+        T5,
+        T6,
+        R
+    >
+    (t1: T1, t2: T2, t3: T__, t4: T__, t5: T__, t6: T__): Curry4<
+        T3,
+        T4,
+        T5,
+        T6,
+        R
+    >
+    (t1: T__, t2: T__, t3: T__, t4: T__, t5: T__, t6: T6): Curry5<
+        T1,
+        T2,
+        T3,
+        T4,
+        T5,
+        R
+    >
+    (t1: T__, t2: T__, t3: T__, t4: T__, t5: T5, t6: T__): Curry5<
+        T1,
+        T2,
+        T3,
+        T4,
+        T6,
+        R
+    >
+    (t1: T__, t2: T__, t3: T__, t4: T4, t5: T__, t6: T__): Curry5<
+        T1,
+        T2,
+        T3,
+        T5,
+        T6,
+        R
+    >
+    (t1: T__, t2: T__, t3: T3, t4: T__, t5: T__, t6: T__): Curry5<
+        T1,
+        T2,
+        T4,
+        T5,
+        T6,
+        R
+    >
+    (t1: T__, t2: T2, t3: T__, t4: T__, t5: T__, t6: T__): Curry5<
+        T1,
+        T3,
+        T4,
+        T5,
+        T6,
+        R
+    >
+    (t1: T1, t2: T__, t3: T__, t4: T__, t5: T__, t6: T__): Curry5<
+        T2,
+        T3,
+        T4,
+        T5,
+        T6,
+        R
+    >
 }
 
 /**
@@ -436,10 +568,14 @@ export function curry<T1, T2, T3, T4, T5, T6, R>(
 export function curry<T1, R>(fn: (t1: T1) => R): Curry1<T1, R>
 export function curry(func: (...args: unknown[]) => unknown): unknown {
     return function curried(this: unknown, ...args: unknown[]) {
-        if (args.some(v => v instanceof Placeholder)) {
+        if (args.some((v) => v instanceof Placeholder)) {
             return function (this: unknown, ...args2: unknown[]) {
                 const args2Copy = [...args2]
-                const argsCopy = args.map(v => v instanceof Placeholder && args2Copy.length ? args2Copy.shift() : v)
+                const argsCopy = args.map((v) =>
+                    v instanceof Placeholder && args2Copy.length
+                        ? args2Copy.shift()
+                        : v
+                )
                 return curried.apply(this, argsCopy.concat(args2Copy))
             }
         }

@@ -11,6 +11,7 @@ import {
     isNullOrUndefined,
     isEmpty,
     ensureArray,
+    hasKeys
 } from '../src'
 
 describe('isPlainObject', () => {
@@ -140,5 +141,28 @@ describe('ensureArray', () => {
 
     it('wraps to array if value is not an array', () => {
         expect(ensureArray(1)).toEqual([1])
+    })
+})
+
+describe('hasKeys', () => {
+    it('checks object keys', () => {
+        expect(hasKeys({'a': 1, 'b': 1}, ['a', 'b'])).toBeTruthy()
+        expect(hasKeys({'a': 1, 'b': 1}, ['c', 'b'])).toBeFalsy()
+    })
+
+    it('Supports unknown', () => {
+        const a = {'a': 1, b: 1} as unknown
+
+        if (hasKeys(a, ['a', 'b'])) {
+            expect(a.a).toBe(a.b)
+        }
+    })
+
+    it('Supports unions', () => {
+        const a = {'a': 1, b: 1} as {a: number} | {b: number}
+
+        if (hasKeys(a, ['a'])) {
+            expect(a.a.toFixed(1)).toBe('1.0')
+        }
     })
 })

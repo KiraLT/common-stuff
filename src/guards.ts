@@ -255,3 +255,23 @@ export function ensureArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>
 export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
     return value instanceof Array ? value : [value]
 }
+
+
+/**
+ * Checks if unknown object have provided keys.
+ * 
+ * @example
+ * ```
+ * if (hasKeys(value, ['a', 'b'])) {
+ *     console.log(value.a, value.b)
+ * }
+ * ```
+ * @category Guard
+ */
+export function hasKeys<T extends unknown, Key extends keyof any>(obj: T, keys: ReadonlyArray<Key>): obj is {[K in Key]: unknown} & T {
+    if (typeof obj === 'object' && keys.every(v => v in (obj as any))) {
+        return true
+    }
+
+    return false
+}

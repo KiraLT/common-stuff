@@ -1,4 +1,4 @@
-import { hashCode } from '.'
+import { hashCode, ensureArray } from '.'
 
 /**
  * Creates sort callback which can be used for `array.sort` input.
@@ -91,15 +91,15 @@ export function sortBy<T, A extends ReadonlyArray<T>>(
  *
  * @example
  * ```
- * >>> range(4)
+ * >>> generateRange(4)
  * [0, 1, 2, 3]
- * >>> range(3,6)
+ * >>> generateRange(3,6)
  * [3, 4, 5]
- * >>> range(0,10,2)
+ * >>> generateRange(0,10,2)
  * [0, 2, 4, 6, 8]
- * >>> range(10,0,-1)
+ * >>> generateRange(10,0,-1)
  * [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
- * >>> range(8,2,-2)
+ * >>> generateRange(8,2,-2)
  * [8, 6, 4]
  * ```
  * @category Array
@@ -112,15 +112,15 @@ export function generateRange(stop: number): number[]
  *
  * @example
  * ```
- * >>> range(4)
+ * >>> generateRange(4)
  * [0, 1, 2, 3]
- * >>> range(3,6)
+ * >>> generateRange(3,6)
  * [3, 4, 5]
- * >>> range(0,10,2)
+ * >>> generateRange(0,10,2)
  * [0, 2, 4, 6, 8]
- * >>> range(10,0,-1)
+ * >>> generateRange(10,0,-1)
  * [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
- * >>> range(8,2,-2)
+ * >>> generateRange(8,2,-2)
  * [8, 6, 4]
  * ```
  * @category Array
@@ -361,37 +361,42 @@ export function groupBy<T, G>(
 }
 
 /**
- * Creates indexed object by provided callback
+ * Creates indexed object by provided callback.
+ * 
+ * If array is returned, creates a separate index for each array element.
  *
  * @example
  * ```
  * indexBy(['one', 'two', 'three'], v => v.length)
  * // { '5': ['three'], '3': ['one', 'two'] }
+ * 
+ * indexBy(['one', 'two', 'three'], v => [v.length, v.length + 1])
+ * // { '5': ['three'], '6': ['three'], '3': ['one', 'two'], '4': ['one', 'two'] }
  * ```
  * @category Array
  */
 export function indexBy<T>(
     array: T[],
-    keyCallback: (value: T) => string | number
+    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>
 ): Record<string, T[]>
 export function indexBy<T>(
     array: ReadonlyArray<T>,
-    keyCallback: (value: T) => string | number
+    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>
 ): Record<string, ReadonlyArray<T>>
 export function indexBy<T>(
     array: ReadonlyArray<T>,
-    keyCallback: (value: T) => string | number
+    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>
 ): Record<string, T[]> {
     return array.reduce((prev, cur) => {
-        const key = keyCallback(cur)
+        return ensureArray(keyCallback(cur)).reduce((prev2, key) => {
+            if (key in prev) {
+                prev2[key]?.push(cur)
+            } else {
+                prev2[key] = [cur]
+            }
 
-        if (key in prev) {
-            prev[key]?.push(cur)
-        } else {
-            prev[key] = [cur]
-        }
-
-        return prev
+            return prev
+        }, prev)
     }, {} as Record<string, T[]>)
 }
 
@@ -422,6 +427,7 @@ export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
  * @category Array
  */
 export function deduplicateBy<T>(array: T[], key: (value: T) => unknown): T[]
+export function deduplicateBy<T>(array: ReadonlyArray<T>, key: (value: T) => unknown): ReadonlyArray<T>
 export function deduplicateBy<T>(
     array: ReadonlyArray<T>,
     key: (value: T) => unknown
@@ -449,7 +455,92 @@ export function deduplicateBy<T>(
                 return (prims[type as Prim][item as any] = true)
             }
         } else {
-            return objs.includes(item) ? false : objs.push(item)
+            return objs.indexOf(item) !== -1 ? false : objs.push(item)
         }
     })
+}
+
+
+/**
+ * Creates an array of array values not included in the other given arrays.
+ * 
+ * @example
+ * ```
+ * difference([2, 1], [2, 3])
+ * // [1]
+ * 
+ * difference([2, 1], ['2', '3'], (a, b) => a === parseInt(b))
+ * // [1]
+ * ```
+ * @category Array
+ */
+export function difference<T, T2>(array: ReadonlyArray<T>, values: ReadonlyArray<T2>, key?: (value: T | T2) => unknown): ReadonlyArray<T>
+export function difference<T, T2>(array: T[], values: T2[], key?: (value: T) => unknown): T[]
+export function difference<T, T2>(array: ReadonlyArray<T>, values: ReadonlyArray<T2>, key: (value: T | T2) => unknown = v => v): T[] {
+    return array.filter(v => !values.some(v2 => key(v) === key(v2)))
+}
+
+/**
+ * Creates an array of unique values that are included in all given arrays.
+ * 
+ * @example
+ * ```
+ * intersection([[2, 1], [2, 3]])
+ * // [2]
+ * ```
+ * @category Array
+ */
+export function intersection<T>(values: ReadonlyArray<ReadonlyArray<T>>, key?: (value: T) => unknown): ReadonlyArray<T>
+export function intersection<T>(values: T[][], key?: (value: T) => unknown): T[]
+export function intersection<T>(values: ReadonlyArray<ReadonlyArray<T>>, key: (value: T) => unknown = v => v): T[] {
+    const [first, ...rest] = values
+    return first ? first.filter(v => rest.every(v2 => v2.some(v3 => key(v) === key(v3)))) : []
+}
+
+/**
+ * Creates an array of unique values that are included in all given arrays.
+ * 
+ * @example
+ * ```
+ * intersection([[2, 1], [2, 3]])
+ * // [2]
+ * ```
+ * @category Array
+ */
+ export function union<T>(values: ReadonlyArray<ReadonlyArray<T>>, key?: (value: T) => unknown): ReadonlyArray<T>
+ export function union<T>(values: T[][], key?: (value: T) => unknown): T[]
+ export function union<T>(values: ReadonlyArray<ReadonlyArray<T>>, key: (value: T) => unknown = v => v): T[] {
+    return deduplicateBy(values.reduce<T[]>((prev, cur) => {
+        prev.push(...cur)
+        return prev
+     }, []), key)
+}
+
+ 
+/**
+ * Checks if any value from provided values array is included in the provided array using provided `comparator` function (or by default comparing using `===`).
+ * 
+ * @category Array
+ * @example
+ * ```
+ * includesAny([1, 2, 3], [3, 4, 5])
+ * // true
+ * ```
+ */
+export function includesAny<T, T2>(array: ReadonlyArray<T>, values: ReadonlyArray<T2>, key: (value: T | T2) => unknown = v => v): boolean {
+    return values.some(v => array.some(v2 => key(v2) === key(v)))
+}
+
+/**
+ * Checks if all values from provided values array are included in the provided array using provided `comparator` function (or by default comparing using `===`).
+ * 
+ * @category Array
+ * @example
+ * ```
+ * includesAll([1, 2, 3], [1, 2])
+ * // true
+ * ```
+ */
+export function includesAll<T, T2>(array: ReadonlyArray<T>, values: ReadonlyArray<T2>, key: (value: T | T2) => unknown = v => v): boolean {
+    return values.every(v => array.some(v2 => key(v2) === key(v)))
 }

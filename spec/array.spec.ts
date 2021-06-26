@@ -8,6 +8,11 @@ import {
     deduplicate,
     deduplicateBy,
     chunk,
+    difference,
+    includesAny,
+    includesAll,
+    intersection,
+    union
 } from '../src'
 
 describe('sortBy', () => {
@@ -134,6 +139,15 @@ describe('indexBy', () => {
             '3': ['one', 'two'],
         })
     })
+
+    it('supports array', () => {
+        expect(indexBy(['one', 'two', 'three'], (v) => [v.length, v.length + 1])).toEqual({
+            '5': ['three'],
+            '6': ['three'],
+            '3': ['one', 'two'],
+            '4': ['one', 'two'],
+        })
+    })
 })
 
 describe('deduplicate', () => {
@@ -197,5 +211,53 @@ describe('chunk', () => {
         ])
         expect(chunk([1, 2, 3], 2)).toEqual([[1, 2], [3]])
         expect(chunk([], 2)).toEqual([])
+    })
+})
+
+describe('difference', () => {
+    it('finds difference', () => {
+        expect(difference([2, 1], [2, 3])).toEqual([1])
+    })
+
+    it('supports key callback', () => {
+        expect(difference([2, 1], ['2', '3'], v => parseInt(v.toString()))).toEqual([1])
+    })
+})
+
+describe('intersection', () => {
+    it('finds intersection', () => {
+        expect(intersection([[2, 1], [2, 3]])).toEqual([2])
+    })
+
+    it('supports key callback', () => {
+        expect(intersection<string | number>([[2, 1], ['2', '3']], v => parseInt(v.toString()))).toEqual([2])
+    })
+})
+
+describe('includesAny', () => {
+    it('checks if includes', () => {
+        expect(includesAny([2, 1], [2, 3])).toBeTruthy()
+    })
+
+    it('checks if not includes', () => {
+        expect(includesAny([2, 1], [0, 3])).toBeFalsy()
+    })
+
+    it('supports key callback', () => {
+        expect(includesAny([2, 1], ['2', '3'], v => parseInt(v.toString()))).toBeTruthy()
+    })
+})
+
+describe('includesAll', () => {
+    it('checks if includes', () => {
+        expect(includesAll([3, 2, 1], [2, 3])).toBeTruthy()
+    })
+
+    it('checks if not includes', () => {
+        expect(includesAll([2, 1], [2, 3])).toBeFalsy()
+    })
+
+    it('supports key callback', () => {
+        expect(includesAll([2, 1], ['1', '2'], v => parseInt(v.toString()))).toBeTruthy()
     })
 })

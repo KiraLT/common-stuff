@@ -552,12 +552,12 @@ export function union<T>(
 /**
  * Checks if any value from provided values array is included in the provided array using provided `comparator` function (or by default comparing using `===`).
  *
- * @category Array
  * @example
  * ```
  * includesAny([1, 2, 3], [3, 4, 5])
  * // true
  * ```
+ * @category Array
  */
 export function includesAny<T, T2>(
     array: ReadonlyArray<T>,
@@ -570,12 +570,12 @@ export function includesAny<T, T2>(
 /**
  * Checks if all values from provided values array are included in the provided array using provided `comparator` function (or by default comparing using `===`).
  *
- * @category Array
  * @example
  * ```
  * includesAll([1, 2, 3], [1, 2])
  * // true
  * ```
+ * @category Array
  */
 export function includesAll<T, T2>(
     array: ReadonlyArray<T>,
@@ -586,8 +586,19 @@ export function includesAll<T, T2>(
 }
 
 /**
- * The findIndex() method returns the index of the first element in the array that satisfies the provided testing function.
- * Otherwise, it returns -1, indicating that no element passed the test.
+ * Returns the index of the first element in the array where predicate is true, and -1
+ * otherwise.
+ * 
+ * @example
+ * ```
+ * const obj = [{name: 'abc'}]
+ * const index = findIndex(obj, v => v.name = 'abc')
+ * // 0
+ * ```
+ * @param predicate find calls predicate once for each element of the array, in ascending
+ * order, until it finds one where predicate returns true. If such an element is found,
+ * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+ * @category Array
  */
 export function findIndex<T>(
     array: ReadonlyArray<T>,

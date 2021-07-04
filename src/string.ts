@@ -7,32 +7,44 @@ export const asciiLowercase = 'abcdefghijklmnopqrstuvwxyz'
 
 /**
  * The uppercase letters `ABCDEFGHIJKLMNOPQRSTUVWXYZ`.
+ * 
+ * @category String
  */
 export const asciiUppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 /**
  * The concatenation of the [[asciiLowercase]] and [[asciiUppercase]] constants.
+ * 
+ * @category String
  */
 export const asciiLetters = asciiLowercase + asciiUppercase
 
 /**
- * The string '0123456789'.
+ * The string `0123456789`.
+ * 
+ * @category String
  */
 export const digits = '0123456789'
 
 /**
- * The string '0123456789abcdefABCDEF'.
+ * The string `0123456789abcdefABCDEF`.
+ * 
+ * @category String
  */
 export const hexdigits = '0123456789abcdefABCDEF'
 
 /**
- * The string '01234567'.
+ * The string `01234567`.
+ * 
+ * @category String
  */
 export const octdigits = '01234567'
 
 /**
  * String of ASCII characters which are considered punctuation characters in the C locale:
  * `!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~.`
+ * 
+ * @category String
  */
 export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
 
@@ -82,7 +94,7 @@ export function extractWords(value: string): string[] {
  * camelCase('foo-bar');
  * // 'fooBar'
  * ```
- * @param value
+ * @category String
  */
 export function camelCase(value: string): string {
     return value
@@ -100,7 +112,7 @@ export function camelCase(value: string): string {
  * pascalCase('foo-bar');
  * // 'FooBar'
  * ```
- * @param value
+ * @category String
  */
 export function pascalCase(value: string): string {
     const parsed = camelCase(value)

@@ -1,4 +1,42 @@
 /**
+ * The lowercase letters `abcdefghijklmnopqrstuvwxyz`.
+ * 
+ * @category String
+ */
+export const asciiLowercase = 'abcdefghijklmnopqrstuvwxyz'
+
+/**
+ * The uppercase letters `ABCDEFGHIJKLMNOPQRSTUVWXYZ`.
+ */
+export const asciiUppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+/**
+ * The concatenation of the [[asciiLowercase]] and [[asciiUppercase]] constants.
+ */
+export const asciiLetters = asciiLowercase + asciiUppercase
+
+/**
+ * The string '0123456789'.
+ */
+export const digits = '0123456789'
+
+/**
+ * The string '0123456789abcdefABCDEF'.
+ */
+export const hexdigits = '0123456789abcdefABCDEF'
+
+/**
+ * The string '01234567'.
+ */
+export const octdigits = '01234567'
+
+/**
+ * String of ASCII characters which are considered punctuation characters in the C locale:
+ * `!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~.`
+*/
+export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~'
+
+/**
  * Truncates string
  *
  * @example

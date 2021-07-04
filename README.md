@@ -95,3 +95,17 @@ app.use(function (err, req, res, next) {
 
 > This example returns 500 error message with text `Internal Server Error` and logs private message to console
 > Check [express-async-errors](https://www.npmjs.com/package/express-async-errors) for async support.
+
+### Common browser helpers
+
+```typescript
+import { parseCookies, generateCookie, parseQueryString } from 'common-stuff'
+
+parseCookies(document.cookie)
+// {session: '26e761be168533cbf0742f8c295176c7'}
+
+document.cookie = generateCookie('name', 'John', { expires: 7 })
+
+parseQueryString(location.search)
+// { page: ['1'], limit: ['20']}
+```

@@ -13,6 +13,7 @@ import {
     includesAll,
     intersection,
     union,
+    findIndex,
 } from '../src'
 
 describe('sortBy', () => {
@@ -251,6 +252,29 @@ describe('intersection', () => {
     })
 })
 
+describe('union', () => {
+    it('finds intersection', () => {
+        expect(
+            union([
+                [2, 1],
+                [2, 3],
+            ])
+        ).toEqual([2, 1, 3])
+    })
+
+    it('supports key callback', () => {
+        expect(
+            union<string | number>(
+                [
+                    [2, 1],
+                    ['2', '3'],
+                ],
+                (v) => parseInt(v.toString())
+            )
+        ).toEqual([2, 1, '3'])
+    })
+})
+
 describe('includesAny', () => {
     it('checks if includes', () => {
         expect(includesAny([2, 1], [2, 3])).toBeTruthy()
@@ -280,5 +304,15 @@ describe('includesAll', () => {
         expect(
             includesAll([2, 1], ['1', '2'], (v) => parseInt(v.toString()))
         ).toBeTruthy()
+    })
+})
+
+describe('findIndex', () => {
+    it('finds index', () => {
+        expect(findIndex([1, 2, 3, 4], (v) => v === 4)).toBe(3)
+    })
+
+    it('returns -1 if not found', () => {
+        expect(findIndex([1, 2, 3, 4], (v) => v === 10)).toBe(-1)
     })
 })

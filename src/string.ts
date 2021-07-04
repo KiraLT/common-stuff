@@ -1,6 +1,6 @@
 /**
  * The lowercase letters `abcdefghijklmnopqrstuvwxyz`.
- * 
+ *
  * @category String
  */
 export const asciiLowercase = 'abcdefghijklmnopqrstuvwxyz'
@@ -33,8 +33,8 @@ export const octdigits = '01234567'
 /**
  * String of ASCII characters which are considered punctuation characters in the C locale:
  * `!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~.`
-*/
-export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~'
+ */
+export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
 
 /**
  * Truncates string

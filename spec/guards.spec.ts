@@ -13,6 +13,7 @@ import {
     ensureArray,
     ensureError,
     hasKeys,
+    assertNotError,
 } from '../src'
 
 describe('isPlainObject', () => {
@@ -176,5 +177,17 @@ describe('hasKeys', () => {
         if (hasKeys(a, ['a'])) {
             expect(a.a.toFixed(1)).toBe('1.0')
         }
+    })
+})
+
+describe('assertNotError', () => {
+    it('returns original value if not error', () => {
+        const value = new Object()
+
+        expect(assertNotError(value)).toBe(value)
+    })
+
+    it('throws value if error', () => {
+        expect(() => assertNotError(new Error('abc'))).toThrowError('abc')
     })
 })

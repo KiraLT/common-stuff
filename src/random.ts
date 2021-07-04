@@ -32,7 +32,7 @@ export function randomChoice<T>(array: ReadonlyArray<T>): T | undefined {
 
 /**
  * Generate new array by randomly picking items from provided array
- * 
+ *
  * @example
  * ```
  * randomChoices([1, 2], 3)
@@ -50,19 +50,22 @@ export function randomChoices<T>(array: ReadonlyArray<T>, length: number): T[] {
 
 /**
  * Generates random string between min (inclusive) and max (inclusive) length.
- * 
+ *
  * By default it uses [[asciiLetters]] + [[digits]] + [[punctuation]]
- * 
- * @param length 
- * @param options 
- * @returns 
+ *
+ * @param length
+ * @param options
+ * @returns
  */
-export function randomString(length: number, options?: { chars?: string }): string {
-    const {
-        chars = asciiLetters + digits + punctuation
-    } = options ?? {}
+export function randomString(
+    length: number,
+    options?: { chars?: string }
+): string {
+    const { chars = asciiLetters + digits + punctuation } = options ?? {}
 
-    return generateRange(length).map(() => chars.charAt(Math.floor(Math.random() * chars.length))).join('')
+    return generateRange(length)
+        .map(() => chars.charAt(Math.floor(Math.random() * chars.length)))
+        .join('')
 }
 
 /**

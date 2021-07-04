@@ -1,4 +1,10 @@
-import { randomInt, randomChoice, shuffle, randomChoices, randomString } from '../src'
+import {
+    randomInt,
+    randomChoice,
+    shuffle,
+    randomChoices,
+    randomString,
+} from '../src'
 
 describe('randomInt', () => {
     it('generates random int', () => {
@@ -22,7 +28,7 @@ describe('randomChoices', () => {
 
 describe('shuffle', () => {
     it('shuffles array', () => {
-        const value = [1, 2, 3]
+        const value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         expect(shuffle(value)).not.toEqual(value)
         expect([...shuffle(value)].sort()).toEqual(value.slice().sort())
     })
@@ -34,8 +40,10 @@ describe('randomString', () => {
     })
 
     it('supports custom chars', () => {
-        expect(randomString(5, {
-            chars: 'abc'
-        })).toMatch(/[abc]{5}/)
+        expect(
+            randomString(5, {
+                chars: 'abc',
+            })
+        ).toMatch(/[abc]{5}/)
     })
 })

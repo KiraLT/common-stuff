@@ -149,6 +149,12 @@ describe('parseQueryString', () => {
             })
         ).toEqual({ page: ['1'], limit: ['20'] })
     })
+
+    it('removes values without keys', () => {
+        expect(parseQueryString('?=1&limit=20')).toEqual({
+            limit: ['20'],
+        })
+    })
 })
 
 describe('generateQueryString', () => {

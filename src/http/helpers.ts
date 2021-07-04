@@ -1,3 +1,5 @@
+import { flatMap, ensureArray, Primitive, isNullOrUndefined, isNot } from '../'
+
 /**
  * Generates cookie string
  *
@@ -56,13 +58,99 @@ export function parseCookies(cookieString: string): Record<string, string> {
 }
 
 /**
+ * Parse a query string given as a string argument.
+ *
+ * @example
+ * ```
+ * location.search
+ * // ?page=1&limit=20
+ *
+ * parseQueryString(location.search)
+ * // { page: ['1'], limit: ['20']}
+ * ```
+ * @category Http
+ */
+export function parseQueryString(
+    query: string,
+    options?: {
+        /**
+         * @default `&`
+         */
+        separator?: string
+    }
+): Record<string, string[]> {
+    const { separator = '&' } = options ?? {}
+
+    return flatMap(
+        (query[0] === '?' ? query.slice(1) : query)
+            .split(separator)
+            .filter((part) => part.indexOf('=') !== -1),
+        (part) => {
+            const [key = '', value = ''] = part.split('=', 2)
+
+            if (key) {
+                return [
+                    [
+                        decodeURIComponent(key),
+                        [decodeURIComponent(value.replace(/\+/g, ' '))],
+                    ],
+                ] as const
+            }
+
+            return []
+        }
+    ).reduce<Record<string, string[]>>(
+        (prev, [key, value]) => ({
+            ...prev,
+            [key]: [...(prev[key] || []), ...value],
+        }),
+        {}
+    )
+}
+
+/**
+ * Generates query string form provided object.
+ *
+ * @example
+ * ```
+ * generateQueryString({ page: 1, limit: 20})
+ * // 'page=1&limit=20'
+ * ```
+ * @category Http
+ * @param query
+ * @param options
+ * @returns
+ */
+export function generateQueryString(
+    query: Record<string, Primitive[] | Primitive>,
+    options?: {
+        /**
+         * @default `&`
+         */
+        separator?: string
+    }
+): string {
+    const { separator = '&' } = options ?? {}
+    return flatMap(Object.entries(query), ([key, values]) =>
+        ensureArray(values)
+            .filter(isNot(isNullOrUndefined))
+            .map(
+                (v) =>
+                    `${encodeURIComponent(key.toString())}=${encodeURIComponent(
+                        v.toString()
+                    ).replace(/%20/g, '+')}`
+            )
+    ).join(separator)
+}
+
+/**
  * Converts absolute URL to relative
- * 
+ *
  * @example
  * ```
  * urlToRelative('https://domain.com/index.html')
  * // /index.html
- * ``` 
+ * ```
  */
 export function urlToRelative(url: string): string {
     return `/${url.replace(/^(?:\/\/|[^/]+)*\//, '')}`
@@ -70,12 +158,12 @@ export function urlToRelative(url: string): string {
 
 // /**
 //  * Construct a full (`absolute`) URL by combining a `base URL` with another URL.
-//  * 
+//  *
 //  * @example
 //  * ```
 //  * urlToAbsolute('https://domain.com', 'index.html')
 //  * // https://domain.com/index.html
-//  * ``` 
+//  * ```
 //  */
 // export function urlJoin(base: string, relative: string): string {
 //     const stack = base.split('/')

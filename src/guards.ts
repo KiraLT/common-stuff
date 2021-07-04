@@ -258,7 +258,7 @@ export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
 
 /**
  * Returns `value` if it is instance of error otherwise wraps `value` to new `Error` instance.
- * 
+ *
  * @param value `Error` or other value
  * @returns `value` if it instance of error `Error` otherwise wraps `value` to new `Error` instance
  * @category Guard
@@ -272,7 +272,7 @@ export function ensureError(value: unknown): Error {
 
 /**
  * Checks if unknown object have provided keys.
- * 
+ *
  * @example
  * ```
  * if (hasKeys(value, ['a', 'b'])) {
@@ -281,8 +281,11 @@ export function ensureError(value: unknown): Error {
  * ```
  * @category Guard
  */
-export function hasKeys<T extends unknown, Key extends keyof any>(obj: T, keys: ReadonlyArray<Key>): obj is {[K in Key]: unknown} & T {
-    if (typeof obj === 'object' && keys.every(v => v in (obj as any))) {
+export function hasKeys<T extends unknown, Key extends keyof any>(
+    obj: T,
+    keys: ReadonlyArray<Key>
+): obj is { [K in Key]: unknown } & T {
+    if (typeof obj === 'object' && keys.every((v) => v in (obj as any))) {
         return true
     }
 

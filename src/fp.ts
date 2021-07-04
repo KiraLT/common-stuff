@@ -1,4 +1,4 @@
-import { ensureError } from "."
+import { ensureError } from '.'
 
 class Placeholder {
     __PLACEHOLDER__ = '__PLACEHOLDER__'
@@ -594,24 +594,30 @@ export function curry(func: (...args: unknown[]) => unknown): unknown {
 
 /**
  * Wraps callback to try/catch block
- * 
- * @param callback 
- * @returns 
+ *
+ * @param callback
+ * @returns
  * @example
  * ```
  * const result = tryCatch(() => fetch('http://example.com'))
  * if (value instanceof Error) {
  *     console.log(value.message)
  * }
- * 
+ *
  * const parsedOrUndefined = tryCatch(() => JSON.parse(jsonString), undefined)
  * ```
  */
 export function tryCatch<T>(callback: () => T): T | Error
 export function tryCatch<T>(callback: () => Promise<T>): Promise<T | Error>
 export function tryCatch<T, T2>(callback: () => T, defaultValue: T2): T | T2
-export function tryCatch<T, T2>(callback: () => Promise<T>, defaultValue: T2): T | T2
-export function tryCatch<T, T2>(callback: () => T, defaultValue?: T2): T | T2 | Error | Promise<T | T2 | Error> {
+export function tryCatch<T, T2>(
+    callback: () => Promise<T>,
+    defaultValue: T2
+): T | T2
+export function tryCatch<T, T2>(
+    callback: () => T,
+    defaultValue?: T2
+): T | T2 | Error | Promise<T | T2 | Error> {
     const defaultValueProvided = arguments.length === 2
 
     const handleError = (err: unknown) => {

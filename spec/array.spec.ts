@@ -12,7 +12,7 @@ import {
     includesAny,
     includesAll,
     intersection,
-    union
+    union,
 } from '../src'
 
 describe('sortBy', () => {
@@ -141,7 +141,9 @@ describe('indexBy', () => {
     })
 
     it('supports array', () => {
-        expect(indexBy(['one', 'two', 'three'], (v) => [v.length, v.length + 1])).toEqual({
+        expect(
+            indexBy(['one', 'two', 'three'], (v) => [v.length, v.length + 1])
+        ).toEqual({
             '5': ['three'],
             '6': ['three'],
             '3': ['one', 'two'],
@@ -220,17 +222,32 @@ describe('difference', () => {
     })
 
     it('supports key callback', () => {
-        expect(difference([2, 1], ['2', '3'], v => parseInt(v.toString()))).toEqual([1])
+        expect(
+            difference([2, 1], ['2', '3'], (v) => parseInt(v.toString()))
+        ).toEqual([1])
     })
 })
 
 describe('intersection', () => {
     it('finds intersection', () => {
-        expect(intersection([[2, 1], [2, 3]])).toEqual([2])
+        expect(
+            intersection([
+                [2, 1],
+                [2, 3],
+            ])
+        ).toEqual([2])
     })
 
     it('supports key callback', () => {
-        expect(intersection<string | number>([[2, 1], ['2', '3']], v => parseInt(v.toString()))).toEqual([2])
+        expect(
+            intersection<string | number>(
+                [
+                    [2, 1],
+                    ['2', '3'],
+                ],
+                (v) => parseInt(v.toString())
+            )
+        ).toEqual([2])
     })
 })
 
@@ -244,7 +261,9 @@ describe('includesAny', () => {
     })
 
     it('supports key callback', () => {
-        expect(includesAny([2, 1], ['2', '3'], v => parseInt(v.toString()))).toBeTruthy()
+        expect(
+            includesAny([2, 1], ['2', '3'], (v) => parseInt(v.toString()))
+        ).toBeTruthy()
     })
 })
 
@@ -258,6 +277,8 @@ describe('includesAll', () => {
     })
 
     it('supports key callback', () => {
-        expect(includesAll([2, 1], ['1', '2'], v => parseInt(v.toString()))).toBeTruthy()
+        expect(
+            includesAll([2, 1], ['1', '2'], (v) => parseInt(v.toString()))
+        ).toBeTruthy()
     })
 })

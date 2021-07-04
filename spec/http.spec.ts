@@ -7,6 +7,8 @@ import {
     decodeHtml,
     encodeHtml,
     urlToRelative,
+    parseQueryString,
+    generateQueryString,
 } from '../src'
 
 describe('httpStatusCodes', () => {
@@ -104,13 +106,17 @@ describe('decodeHtml', () => {
     })
 })
 
-describe('urlToRelative', ( ) => {
+describe('urlToRelative', () => {
     it('converts absolute URL to relative', () => {
-        expect(urlToRelative('https://domain.com/index.html')).toBe('/index.html')
+        expect(urlToRelative('https://domain.com/index.html')).toBe(
+            '/index.html'
+        )
     })
 
     it('supports subdomains', () => {
-        expect(urlToRelative('https://my-sub.domain.com/index.html')).toBe('/index.html')
+        expect(urlToRelative('https://my-sub.domain.com/index.html')).toBe(
+            '/index.html'
+        )
     })
 })
 
@@ -121,3 +127,45 @@ describe('urlToRelative', ( ) => {
 //     })
 // })
 
+describe('parseQueryString', () => {
+    it('parses string with ?', () => {
+        expect(parseQueryString('?page=1&limit=20')).toEqual({
+            page: ['1'],
+            limit: ['20'],
+        })
+    })
+
+    it('parses string without ?', () => {
+        expect(parseQueryString('page=1&limit=20')).toEqual({
+            page: ['1'],
+            limit: ['20'],
+        })
+    })
+
+    it('supports separator', () => {
+        expect(
+            parseQueryString('page=1;limit=20', {
+                separator: ';',
+            })
+        ).toEqual({ page: ['1'], limit: ['20'] })
+    })
+})
+
+describe('generateQueryString', () => {
+    it('parses string', () => {
+        expect(generateQueryString({ page: [1], limit: 20 })).toBe(
+            'page=1&limit=20'
+        )
+    })
+
+    it('supports separator', () => {
+        expect(
+            generateQueryString(
+                { page: [1], limit: 20 },
+                {
+                    separator: ';',
+                }
+            )
+        ).toBe('page=1;limit=20')
+    })
+})

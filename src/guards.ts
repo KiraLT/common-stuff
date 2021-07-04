@@ -223,7 +223,7 @@ export function isPlainObject<T = Record<keyof any, unknown>>(
  * @example
  * ```
  * const value = new Error()
- * const value2 = assertError(value)
+ * const value2 = assertNotError(value)
  * // throws error
  * ```
  * @category Guard
@@ -231,7 +231,7 @@ export function isPlainObject<T = Record<keyof any, unknown>>(
  * @returns `value` if it is not an instance of `Error`
  * @throws `value` if it is an instance of `Error`
  */
-export function assertError<T, E extends Error>(value: T | E): T {
+export function assertNotError<T, E extends Error>(value: T | E): T {
     if (value instanceof Error) {
         throw value
     }
@@ -256,6 +256,19 @@ export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
     return value instanceof Array ? value : [value]
 }
 
+/**
+ * Returns `value` if it is instance of error otherwise wraps `value` to new `Error` instance.
+ * 
+ * @param value `Error` or other value
+ * @returns `value` if it instance of error `Error` otherwise wraps `value` to new `Error` instance
+ * @category Guard
+ */
+export function ensureError(value: unknown): Error {
+    if (value instanceof Error) {
+        return value
+    }
+    return new Error(String(value))
+}
 
 /**
  * Checks if unknown object have provided keys.

@@ -2716,6 +2716,9 @@ img {
 		<li class=" tsd-kind-interface">
 			<a href="interfaces/logger.html" class="tsd-kind-icon">Logger</a>
 		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="modules.html#primitive" class="tsd-kind-icon">Primitive</a>
+		</li>
 		<li class=" tsd-kind-variable">
 			<a href="modules.html#__" class="tsd-kind-icon">__</a>
 		</li>
@@ -2804,6 +2807,9 @@ img {
 			<a href="modules.html#generatecookie" class="tsd-kind-icon">generate<wbr>Cookie</a>
 		</li>
 		<li class=" tsd-kind-function">
+			<a href="modules.html#generatequerystring" class="tsd-kind-icon">generate<wbr>Query<wbr>String</a>
+		</li>
+		<li class=" tsd-kind-function">
 			<a href="modules.html#generaterange" class="tsd-kind-icon">generate<wbr>Range</a>
 		</li>
 		<li class=" tsd-kind-function">
@@ -2877,6 +2883,9 @@ img {
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="modules.html#parsecookies" class="tsd-kind-icon">parse<wbr>Cookies</a>
+		</li>
+		<li class=" tsd-kind-function">
+			<a href="modules.html#parsequerystring" class="tsd-kind-icon">parse<wbr>Query<wbr>String</a>
 		</li>
 		<li class=" tsd-kind-function">
 			<a href="modules.html#parsesize" class="tsd-kind-icon">parse<wbr>Size</a>
@@ -3024,6 +3033,12 @@ img {
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
+						<h3>Type aliases</h3>
+						<ul class="tsd-index-list">
+							<li class="tsd-kind-type-alias"><a href="modules.html#primitive" class="tsd-kind-icon">Primitive</a></li>
+						</ul>
+					</section>
+					<section class="tsd-index-section ">
 						<h3>FP Variables</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-variable"><a href="modules.html#__" class="tsd-kind-icon">__</a></li>
@@ -3081,7 +3096,9 @@ img {
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function"><a href="modules.html#decodehtml" class="tsd-kind-icon">decode<wbr>Html</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#encodehtml" class="tsd-kind-icon">encode<wbr>Html</a></li>
+							<li class="tsd-kind-function"><a href="modules.html#generatequerystring" class="tsd-kind-icon">generate<wbr>Query<wbr>String</a></li>
 							<li class="tsd-kind-function"><a href="modules.html#parsecookies" class="tsd-kind-icon">parse<wbr>Cookies</a></li>
+							<li class="tsd-kind-function"><a href="modules.html#parsequerystring" class="tsd-kind-icon">parse<wbr>Query<wbr>String</a></li>
 						</ul>
 						<h3>Logging Functions</h3>
 						<ul class="tsd-index-list">
@@ -3124,6 +3141,27 @@ img {
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
+			<h2>Type aliases</h2>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="primitive" class="tsd-anchor"></a>
+				<h3>Primitive</h3>
+				<div class="tsd-signature tsd-kind-icon">Primitive<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">bigint</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/types.ts#L8">src/types.ts:8</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Primitive types union.</p>
+					</div>
+					<p>In JavaScript, a primitive (primitive value, primitive data type) is data
+						that is not an object and has no methods. There are 7 primitive data types:
+					string, number, bigint, boolean, undefined, symbol, and null.</p>
+				</div>
+			</section>
+		</section>
+		<section class="tsd-panel-group tsd-member-group ">
 			<h2>FP Variables</h2>
 			<section class="tsd-panel tsd-member tsd-kind-variable">
 				<a name="__" class="tsd-anchor"></a>
@@ -3131,7 +3169,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">__<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Placeholder</span><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L18">src/fp.ts:18</a></li>
+						<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L18">src/fp.ts:18</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -3155,7 +3193,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L308">src/array.ts:308</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L308">src/array.ts:308</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3193,7 +3231,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L309">src/array.ts:309</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L309">src/array.ts:309</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3226,7 +3264,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L413">src/array.ts:413</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L413">src/array.ts:413</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3258,7 +3296,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L414">src/array.ts:414</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L414">src/array.ts:414</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3289,7 +3327,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L429">src/array.ts:429</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L429">src/array.ts:429</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3342,7 +3380,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L430">src/array.ts:430</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L430">src/array.ts:430</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3383,7 +3421,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L431">src/array.ts:431</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L434">src/array.ts:434</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3434,7 +3472,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L477">src/array.ts:477</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L479">src/array.ts:479</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3496,7 +3534,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L478">src/array.ts:478</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L484">src/array.ts:484</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3553,7 +3591,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L195">src/array.ts:195</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L195">src/array.ts:195</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3640,7 +3678,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L199">src/array.ts:199</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L199">src/array.ts:199</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3700,7 +3738,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L272">src/array.ts:272</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L272">src/array.ts:272</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3755,7 +3793,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L276">src/array.ts:276</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L276">src/array.ts:276</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -3791,7 +3829,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L109">src/array.ts:109</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L109">src/array.ts:109</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3829,7 +3867,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L132">src/array.ts:132</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L132">src/array.ts:132</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3889,7 +3927,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L335">src/array.ts:335</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L335">src/array.ts:335</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -3948,7 +3986,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L339">src/array.ts:339</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L339">src/array.ts:339</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -4001,7 +4039,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L544">src/array.ts:544</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L580">src/array.ts:580</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4069,7 +4107,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L530">src/array.ts:530</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L562">src/array.ts:562</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4138,7 +4176,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L378">src/array.ts:378</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L378">src/array.ts:378</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4195,7 +4233,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L382">src/array.ts:382</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L382">src/array.ts:382</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -4246,7 +4284,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L493">src/array.ts:493</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L507">src/array.ts:507</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4299,7 +4337,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L494">src/array.ts:494</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L511">src/array.ts:511</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -4350,7 +4388,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L74">src/array.ts:74</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L74">src/array.ts:74</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4416,7 +4454,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L75">src/array.ts:75</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L75">src/array.ts:75</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -4466,7 +4504,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L21">src/array.ts:21</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L21">src/array.ts:21</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4557,7 +4595,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L510">src/array.ts:510</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L534">src/array.ts:534</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4610,7 +4648,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L511">src/array.ts:511</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L538">src/array.ts:538</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -4663,7 +4701,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/async.ts#L20">src/async.ts:20</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/async.ts#L20">src/async.ts:20</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4737,7 +4775,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/async.ts#L6">src/async.ts:6</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/async.ts#L6">src/async.ts:6</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4775,7 +4813,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L106">src/fp.ts:106</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L106">src/fp.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -4850,7 +4888,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L107">src/fp.ts:107</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L107">src/fp.ts:107</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -4933,7 +4971,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L111">src/fp.ts:111</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L111">src/fp.ts:111</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -5040,7 +5078,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L116">src/fp.ts:116</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L116">src/fp.ts:116</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -5171,7 +5209,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L122">src/fp.ts:122</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L122">src/fp.ts:122</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -5326,7 +5364,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L129">src/fp.ts:129</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L129">src/fp.ts:129</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -5505,7 +5543,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L137">src/fp.ts:137</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L137">src/fp.ts:137</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -5708,7 +5746,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L146">src/fp.ts:146</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L146">src/fp.ts:146</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -5754,7 +5792,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L557">src/fp.ts:557</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L557">src/fp.ts:557</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -5836,7 +5874,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L558">src/fp.ts:558</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L558">src/fp.ts:558</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -5889,7 +5927,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L561">src/fp.ts:561</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L561">src/fp.ts:561</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -5948,7 +5986,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L564">src/fp.ts:564</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L564">src/fp.ts:564</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6013,7 +6051,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L567">src/fp.ts:567</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L567">src/fp.ts:567</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6084,7 +6122,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L570">src/fp.ts:570</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L570">src/fp.ts:570</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6141,7 +6179,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L35">src/fp.ts:35</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L35">src/fp.ts:35</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -6201,7 +6239,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L36">src/fp.ts:36</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L36">src/fp.ts:36</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6269,7 +6307,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L41">src/fp.ts:41</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L41">src/fp.ts:41</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6361,7 +6399,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L47">src/fp.ts:47</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L47">src/fp.ts:47</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6477,7 +6515,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L54">src/fp.ts:54</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L54">src/fp.ts:54</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6617,7 +6655,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L62">src/fp.ts:62</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L62">src/fp.ts:62</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6781,7 +6819,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L71">src/fp.ts:71</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L71">src/fp.ts:71</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -6969,7 +7007,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L81">src/fp.ts:81</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L81">src/fp.ts:81</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -6998,7 +7036,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L234">src/guards.ts:234</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L234">src/guards.ts:234</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7051,7 +7089,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L253">src/guards.ts:253</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L253">src/guards.ts:253</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7085,7 +7123,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L254">src/guards.ts:254</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L254">src/guards.ts:254</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -7114,7 +7152,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L266">src/guards.ts:266</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L266">src/guards.ts:266</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7146,7 +7184,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L284">src/guards.ts:284</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L284">src/guards.ts:284</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7194,7 +7232,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L53">src/guards.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L53">src/guards.ts:53</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7235,7 +7273,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L25">src/guards.ts:25</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L25">src/guards.ts:25</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7276,7 +7314,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L141">src/guards.ts:141</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L141">src/guards.ts:141</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7318,7 +7356,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L72">src/guards.ts:72</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L72">src/guards.ts:72</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7362,7 +7400,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L180">src/guards.ts:180</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L180">src/guards.ts:180</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7445,7 +7483,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L106">src/guards.ts:106</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L106">src/guards.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7489,7 +7527,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L123">src/guards.ts:123</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L123">src/guards.ts:123</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7533,7 +7571,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L11">src/guards.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L11">src/guards.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7574,7 +7612,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L199">src/guards.ts:199</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L199">src/guards.ts:199</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7618,7 +7656,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L39">src/guards.ts:39</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L39">src/guards.ts:39</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7659,7 +7697,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/guards.ts#L89">src/guards.ts:89</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/guards.ts#L89">src/guards.ts:89</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7706,7 +7744,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/http/html.ts#L33">src/http/html.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/http/html.ts#L33">src/http/html.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7736,7 +7774,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/http/html.ts#L22">src/http/html.ts:22</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/http/html.ts#L22">src/http/html.ts:22</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7757,6 +7795,56 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="generatequerystring" class="tsd-anchor"></a>
+				<h3>generate<wbr>Query<wbr>String</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">generate<wbr>Query<wbr>String<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="modules.html#primitive" class="tsd-signature-type" data-tsd-kind="Type alias">Primitive</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="modules.html#primitive" class="tsd-signature-type" data-tsd-kind="Type alias">Primitive</a><span class="tsd-signature-symbol">&gt;</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>separator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/http/helpers.ts#L124">src/http/helpers.ts:124</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Generates query string form provided object.</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #795E26">generateQueryString</span><span style="color: #000000">({ </span><span style="color: #001080">page:</span><span style="color: #000000"> </span><span style="color: #098658">1</span><span style="color: #000000">, </span><span style="color: #001080">limit:</span><span style="color: #000000"> </span><span style="color: #098658">20</span><span style="color: #000000">})</span>
+<span style="color: #008000">// &#039;page=1&amp;limit=20&#039;</span>
+</code></pre>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>query: <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="modules.html#primitive" class="tsd-signature-type" data-tsd-kind="Type alias">Primitive</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="modules.html#primitive" class="tsd-signature-type" data-tsd-kind="Type alias">Primitive</a><span class="tsd-signature-symbol">&gt;</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-symbol">{ </span>separator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter">
+										<h5><span class="tsd-flag ts-flagOptional">Optional</span> separator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<dl class="tsd-comment-tags">
+												<dt>default</dt>
+												<dd><p><code>&amp;</code></p>
+												</dd>
+											</dl>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
 				<a name="parsecookies" class="tsd-anchor"></a>
 				<h3>parse<wbr>Cookies</h3>
 				<ul class="tsd-signatures tsd-kind-function">
@@ -7766,7 +7854,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/http/helpers.ts#L46">src/http/helpers.ts:46</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/http/helpers.ts#L48">src/http/helpers.ts:48</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7794,6 +7882,59 @@ img {
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function">
+				<a name="parsequerystring" class="tsd-anchor"></a>
+				<h3>parse<wbr>Query<wbr>String</h3>
+				<ul class="tsd-signatures tsd-kind-function">
+					<li class="tsd-signature tsd-kind-icon">parse<wbr>Query<wbr>String<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{ </span>separator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/http/helpers.ts#L73">src/http/helpers.ts:73</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Parse a query string given as a string argument.</p>
+							</div>
+							<dl class="tsd-comment-tags">
+								<dt>example</dt>
+								<dd><pre><code><span style="color: #001080">location</span><span style="color: #000000">.</span><span style="color: #001080">search</span>
+<span style="color: #008000">// ?page=1&amp;limit=20</span>
+
+<span style="color: #795E26">parseQueryString</span><span style="color: #000000">(</span><span style="color: #001080">location</span><span style="color: #000000">.</span><span style="color: #001080">search</span><span style="color: #000000">)</span>
+<span style="color: #008000">// { page: [&#039;1&#039;], limit: [&#039;20&#039;]}</span>
+</code></pre>
+								</dd>
+							</dl>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>query: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-symbol">{ </span>separator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter">
+										<h5><span class="tsd-flag ts-flagOptional">Optional</span> separator<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span></h5>
+										<div class="tsd-comment tsd-typography">
+											<dl class="tsd-comment-tags">
+												<dt>default</dt>
+												<dd><p><code>&amp;</code></p>
+												</dd>
+											</dl>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+					</li>
+				</ul>
+			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Logging Functions</h2>
@@ -7807,7 +7948,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/logging.ts#L29">src/logging.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/logging.ts#L29">src/logging.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7840,7 +7981,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/object.ts#L181">src/object.ts:181</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/object.ts#L181">src/object.ts:181</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7883,7 +8024,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/object.ts#L216">src/object.ts:216</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/object.ts#L216">src/object.ts:216</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -7999,7 +8140,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/object.ts#L106">src/object.ts:106</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/object.ts#L106">src/object.ts:106</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8071,7 +8212,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/object.ts#L57">src/object.ts:57</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/object.ts#L57">src/object.ts:57</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8151,7 +8292,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/object.ts#L13">src/object.ts:13</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/object.ts#L13">src/object.ts:13</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8190,7 +8331,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/object.ts#L86">src/object.ts:86</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/object.ts#L86">src/object.ts:86</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8270,7 +8411,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/object.ts#L123">src/object.ts:123</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/object.ts#L123">src/object.ts:123</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8344,7 +8485,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/encoding.ts#L46">src/encoding.ts:46</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/encoding.ts#L46">src/encoding.ts:46</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8372,7 +8513,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/encoding.ts#L80">src/encoding.ts:80</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/encoding.ts#L80">src/encoding.ts:80</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8400,7 +8541,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/cache.ts#L3">src/cache.ts:3</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/cache.ts#L3">src/cache.ts:3</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -8429,7 +8570,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/string.ts#L49">src/string.ts:49</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/string.ts#L49">src/string.ts:49</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8466,7 +8607,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/array.ts#L552">src/array.ts:552</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/array.ts#L592">src/array.ts:592</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8522,7 +8663,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/files.ts#L12">src/files.ts:12</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/files.ts#L12">src/files.ts:12</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8560,7 +8701,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/http/helpers.ts#L15">src/http/helpers.ts:15</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/http/helpers.ts#L17">src/http/helpers.ts:17</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8620,7 +8761,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/encoding.ts#L29">src/encoding.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/encoding.ts#L29">src/encoding.ts:29</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8654,7 +8795,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/files.ts#L72">src/files.ts:72</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/files.ts#L83">src/files.ts:83</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8694,7 +8835,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/encoding.ts#L4">src/encoding.ts:4</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/encoding.ts#L4">src/encoding.ts:4</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8722,7 +8863,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/files.ts#L34">src/files.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/files.ts#L34">src/files.ts:34</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8758,7 +8899,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/string.ts#L67">src/string.ts:67</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/string.ts#L67">src/string.ts:67</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8798,7 +8939,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L610">src/fp.ts:610</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L610">src/fp.ts:610</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -8846,7 +8987,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L611">src/fp.ts:611</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L611">src/fp.ts:611</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -8878,7 +9019,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L612">src/fp.ts:612</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L612">src/fp.ts:612</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -8916,7 +9057,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/fp.ts#L613">src/fp.ts:613</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/fp.ts#L613">src/fp.ts:613</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -8963,7 +9104,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/http/helpers.ts#L67">src/http/helpers.ts:67</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/http/helpers.ts#L155">src/http/helpers.ts:155</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -9001,7 +9142,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/string.ts#L33">src/string.ts:33</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/string.ts#L33">src/string.ts:33</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -9036,7 +9177,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/6ac8ccb/src/string.ts#L11">src/string.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/KiraLT/common-stuff/blob/a549401/src/string.ts#L11">src/string.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

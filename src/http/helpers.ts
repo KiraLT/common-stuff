@@ -54,3 +54,83 @@ export function parseCookies(cookieString: string): Record<string, string> {
         return prev
     }, {} as Record<string, string>)
 }
+
+/**
+ * Converts absolute URL to relative
+ * 
+ * @example
+ * ```
+ * urlToRelative('https://domain.com/index.html')
+ * // /index.html
+ * ``` 
+ */
+export function urlToRelative(url: string): string {
+    return `/${url.replace(/^(?:\/\/|[^/]+)*\//, '')}`
+}
+
+// /**
+//  * Construct a full (`absolute`) URL by combining a `base URL` with another URL.
+//  * 
+//  * @example
+//  * ```
+//  * urlToAbsolute('https://domain.com', 'index.html')
+//  * // https://domain.com/index.html
+//  * ``` 
+//  */
+// export function urlJoin(base: string, relative: string): string {
+//     const stack = base.split('/')
+//     const parts = relative.split('/')
+
+//     const minimalBase = base[0] && (!base[1] && !base[2]) ? base.slice(0, 3) : []
+//     parts.forEach((value, index) => {
+//         if (index === 0) {
+//             stack.pop()
+//         } else if (value === '.') {
+//             return
+//         } else if (value === '..') {
+//             stack.pop()
+//         } else {
+//             stack.push(value)
+//         }
+//     })
+
+//     return stack.join('/');
+// }
+
+// /**
+//  * Parses url string to separate parts.
+//  */
+// export function urlParse(url: string): {
+//     hash: string
+//     host: string
+//     hostname: string
+//     href: string
+//     origin: string
+//     pathname: string
+//     port: string
+//     protocol: string
+//     search: string
+//     username: string
+//     password: string
+// } {
+//     const match = url.match(/^(([^:\/?#]+:)?(?:\/\/((?:([^\/?#:]*):([^\/?#:]*)@)?([^\/?#:]*)(?::([^\/?#:]*))?)))?([^?#]*)(\?[^#]*)?(#.*)?$/)
+//     const value = {
+//             hash: match?.[10] || "",
+//             host: match?.[3] || "",
+//             hostname: match?.[6] || "",
+//             href: match?.[0] || "",
+//             origin: match?.[1] || "",
+//             pathname: match?.[8] || (match?.[1] ? "/" : ""),
+//             port: match?.[7] || "",
+//             protocol: match?.[2] || "",
+//             search: match?.[9] || "",
+//             username: match?.[4] || "",
+//             password: match?.[5] || ""
+//         };
+//     if (value.protocol.length == 2) {
+//         value.protocol = "file:///" + value.protocol.toUpperCase();
+//         value.origin = value.protocol + "//" + value.host;
+//     }
+//     value.href = value.origin + value.pathname + value.search + value.hash;
+//     return value;
+// }

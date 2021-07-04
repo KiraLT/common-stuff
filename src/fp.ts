@@ -1,3 +1,5 @@
+import { ensureError } from "."
+
 class Placeholder {
     __PLACEHOLDER__ = '__PLACEHOLDER__'
 
@@ -587,5 +589,47 @@ export function curry(func: (...args: unknown[]) => unknown): unknown {
                 return curried.apply(this, args.concat(args2))
             }
         }
+    }
+}
+
+/**
+ * Wraps callback to try/catch block
+ * 
+ * @param callback 
+ * @returns 
+ * @example
+ * ```
+ * const result = tryCatch(() => fetch('http://example.com'))
+ * if (value instanceof Error) {
+ *     console.log(value.message)
+ * }
+ * 
+ * const parsedOrUndefined = tryCatch(() => JSON.parse(jsonString), undefined)
+ * ```
+ */
+export function tryCatch<T>(callback: () => T): T | Error
+export function tryCatch<T>(callback: () => Promise<T>): Promise<T | Error>
+export function tryCatch<T, T2>(callback: () => T, defaultValue: T2): T | T2
+export function tryCatch<T, T2>(callback: () => Promise<T>, defaultValue: T2): T | T2
+export function tryCatch<T, T2>(callback: () => T, defaultValue?: T2): T | T2 | Error | Promise<T | T2 | Error> {
+    const defaultValueProvided = arguments.length === 2
+
+    const handleError = (err: unknown) => {
+        const error = ensureError(err)
+        if (defaultValueProvided) {
+            return defaultValue as T2
+        }
+        return error
+    }
+
+    try {
+        const result = callback()
+        if (typeof Promise !== 'undefined' && result instanceof Promise) {
+            return result.catch(handleError)
+        }
+
+        return result
+    } catch (err) {
+        return handleError(err)
     }
 }

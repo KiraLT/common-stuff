@@ -1,4 +1,4 @@
-import { pipe, compose, curry, __ } from '../src'
+import { pipe, compose, curry, __, tryCatch } from '../src'
 
 describe('pipe', () => {
     it('applies pipe', () => {
@@ -53,5 +53,35 @@ describe('curry', () => {
         const myFunc = (a: number, b: string, c: boolean) => a + b + c
         expect(curry(myFunc)(__, '5', __)(5, true)).toBe('55true')
         expect(curry(myFunc)(__, '5', __)(5)(true)).toBe('55true')
+    })
+})
+
+describe('tryCatch', () => {
+    it('returns value and error union', () => {
+        const value = tryCatch(() => 'abc')
+
+        expect<string | Error>(value).toBe('abc')
+    })
+
+    it('catches error', () => {
+        const value = tryCatch(() => {
+            if (1 < 10) {
+                throw new Error('abc')
+            }
+            return 'abc'
+        })
+
+        expect<string | Error>(value).toBeInstanceOf(Error)
+    })
+
+    it('supports default value', () => {
+        const value = tryCatch(() => {
+            if (1 < 10) {
+                throw new Error('abc')
+            }
+            return 'abc'
+        }, 'bc')
+
+        expect<string>(value.toLocaleLowerCase()).toBe('bc')
     })
 })

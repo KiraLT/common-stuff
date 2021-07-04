@@ -11,6 +11,7 @@ import {
     isNullOrUndefined,
     isEmpty,
     ensureArray,
+    ensureError,
     hasKeys
 } from '../src'
 
@@ -141,6 +142,17 @@ describe('ensureArray', () => {
 
     it('wraps to array if value is not an array', () => {
         expect(ensureArray(1)).toEqual([1])
+    })
+})
+
+describe('ensureError', () => {
+    it('returns original value if error', () => {
+        const value = new Error()
+        expect(ensureError(value)).toBe(value)
+    })
+
+    it('wraps to error if value is not an error', () => {
+        expect(ensureError('a')).toBeInstanceOf(Error)
     })
 })
 

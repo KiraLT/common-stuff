@@ -544,3 +544,17 @@ export function includesAny<T, T2>(array: ReadonlyArray<T>, values: ReadonlyArra
 export function includesAll<T, T2>(array: ReadonlyArray<T>, values: ReadonlyArray<T2>, key: (value: T | T2) => unknown = v => v): boolean {
     return values.every(v => array.some(v2 => key(v2) === key(v)))
 }
+
+/**
+ * The findIndex() method returns the index of the first element in the array that satisfies the provided testing function.
+ * Otherwise, it returns -1, indicating that no element passed the test.
+ */
+export function findIndex<T>(array: ReadonlyArray<T>, compare: (value: T) => boolean): number {
+    for (let index = 0; index < array.length; index++) {
+        if (compare(array[index] as T)) {
+            return index
+        }
+    }
+
+    return -1
+}

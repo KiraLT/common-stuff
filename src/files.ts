@@ -1,3 +1,5 @@
+import { findIndex } from "."
+
 /**
  * Converts bytes number to string representation (e.g. `15.25 GB`)
  *
@@ -17,6 +19,33 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+}
+
+/**
+ * Parses size string to bytes.
+ * 
+ * @example
+ * ```
+ * parseSize('15.53 MB')
+ * // 16288832
+ * ```
+ */
+export function parseSize(value: string): number {
+    const [rawSize, rawUnit] = value.match(/^(\d+(?:[.]\d+|))\s*([a-z]+)$/i) ?? []
+
+    const k = 1024
+    const sizes = [['bytes', 'byte', 'b'], ['kb'], ['mb'], ['gb'], ['tb'], ['pb'], ['eb'], ['zb'], ['yb']]
+
+    if (rawSize && rawUnit) {
+        const size = parseFloat(rawSize)
+        const unit = rawUnit.toLocaleLowerCase()
+
+        const index = findIndex(sizes, v => v.indexOf(unit) !== -1)
+
+        return index * k
+    }
+
+    return 0
 }
 
 /**

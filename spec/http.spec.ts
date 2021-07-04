@@ -6,6 +6,7 @@ import {
     parseCookies,
     decodeHtml,
     encodeHtml,
+    urlToRelative,
 } from '../src'
 
 describe('httpStatusCodes', () => {
@@ -102,3 +103,21 @@ describe('decodeHtml', () => {
         expect(decodeHtml('&lt; &gt; &quot; &apos; &amp;')).toBe('< > " \' &')
     })
 })
+
+describe('urlToRelative', ( ) => {
+    it('converts absolute URL to relative', () => {
+        expect(urlToRelative('https://domain.com/index.html')).toBe('/index.html')
+    })
+
+    it('supports subdomains', () => {
+        expect(urlToRelative('https://my-sub.domain.com/index.html')).toBe('/index.html')
+    })
+})
+
+// describe('urlJoin', () => {
+//     it('joins absolute ant relative urls', () => {
+//         expect(urlJoin('https://domain.com', 'index.html')).toBe('https://domain.com/index.html')
+//         expect(urlJoin('https://domain.com/test/index.html', 'index.html')).toBe('https://domain.com/test/index.html')
+//     })
+// })
+

@@ -1,7 +1,7 @@
 import { findIndex } from "."
 
 /**
- * Converts bytes number to string representation (e.g. `15.25 GB`)
+ * Converts bytes number to string representation (e.g. `15.25 GB`).
  *
  * @example
  * ```
@@ -29,20 +29,27 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
  * parseSize('15.53 MB')
  * // 16288832
  * ```
+ * @returns parsed bytes or `-1` on fail
  */
 export function parseSize(value: string): number {
-    const [rawSize, rawUnit] = value.match(/^(\d+(?:[.]\d+|))\s*([a-z]+)$/i) ?? []
+    const [_, rawSize, rawUnit] = value.match(/^(\d+(?:[.]\d+|))\s*([a-z]+)$/i) ?? []
 
     const k = 1024
-    const sizes = [['bytes', 'byte', 'b'], ['kb'], ['mb'], ['gb'], ['tb'], ['pb'], ['eb'], ['zb'], ['yb']]
+    const units = [['bytes', 'byte', 'b'], ['kb'], ['mb'], ['gb'], ['tb'], ['pb'], ['eb'], ['zb'], ['yb']]
 
     if (rawSize && rawUnit) {
         const size = parseFloat(rawSize)
-        const unit = rawUnit.toLocaleLowerCase()
+        const unit = rawUnit.toLowerCase()
 
-        const index = findIndex(sizes, v => v.indexOf(unit) !== -1)
+        let index = findIndex(units, v => v.indexOf(unit) !== -1)
 
-        return index * k
+        let bytes = size
+        while (index > 0) {
+            bytes = bytes * k
+            index--
+        }
+
+        return bytes
     }
 
     return 0

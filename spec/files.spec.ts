@@ -1,4 +1,4 @@
-import { formatBytes, getFileParts } from '../src'
+import { formatBytes, getFileParts, parseSize } from '../src'
 
 describe('formatBytes', () => {
     it('handles zero', () => {
@@ -15,6 +15,24 @@ describe('formatBytes', () => {
 
     it('just works', () => {
         expect(formatBytes(1648 * 9884)).toEqual('15.53 MB')
+    })
+})
+
+describe('parseSize', () => {
+    it('parses bytes', () => {
+        expect(parseSize('10 Bytes')).toEqual(10)
+    })
+
+    it('returns -1 on error', () => {
+        expect(parseSize('zero bytes')).toEqual(0)
+    })
+
+    it('support decimals', () => {
+        expect(parseSize('1.6 KB')).toEqual(1638.4)
+    })
+
+    it('just works', () => {
+        expect(parseSize('15.53 MB')).toEqual(16284385.28)
     })
 })
 

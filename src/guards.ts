@@ -231,7 +231,7 @@ export function isPlainObject<T = Record<keyof any, unknown>>(
  * @returns `value` if it is not an instance of `Error`
  * @throws `value` if it is an instance of `Error`
  */
-export function assertNotError<T, E extends Error>(value: T | E): T {
+export function assertNotError<T>(value: Error | T): T {
     if (value instanceof Error) {
         throw value
     }

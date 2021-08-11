@@ -160,56 +160,6 @@ export function generateRange(
     return result
 }
 
-/**
- * Calls a defined callback function on each element of an array. Then, flattens the result into
- * a new array.
- * This is identical to a map followed by flat with depth 1.
- *
- * Use [Array.flatMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap) if possible or polyfill globally:
- *
- * ```
- * Array.prototype.flatMap = function(callback) {
- *     return flatMap(this, callback)
- * }
- * ```
- *
- * @example
- * ```
- * const arr1 = [1, 2, 3, 4]
- *
- * arr1.map(x => [x * 2])
- * // [[2], [4], [6], [8]]
- *
- * flatMap(arr1, x => [x * 2])
- * // [2, 4, 6, 8]
- *
- * // only one level is flattened
- * flatMap(arr1, x => [[x * 2]])
- * // [[2], [4], [6], [8]]
- * ```
- * @category Array
- * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
- * @param array any array
- * @param callback A function that accepts up to three arguments. The flatMap method calls the callback function one time for each element in the array.
- */
-export function flatMap<T, U>(
-    array: T[],
-    callback: (item: T, index: number, array: T[]) => U | readonly U[]
-): U[]
-export function flatMap<T, U>(
-    array: readonly T[],
-    callback: (item: T, index: number, array: readonly T[]) => U | readonly U[]
-): readonly U[]
-export function flatMap<T, U>(
-    array: readonly T[],
-    callback: (item: T, index: number, array: T[]) => U | readonly U[]
-): readonly U[] {
-    return array.reduce(
-        (acc, v, index) => acc.concat(callback(v, index, array as T[])),
-        [] as U[]
-    )
-}
-
 type FlatArray<Arr, Depth extends number> = {
     done: Arr
     recur: Arr extends ReadonlyArray<infer InnerArr>

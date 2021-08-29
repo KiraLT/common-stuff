@@ -607,13 +607,13 @@ export function curry(func: (...args: unknown[]) => unknown): unknown {
  * const parsedOrUndefined = tryCatch(() => JSON.parse(jsonString), undefined)
  * ```
  */
-export function tryCatch<T>(callback: () => T): T | Error
 export function tryCatch<T>(callback: () => Promise<T>): Promise<T | Error>
-export function tryCatch<T, T2>(callback: () => T, defaultValue: T2): T | T2
+export function tryCatch<T>(callback: () => T): T | Error
 export function tryCatch<T, T2>(
     callback: () => Promise<T>,
     defaultValue: T2
-): T | T2
+    ): Promise<T | T2>
+export function tryCatch<T, T2>(callback: () => T, defaultValue: T2): T | T2
 export function tryCatch<T, T2>(
     callback: () => T,
     defaultValue?: T2

@@ -74,6 +74,17 @@ describe('tryCatch', () => {
         expect<string | Error>(value).toBeInstanceOf(Error)
     })
 
+    it('supports promise', async () => {
+        const value = tryCatch(async () => {
+            if (1 < 10) {
+                throw new Error('abc')
+            }
+            return 'abc'
+        })
+
+        expect<Promise<string | Error>>(value).resolves.toBeInstanceOf(Error)
+    })
+
     it('supports default value', () => {
         const value = tryCatch(() => {
             if (1 < 10) {
@@ -83,5 +94,16 @@ describe('tryCatch', () => {
         }, 'bc')
 
         expect<string>(value.toLocaleLowerCase()).toBe('bc')
+    })
+
+    it('supports promise with default value', async () => {
+        const value = tryCatch(async () => {
+            if (1 < 10) {
+                throw new Error('abc')
+            }
+            return 'abc'
+        }, 'bc')
+
+        expect<Promise<string>>(value).resolves.toBe('bc')
     })
 })

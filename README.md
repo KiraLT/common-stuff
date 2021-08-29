@@ -7,7 +7,7 @@
 
 JavaScript and NodeJS are missing a lot of core functionalities. The goal of this library is to bring a variety of useful helpers on both NodeJS & Browser with strong **TypeScript** typing and **zero dependencies**.
 
-Missing something? Create [feature request](https://github.com/KiraLT/common-stuff/issues/new)!
+Missing something? Create [feature request](https://github.com/KiraLT/common-stuff/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)!
 
 Read [Documentation 📘](https://kiralt.github.io/common-stuff/)
 

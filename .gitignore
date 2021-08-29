@@ -107,3 +107,7 @@ dist
 /lib
 /docs
 /esnext
+
+# Editors
+.idea
+.vscode

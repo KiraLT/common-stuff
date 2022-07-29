@@ -588,7 +588,7 @@ export function includesAll<T, T2>(
 /**
  * Returns the index of the first element in the array where predicate is true, and -1
  * otherwise.
- * 
+ *
  * @example
  * ```
  * const obj = [{name: 'abc'}]

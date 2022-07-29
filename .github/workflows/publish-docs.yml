@@ -1,24 +1,54 @@
-name: Publish to GitHub Pages
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
 
 on:
+  # Runs on pushes targeting the default branch
   push:
-    branches:
-      - main
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  publish-docs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out
-        uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Build docs
-        run: npm ci && npm run docs:build
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
 
-      - name: Deploy to gh-pages
-        uses: s0/git-publish-subdir-action@v2.4.0
-        env:
-            REPO: self
-            BRANCH: gh-pages
-            FOLDER: docs
-            GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+      - run: npm ci
+
+      - run: npm run build
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v1
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'docs'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@main

@@ -4,21 +4,18 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
+          node-version: 16
+          cache: 'npm'
 
       - run: npm ci
 
       - run: npm test -- --coverage
 
-      - uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+      - uses: codecov/codecov-action@v3.1.0

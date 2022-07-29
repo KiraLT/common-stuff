@@ -612,7 +612,7 @@ export function tryCatch<T>(callback: () => T): T | Error
 export function tryCatch<T, T2>(
     callback: () => Promise<T>,
     defaultValue: T2
-    ): Promise<T | T2>
+): Promise<T | T2>
 export function tryCatch<T, T2>(callback: () => T, defaultValue: T2): T | T2
 export function tryCatch<T, T2>(
     callback: () => T,

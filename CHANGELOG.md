@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/KiraLT/common-stuff/compare/v1.6.0...v1.6.1) (2022-12-27)
+
+
+### Bug Fixes
+
+* fix npm release files configuration caused by changed build tool ([080fa2c](https://github.com/KiraLT/common-stuff/commit/080fa2ce8adb42487247148e9b601a9fabdb1cdc))
+
 # [1.6.0](https://github.com/KiraLT/common-stuff/compare/v1.5.2...v1.6.0) (2022-12-27)
 
 

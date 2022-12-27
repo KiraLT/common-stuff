@@ -1,4 +1,4 @@
-import { isPlainObject } from '.'
+import { isPlainObject, map, flatMap } from '.'
 
 /**
  * Compares two values.
@@ -53,19 +53,13 @@ export function isEqual(a: unknown, b: unknown): boolean {
  * @param obj `Record` like object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return list of entry pairs
  * @returns new mapped object
+ * @deprecated use [[flatMap]]
  */
 export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
     obj: Record<K, V>,
     callback: (entry: [K, V]) => Array<[RK, RV]>
 ): Record<RK, RV> {
-    const entries = Object.entries(obj) as Array<[K, V]>
-
-    return entries.map(callback).reduce((prev, values) => {
-        values.forEach(([key, value]) => {
-            prev[key] = value
-        })
-        return prev
-    }, {} as Record<RK, RV>)
+    return flatMap(obj, callback)
 }
 
 /**
@@ -82,12 +76,13 @@ export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return entry pair
  * @returns new mapped object
+ * @deprecated use [[map]]
  */
 export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
     obj: Record<K, V>,
     callback: (entry: [K, V]) => [RK, RV]
 ): Record<RK, RV> {
-    return flatMapRecord(obj, (v) => [callback(v)])
+    return map(obj, callback)
 }
 
 /**

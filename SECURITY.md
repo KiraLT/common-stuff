@@ -11,4 +11,4 @@ Only latest version is supported with latest security fixes.
 
 ## Reporting a Vulnerability
 
-If you notice any security vulnerability please [create a issue](issues/new?assignees=&labels=bug&template=bug_report.md&title=) for that. 
+If you notice any security vulnerability please [create a issue](https://github.com/KiraLT/common-stuff/issues/new?assignees=&labels=bug&template=bug_report.md&title=) for that. 

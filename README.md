@@ -16,10 +16,13 @@ Read [Documentation 📘](https://kiralt.github.io/common-stuff/)
 [![npm version](https://badge.fury.io/js/common-stuff.svg)](https://www.npmjs.com/package/common-stuff)
 [![npm](https://img.shields.io/npm/dt/common-stuff)](https://www.npmjs.com/package/common-stuff)
 
-Install with NPM/Yarn:
+### Install with NPM/yarn:
 
 ```bash
+// NPM
 npm install common-stuff
+// Yarn
+yarn add common-stuff
 ```
 
 Import what you need:
@@ -32,7 +35,22 @@ if (isEqual({'a': 1}, {'a': 1})) {
 }
 ```
 
-> In a browser always import only what is necessary to take full advantage of [tree shaking](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking).
+> Always import only what is necessary to take full advantage of [tree shaking](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking).
+
+## Load directly in the browser
+
+### Include UMD bundle
+
+Include script from CDN and use `commonStuff` global variable:
+
+```html
+<script src="https://unpkg.com/common-stuff"></script>
+<script>
+  if (commonStuff.isEqual({'a': 1}, {'a': 1})) {
+    console.log('Hello')
+  }
+</script>
+```
 
 ## Examples
 

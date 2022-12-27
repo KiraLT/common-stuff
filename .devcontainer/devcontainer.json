@@ -4,5 +4,5 @@
   "features": {
     "ghcr.io/devcontainers/features/node:1": {}
   },
-  "updateContentCommand": "yarn install"
+  "updateContentCommand": "npm install"
 }

@@ -163,6 +163,14 @@ describe('hasKeys', () => {
         expect(hasKeys({ a: 1, b: 1 }, ['c', 'b'])).toBeFalsy()
     })
 
+    it('Supports object', () => {
+        const a = { a: 1, b: 1 }
+
+        if (hasKeys(a, ['a', 'b'])) {
+            expect(a.a.toFixed(1)).toBe(a.b.toFixed(1))
+        }
+    })
+
     it('Supports unknown', () => {
         const a = { a: 1, b: 1 } as unknown
 

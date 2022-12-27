@@ -49,6 +49,22 @@ export const octdigits = '01234567'
 export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
 
 /**
+ * Check if given value contains at least one letter.
+ *
+ * @example
+ * ```
+ * isLetter('a')
+ * // true
+* isLetter('-')
+ * // false
+ * ```
+ * @category String
+ */
+export function isLetter(value: string): boolean {
+    return value.toLowerCase() != value.toUpperCase()
+}
+
+/**
  * Truncates string
  *
  * @example
@@ -117,4 +133,27 @@ export function camelCase(value: string): string {
 export function pascalCase(value: string): string {
     const parsed = camelCase(value)
     return parsed.charAt(0).toUpperCase() + parsed.slice(1)
+}
+
+/**
+ * Convert the first letter in each to word upper case
+ *
+ * @example
+ * ```
+ * titleCase('hello world');
+ * // 'Hello World'
+ * ```
+ * @category String
+ */
+export function titleCase(value: string): string {
+    return value
+        .split('')
+        .map((char, index, chars) => {
+            const prevChar = chars[index - 1]
+            if (prevChar && isLetter(prevChar)) {
+                return char.toLowerCase()
+            }
+            return char.toUpperCase()
+        })
+        .join('')
 }

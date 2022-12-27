@@ -35,8 +35,7 @@
         "prettify": "prettier --write \"{src,spec}/**/*.ts\""
     },
     "files": [
-        "lib/**/*",
-        "esnext/**/*"
+        "dist/**/*"
     ],
     "repository": {
         "type": "git",

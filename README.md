@@ -19,9 +19,9 @@ Read [Documentation 📘](https://kiralt.github.io/common-stuff/)
 ### Install with NPM/yarn:
 
 ```bash
-// NPM
+# NPM
 npm install common-stuff
-// Yarn
+# Yarn
 yarn add common-stuff
 ```
 

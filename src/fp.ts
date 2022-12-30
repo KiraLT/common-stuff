@@ -13,7 +13,7 @@ class Placeholder {
  * A special placeholder value used to specify "gaps" within curried functions,
  * allowing partial application of any combination of arguments, regardless of their positions.
  *
- * @category FP
+ * @group FP
  */
 export const __ = new Placeholder()
 type T__ = typeof __
@@ -30,7 +30,7 @@ type T__ = typeof __
  * )
  * // [4, 6, 8, 10]
  *```
- * @category FP
+ * @group FP
  */
 export function pipe<A, B>(value: A, op1: (input: A) => B): B
 export function pipe<A, B, C>(
@@ -101,7 +101,7 @@ export function pipe(
  * // [4, 6, 8, 10]
  * //
  * ```
- * @category FP
+ * @group FP
  */
 export function compose<T1, T2>(op1: (input: T1) => T2): (input: T1) => T2
 export function compose<T1, T2, T3>(
@@ -552,7 +552,7 @@ type Curry6<T1, T2, T3, T4, T5, T6, R> = {
  * const addFirst = curry(addNumbers)(__, 5, 5, 5)
  * addFirst(5)
  * ```
- * @category FP
+ * @group FP
  */
 export function curry<T1, T2, R>(fn: (t1: T1, t2: T2) => R): Curry2<T1, T2, R>
 export function curry<T1, T2, T3, R>(

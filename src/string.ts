@@ -1,42 +1,42 @@
 /**
  * The lowercase letters `abcdefghijklmnopqrstuvwxyz`.
  *
- * @category String
+ * @group String
  */
 export const asciiLowercase = 'abcdefghijklmnopqrstuvwxyz'
 
 /**
  * The uppercase letters `ABCDEFGHIJKLMNOPQRSTUVWXYZ`.
  *
- * @category String
+ * @group String
  */
 export const asciiUppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 /**
  * The concatenation of the [[asciiLowercase]] and [[asciiUppercase]] constants.
  *
- * @category String
+ * @group String
  */
 export const asciiLetters = asciiLowercase + asciiUppercase
 
 /**
  * The string `0123456789`.
  *
- * @category String
+ * @group String
  */
 export const digits = '0123456789'
 
 /**
  * The string `0123456789abcdefABCDEF`.
  *
- * @category String
+ * @group String
  */
 export const hexdigits = '0123456789abcdefABCDEF'
 
 /**
  * The string `01234567`.
  *
- * @category String
+ * @group String
  */
 export const octdigits = '01234567'
 
@@ -44,7 +44,7 @@ export const octdigits = '01234567'
  * String of ASCII characters which are considered punctuation characters in the C locale:
  * `!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~.`
  *
- * @category String
+ * @group String
  */
 export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
 
@@ -58,7 +58,7 @@ export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
 * isLetter('-')
  * // false
  * ```
- * @category String
+ * @group String
  */
 export function isLetter(value: string): boolean {
     return value.toLowerCase() != value.toUpperCase()
@@ -72,7 +72,7 @@ export function isLetter(value: string): boolean {
  * truncate('Hello world', 8)
  * // Hello...
  * ```
- * @category String
+ * @group String
  */
 export function truncate(
     value: string,
@@ -94,7 +94,7 @@ export function truncate(
  * extractWords('Hello-world!')
  * // ['Hello', 'world']
  * ```
- * @category String
+ * @group String
  */
 export function extractWords(value: string): string[] {
     return value
@@ -110,7 +110,7 @@ export function extractWords(value: string): string[] {
  * camelCase('foo-bar');
  * // 'fooBar'
  * ```
- * @category String
+ * @group String
  */
 export function camelCase(value: string): string {
     return value
@@ -128,7 +128,7 @@ export function camelCase(value: string): string {
  * pascalCase('foo-bar');
  * // 'FooBar'
  * ```
- * @category String
+ * @group String
  */
 export function pascalCase(value: string): string {
     const parsed = camelCase(value)
@@ -143,7 +143,7 @@ export function pascalCase(value: string): string {
  * titleCase('hello world');
  * // 'Hello World'
  * ```
- * @category String
+ * @group String
  */
 export function titleCase(value: string): string {
     return value

@@ -1,7 +1,7 @@
 /**
  * Returns `Promise` delayed for specified time in MS.
  *
- * @category Async
+ * @group Async
  */
 export function delay(timeInMs: number): Promise<void> {
     return new Promise((resolve) => {
@@ -15,7 +15,7 @@ export function delay(timeInMs: number): Promise<void> {
  * Creates and returns a new debounced version of the passed function that will postpone its execution
  * until after wait milliseconds have elapsed since the last time it was invoked.
  *
- * @category Async
+ * @group Async
  */
 export function debounce<A extends unknown[]>(
     func: (...args: A) => unknown,

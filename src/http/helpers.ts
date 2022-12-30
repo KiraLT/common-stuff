@@ -42,7 +42,7 @@ export function generateCookie(
  * parseCookies(document.cookie)
  * // {session: '26e761be168533cbf0742f8c295176c7'}
  * ```
- * @category Http
+ * @group Http
  * @param cookieString `document.cookie` value
  */
 export function parseCookies(cookieString: string): Record<string, string> {
@@ -68,7 +68,7 @@ export function parseCookies(cookieString: string): Record<string, string> {
  * parseQueryString(location.search)
  * // { page: ['1'], limit: ['20']}
  * ```
- * @category Http
+ * @group Http
  */
 export function parseQueryString(
     query: string,
@@ -116,7 +116,7 @@ export function parseQueryString(
  * generateQueryString({ page: 1, limit: 20})
  * // 'page=1&limit=20'
  * ```
- * @category Http
+ * @group Http
  * @param query
  * @param options
  * @returns

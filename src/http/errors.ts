@@ -31,7 +31,7 @@ const codeToReason = Object.entries(HttpStatusCodes).reduce(
  *     return err.publicMessage
  * }
  * ```
- * @category Http
+ * @group Http
  */
 export class HttpError extends Error {
     /**

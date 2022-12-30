@@ -5,7 +5,7 @@ import { isPlainObject } from '.'
  *
  * Supported types: all primitives, `null`, `undefined`, `array`, `object`, `Date`
  *
- * @category Object
+ * @group Object
  * @param a any value to compare
  * @param b any value to compare
  * @returns `true` if values are equal
@@ -49,7 +49,7 @@ export function isEqual(a: unknown, b: unknown): boolean {
  * flatMapRecord({'a': 2, 'b': 3}, ([k, v]) => v === 2 ? [[k, v]] : [])
  * >> {'a': 2}
  * ```
- * @category Object
+ * @group Object
  * @param obj `Record` like object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return list of entry pairs
  * @returns new mapped object
@@ -78,7 +78,7 @@ export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  * mapRecord({'a': 'b'}, ([k, v]) => [v, k])
  * >> {'b': 'a'}
  * ```
- * @category Object
+ * @group Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return entry pair
  * @returns new mapped object
@@ -98,7 +98,7 @@ export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  * filterRecord({'a': 2, 'b': 3}, ([k, v]) => v === 2)
  * >> {'a': 2}
  * ```
- * @category Object
+ * @group Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should boolean value
  * @returns new filtered object
@@ -118,7 +118,7 @@ export function filterRecord<K extends keyof any, V>(
  * merge({ a: 1 }, { b: 2 }))
  * // { a: 1, b: 2 }
  * ```
- * @category Object
+ * @group Object
  */
 export function merge<T>(
     target: unknown,
@@ -174,7 +174,7 @@ export function merge<T>(
 /**
  * Return a clone of given value
  *
- * @category Object
+ * @group Object
  * @param value any value
  * @param recursive should recursive values (object and array) be cloned
  */
@@ -211,7 +211,7 @@ export function clone<T>(value: T, recursive = true): T {
  * }).config
  * // { privateKey: 'my key', publicKey: 'my key', allowedIps: ['127.0.0.1', 'localhost'] }
  * ```
- * @category Object
+ * @group Object
  */
 export function convertToNested<T = Record<string, unknown>>(
     array: Record<string, unknown>,

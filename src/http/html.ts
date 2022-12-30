@@ -16,7 +16,7 @@ const tagsToDecode = Object.entries(tagsToEncode).reduce(
 /**
  * Encodes text replacing HTML special characters (<>&"')
  *
- * @category Http
+ * @group Http
  * @param html
  */
 export function encodeHtml(html: string): string {
@@ -27,7 +27,7 @@ export function encodeHtml(html: string): string {
 /**
  * Decodes text restoring HTML encoded characters (<>&"')
  *
- * @category Http
+ * @group Http
  * @param html
  */
 export function decodeHtml(html: string): string {

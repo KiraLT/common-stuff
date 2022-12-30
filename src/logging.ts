@@ -6,7 +6,7 @@
  * const logger: Logger = console
  * logger.info('Hello world')
  * ```
- * @category Logging
+ * @group Logging
  */
 export interface Logger {
     error(message: unknown, ...meta: unknown[]): void
@@ -24,7 +24,7 @@ export interface Logger {
  * logger.info('Hello world')
  * // Nothing will be logged
  * ```
- * @category Logging
+ * @group Logging
  */
 export function createDummyLogger(): Logger {
     return {

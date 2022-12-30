@@ -14,7 +14,7 @@ import { hashCode, ensureArray } from '.'
  * // Sort by object key, then by boolean value in revered order
  * arr.sort(sortByCb(v => [v.myKey, !v.boolValue])
  * ```
- * @category Array
+ * @group Array
  * @param key a function to execute to decide the order
  * @returns `array.sort` compatible callback
  */
@@ -66,7 +66,7 @@ export function sortByCb<T>(
  * // Sort by object key, then by boolean value in revered order
  * sortBy(arr, v => [v.myKey, !v.boolValue])
  * ```
- * @category Array
+ * @group Array
  * @param arr any array
  * @param key a function to execute to decide the order
  * @returns sorted array copy
@@ -102,7 +102,7 @@ export function sortBy<T, A extends ReadonlyArray<T>>(
  * >>> generateRange(8,2,-2)
  * [8, 6, 4]
  * ```
- * @category Array
+ * @group Array
  * @param stop an integer number specifying at which position to stop (not included)
  * @returns generated array by range
  */
@@ -123,7 +123,7 @@ export function generateRange(stop: number): number[]
  * >>> generateRange(8,2,-2)
  * [8, 6, 4]
  * ```
- * @category Array
+ * @group Array
  * @param start an integer number specifying at which position to start
  * @param stop an integer number specifying at which position to stop (not included)
  * @param step an integer number specifying the incrementation
@@ -187,7 +187,7 @@ export function generateRange(
  * flatMap(arr1, x => [[x * 2]])
  * // [[2], [4], [6], [8]]
  * ```
- * @category Array
+ * @group Array
  * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
  * @param array any array
  * @param callback A function that accepts up to three arguments. The flatMap method calls the callback function one time for each element in the array.
@@ -265,7 +265,7 @@ type FlatArray<Arr, Depth extends number> = {
  * flatten([1, 2, [3, 4, [5, 6]]], 2)
  * // [1, 2, 3, 4, 5, 6]
  * ```
- * @category Array
+ * @group Array
  * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
  * @param depth The maximum recursion depth
  */
@@ -303,7 +303,7 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
  * // [[1, 2], [3, 4], [5]]
  * ```
  * @param size Chunk maximum size
- * @category Array
+ * @group Array
  */
 export function chunk<T>(array: T[], size: number): T[][]
 export function chunk<T>(
@@ -330,7 +330,7 @@ export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
  * groupBy(['one', 'two', 'three'], v => [v.length, v.includes('a')])
  * // [ [[5, false], ['three']], [[3, false], ['one', 'two']] ]
  * ```
- * @category Array
+ * @group Array
  */
 export function groupBy<T, G>(
     array: T[],
@@ -373,7 +373,7 @@ export function groupBy<T, G>(
  * indexBy(['one', 'two', 'three'], v => [v.length, v.length + 1])
  * // { '5': ['three'], '6': ['three'], '3': ['one', 'two'], '4': ['one', 'two'] }
  * ```
- * @category Array
+ * @group Array
  */
 export function indexBy<T>(
     array: T[],
@@ -408,7 +408,7 @@ export function indexBy<T>(
  * deduplicate([1, 1, 2, 3, 3])
  * // [1, 2, 3]
  * ```
- * @category Array
+ * @group Array
  */
 export function deduplicate<T>(array: T[]): T[]
 export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T>
@@ -424,7 +424,7 @@ export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
  * deduplicateBy([ { a: 1 }, { a: 1 } ], v => v.a)
  * // [ { a: 1 } ]
  * ```
- * @category Array
+ * @group Array
  */
 export function deduplicateBy<T>(array: T[], key: (value: T) => unknown): T[]
 export function deduplicateBy<T>(
@@ -474,7 +474,7 @@ export function deduplicateBy<T>(
  * difference([2, 1], ['2', '3'], (a, b) => a === parseInt(b))
  * // [1]
  * ```
- * @category Array
+ * @group Array
  */
 export function difference<T, T2>(
     array: ReadonlyArray<T>,
@@ -502,7 +502,7 @@ export function difference<T, T2>(
  * intersection([[2, 1], [2, 3]])
  * // [2]
  * ```
- * @category Array
+ * @group Array
  */
 export function intersection<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
@@ -529,7 +529,7 @@ export function intersection<T>(
  * intersection([[2, 1], [2, 3]])
  * // [2]
  * ```
- * @category Array
+ * @group Array
  */
 export function union<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
@@ -557,7 +557,7 @@ export function union<T>(
  * includesAny([1, 2, 3], [3, 4, 5])
  * // true
  * ```
- * @category Array
+ * @group Array
  */
 export function includesAny<T, T2>(
     array: ReadonlyArray<T>,
@@ -575,7 +575,7 @@ export function includesAny<T, T2>(
  * includesAll([1, 2, 3], [1, 2])
  * // true
  * ```
- * @category Array
+ * @group Array
  */
 export function includesAll<T, T2>(
     array: ReadonlyArray<T>,
@@ -598,7 +598,7 @@ export function includesAll<T, T2>(
  * @param predicate find calls predicate once for each element of the array, in ascending
  * order, until it finds one where predicate returns true. If such an element is found,
  * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
- * @category Array
+ * @group Array
  */
 export function findIndex<T>(
     array: ReadonlyArray<T>,

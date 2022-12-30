@@ -6,7 +6,7 @@
  * [1, 'b', 2].filter(isNumber)
  * > [1, 2]
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isNumber<T>(value: T | number): value is number {
     return typeof value === 'number'
@@ -20,7 +20,7 @@ export function isNumber<T>(value: T | number): value is number {
  * [true, 'b', false].filter(isBoolean)
  * > [true, false]
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isBoolean<T>(value: T | boolean): value is boolean {
     return typeof value === 'boolean'
@@ -34,7 +34,7 @@ export function isBoolean<T>(value: T | boolean): value is boolean {
  * [1, 'b', false].filter(isString)
  * > ['b']
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isString<T>(value: T | string): value is string {
     return typeof value === 'string'
@@ -48,7 +48,7 @@ export function isString<T>(value: T | string): value is string {
  * [[1], ['b'], false].filter(isArray)
  * > [[1], ['b']]
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isArray<T>(
     value: T | Array<T> | ReadonlyArray<T>
@@ -67,7 +67,7 @@ export function isArray<T>(
  * [new Error('error'), 1, 5].filter(isNot(isError))
  * > [1, 5]
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isError<T>(data: T | Error): data is Error {
     return data instanceof Error
@@ -84,7 +84,7 @@ export function isError<T>(data: T | Error): data is Error {
  * [null, undefined, 1, 5].filter(isNot(isUndefined))
  * > [null, 1, 5]
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isUndefined<T>(value: T | undefined): value is undefined {
     return value === undefined
@@ -101,7 +101,7 @@ export function isUndefined<T>(value: T | undefined): value is undefined {
  * [null, undefined, 1, 5].filter(isNot(isUndefined))
  * > [null, 1, 5]
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isNull<T>(value: T | null): value is null {
     return value === null
@@ -118,7 +118,7 @@ export function isNull<T>(value: T | null): value is null {
  * [null, undefined, 1, 5].filter(isNot(isUndefined))
  * > [1, 5]
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isNullOrUndefined<T>(
     value: T | null | undefined
@@ -136,7 +136,7 @@ export function isNullOrUndefined<T>(
  * * Number - `false` if string is `''`
  * * Number - `false` if number is `0`
  *
- * @category Guard
+ * @group Guard
  */
 export function isEmpty<T>(value: T): boolean {
     if (value == null) {
@@ -175,7 +175,7 @@ export function isEmpty<T>(value: T): boolean {
  * // [1, 2]
  * ```
  * @param guard - guard function
- * @category Guard
+ * @group Guard
  */
 export function isNot<T, S extends T>(
     guard: (data: T) => data is S
@@ -194,7 +194,7 @@ export function isNot<T, S extends T>(
  * isPlainObject([1])
  * // false
  * ```
- * @category Guard
+ * @group Guard
  */
 export function isPlainObject<T = Record<keyof any, unknown>>(
     value: unknown
@@ -226,7 +226,7 @@ export function isPlainObject<T = Record<keyof any, unknown>>(
  * const value2 = assertNotError(value)
  * // throws error
  * ```
- * @category Guard
+ * @group Guard
  * @param value any value
  * @returns `value` if it is not an instance of `Error`
  * @throws `value` if it is an instance of `Error`
@@ -248,7 +248,7 @@ export function assertNotError<T>(value: Error | T): T {
  * ensureArray(['hello'])
  * // ['hello']
  * ```
- * @category Guard
+ * @group Guard
  */
 export function ensureArray<T>(value: T | T[]): T[]
 export function ensureArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>
@@ -261,7 +261,7 @@ export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
  *
  * @param value `Error` or other value
  * @returns `value` if it instance of error `Error` otherwise wraps `value` to new `Error` instance
- * @category Guard
+ * @group Guard
  */
 export function ensureError(value: unknown): Error {
     if (value instanceof Error) {
@@ -279,7 +279,7 @@ export function ensureError(value: unknown): Error {
  *     console.log(value.a, value.b)
  * }
  * ```
- * @category Guard
+ * @group Guard
  */
 export function hasKeys<T extends unknown, Key extends keyof any>(
     obj: T,

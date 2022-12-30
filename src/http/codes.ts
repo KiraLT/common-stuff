@@ -7,7 +7,7 @@
  * >> 202
  * ```
  *
- * @category Http
+ * @group Http
  */
 export enum HttpStatusCodes {
     /**
@@ -357,7 +357,7 @@ export enum HttpStatusCodes {
  * >> 'Accepted'
  * ```
  *
- * @category Http
+ * @group Http
  */
 export enum HttpStatusReasons {
     /**

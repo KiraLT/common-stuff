@@ -8,7 +8,7 @@ import { generateRange, asciiLetters, digits, punctuation } from '.'
  * randomInt(1, 10)
  * // 9
  * ```
- * @category Random
+ * @group Random
  */
 export function randomInt(min: number, max: number): number {
     const roundedMin = Math.ceil(min)
@@ -24,7 +24,7 @@ export function randomInt(min: number, max: number): number {
  * randomChoice([1, 2, 3, 4, 5])
  * // 2
  * ```
- * @category Random
+ * @group Random
  */
 export function randomChoice<T>(array: ReadonlyArray<T>): T | undefined {
     return array[Math.floor(Math.random() * array.length)]
@@ -38,7 +38,7 @@ export function randomChoice<T>(array: ReadonlyArray<T>): T | undefined {
  * randomChoices([1, 2], 3)
  * // [2, 2, 1]
  * ```
- * @category Random
+ * @group Random
  */
 export function randomChoices<T>(array: ReadonlyArray<T>, length: number): T[] {
     if (!array.length) {
@@ -76,7 +76,7 @@ export function randomString(
  * shuffle([1, 2, 3])
  * // [2, 1, 3]
  * ```
- * @category Random
+ * @group Random
  */
 export function shuffle<T>(array: ReadonlyArray<T>): ReadonlyArray<T>
 export function shuffle<T>(array: T[]): T[]

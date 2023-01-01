@@ -52,6 +52,20 @@ Include script from CDN and use `commonStuff` global variable:
 </script>
 ```
 
+### Use dynamic import that returns loaded library wrapped in the promise:
+
+Use [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) directly in the browser
+
+```html
+<script>
+  import('https://unpkg.com/common-stuff?module').then(({ isEqual }) => {
+    if (isEqual({'a': 1}, {'a': 1})) {
+      console.log('Hello')
+    }
+  })
+</script>
+```
+
 ## Examples
 
 ### Using FP patterns
@@ -114,8 +128,8 @@ app.use(function (err, req, res, next) {
 })
 ```
 
-> This example returns 500 error message with text `Internal Server Error` and logs private message to console
-> Check [express-async-errors](https://www.npmjs.com/package/express-async-errors) for async support.
+> This example returns 500 error message with text `Internal Server Error` and logs private message to console.
+> Check [express-async-errors](https://www.npmjs.com/package/express-async-errors) for Express JS async support.
 
 ### Common browser helpers
 

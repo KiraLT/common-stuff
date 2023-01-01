@@ -115,6 +115,10 @@ describe('merge', () => {
     it('supports custom array merge function', () => {
         expect(merge([1, 2], [3, 4], { arrayPolicy: (a, b) => b.concat(a) })).toEqual([3, 4, 1, 2])
     })
+
+    it('skip nulls', () => {
+        expect(merge({ a: 1 }, { a: null }, { skipNulls: true })).toEqual({ a: 1 })
+    })
 })
 
 describe('clone', () => {

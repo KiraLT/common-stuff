@@ -126,8 +126,10 @@ export function merge<T>(
     options?: {
         /**
          * When `source` has `null` or `undefined` value, do not overwrite `target`
+         * 
+         * @default false
          */
-        skipNulls?: false
+        skipNulls?: boolean
         /**
          * Array merge policy, default is `overwrite`
          *
@@ -135,6 +137,8 @@ export function merge<T>(
          * * `overwrite` - always replace `target` array with `source`
          * * `merge` - merge `target` and `source` array values
          * * `(target, source) => source` - custom array merge function
+         * 
+         * @default 'overwrite'
          */
         arrayPolicy?:
             | 'overwrite'
@@ -147,7 +151,7 @@ export function merge<T>(
     if (isPlainObject(target) && isPlainObject(source)) {
         return Object.entries(source).reduce(
             (prev, [key, value]) => {
-                prev[key] = merge(prev[key], value)
+                prev[key] = merge(prev[key], value, options)
                 return prev
             },
             { ...target }

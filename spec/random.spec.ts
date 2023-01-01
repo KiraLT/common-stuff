@@ -24,6 +24,10 @@ describe('randomChoices', () => {
     it('gets random element from the array', () => {
         expect(randomChoices([1, 2, 3], 4).length).toBe(4)
     })
+
+    it('works with empty array', () => {
+        expect(randomChoices([], 4).length).toEqual(0)
+    })
 })
 
 describe('shuffle', () => {

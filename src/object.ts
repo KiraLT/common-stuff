@@ -127,7 +127,7 @@ export function merge<T>(
         /**
          * When `source` has `null` or `undefined` value, do not overwrite `target`
          */
-        skipNulls: false
+        skipNulls?: false
         /**
          * Array merge policy, default is `overwrite`
          *
@@ -136,10 +136,10 @@ export function merge<T>(
          * * `merge` - merge `target` and `source` array values
          * * `(target, source) => source` - custom array merge function
          */
-        arrayPolicy:
+        arrayPolicy?:
             | 'overwrite'
             | 'merge'
-            | ((target: unknown, source: unknown) => unknown)
+            | ((target: unknown[], source: unknown[]) => unknown)
     }
 ): T {
     const { skipNulls = false, arrayPolicy = 'overwrite' } = options ?? {}

@@ -107,6 +107,14 @@ describe('merge', () => {
     it('overwrites arrays', () => {
         expect(merge({ a: [1, 2], b: 3 }, { a: [1] })).toEqual({ a: [1], b: 3 })
     })
+
+    it('merges arrays', () => {
+        expect(merge([1, 2], [3, 4], { arrayPolicy: 'merge' })).toEqual([1, 2, 3, 4])
+    })
+
+    it('supports custom array merge function', () => {
+        expect(merge([1, 2], [3, 4], { arrayPolicy: (a, b) => b.concat(a) })).toEqual([3, 4, 1, 2])
+    })
 })
 
 describe('clone', () => {

@@ -52,9 +52,9 @@ Include script from CDN and use `commonStuff` global variable:
 </script>
 ```
 
-### Use dynamic import that returns loaded library wrapped in the promise:
+### Dynamic import
 
-Use [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) directly in the browser
+Use [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) directly in the browser that returns loaded library wrapped in the promise:
 
 ```html
 <script>

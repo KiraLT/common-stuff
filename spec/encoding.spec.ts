@@ -8,16 +8,16 @@ describe('generateHash', () => {
 
 describe('base64Decode', () => {
     it('encodes string', () => {
-        expect(base64Encode('rtėęrfgt58įė9įėš+ė*-')).toBe(
-            'cnTEl8SZcmZndDU4xK/ElznEr8SXxaErxJcqLQ=='
+        expect(base64Encode('rtėęrfgt58įė9įėš+ė*-は个')).toBe(
+            'cnTEl8SZcmZndDU4xK/ElznEr8SXxaErxJcqLeOBr+S4qg=='
         )
     })
 })
 
 describe('base64Decode', () => {
     it('decodes string', () => {
-        expect(base64Decode('cnTEl8SZcmZndDU4xK/ElznEr8SXxaErxJcqLQ==')).toBe(
-            'rtėęrfgt58įė9įėš+ė*-'
+        expect(base64Decode('cnTEl8SZcmZndDU4xK/ElznEr8SXxaErxJcqLeOBr+S4qg==')).toBe(
+            'rtėęrfgt58įė9įėš+ė*-は个'
         )
     })
 })

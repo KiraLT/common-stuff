@@ -210,6 +210,7 @@ export function isPlainObject<T = Record<keyof any, unknown>>(
     const prototype = constructor.prototype
     if (!isObject(prototype)) return false
 
+    // Checks if it is not a class
     if (!prototype.hasOwnProperty('isPrototypeOf')) {
         return false
     }

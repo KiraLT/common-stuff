@@ -239,6 +239,21 @@ describe('intersection', () => {
         ).toEqual([2])
     })
 
+    it('supports empty array', () => {
+        expect(
+            intersection([
+                [],
+                [2, 3],
+            ])
+        ).toEqual([])
+        expect(
+            intersection([
+                [2, 3],
+                [],
+            ])
+        ).toEqual([])
+    })
+
     it('supports key callback', () => {
         expect(
             intersection<string | number>(

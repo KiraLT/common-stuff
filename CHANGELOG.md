@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/KiraLT/common-stuff/compare/v1.6.1...v1.6.2) (2023-01-01)
+
+
+### Bug Fixes
+
+* better `merge` function parameters types ([229608a](https://github.com/KiraLT/common-stuff/commit/229608a1d1feb0dfddc1f348809a07b3d37e5688))
+
 ## [1.6.1](https://github.com/KiraLT/common-stuff/compare/v1.6.0...v1.6.1) (2022-12-27)
 
 

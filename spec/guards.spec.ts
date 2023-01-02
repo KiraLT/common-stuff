@@ -179,6 +179,9 @@ describe('hasKeys', () => {
 
         if (hasKeys(a, ['a', 'b'])) {
             expect(a.a).toBe(a.b)
+
+            // @ts-expect-error
+            expect(a.a.toFixed(1)).toBe('1.0')
         }
     })
 

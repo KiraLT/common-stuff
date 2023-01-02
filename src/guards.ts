@@ -285,8 +285,7 @@ export function ensureError(value: unknown): Error {
 export function hasKeys<T extends unknown, Key extends keyof any>(
     obj: T,
     keys: ReadonlyArray<Key>
-    // @ts-ignore
-): obj is (T extends { [K in Key]: any } ? Extract<{ [K in Key]: any }, T> : { [K in Key]: unknown }) {
+): obj is (T extends { [K in Key]: any } ? Extract<{ [K in Key]: any }, T> : Extract<{ [K in Key]: unknown }, T>) {
     if (typeof obj === 'object' && keys.every((v) => v in (obj as any))) {
         return true
     }

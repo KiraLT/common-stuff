@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/KiraLT/common-stuff/compare/v1.6.2...v1.6.3) (2023-01-01)
+
+
+### Bug Fixes
+
+* `merge` function nested structure fix when using custom options ([c75f63d](https://github.com/KiraLT/common-stuff/commit/c75f63d811da55f9a43c7aea5379fec778e78d9a))
+
 ## [1.6.2](https://github.com/KiraLT/common-stuff/compare/v1.6.1...v1.6.2) (2023-01-01)
 
 

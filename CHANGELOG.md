@@ -1,3 +1,10 @@
+## [1.6.4](https://github.com/KiraLT/common-stuff/compare/v1.6.3...v1.6.4) (2023-01-02)
+
+
+### Bug Fixes
+
+* `hasKeys` types fix ([b23c8fb](https://github.com/KiraLT/common-stuff/commit/b23c8fb32c0d4ee17c65b95d26c3cb013d935343))
+
 ## [1.6.3](https://github.com/KiraLT/common-stuff/compare/v1.6.2...v1.6.3) (2023-01-01)
 
 

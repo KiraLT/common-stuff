@@ -17,7 +17,8 @@
         "helper",
         "merge",
         "sort",
-        "lodash"
+        "lodash",
+        "isomorphic"
     ],
     "type": "module",
     "source": "src/index.ts",

@@ -7,6 +7,7 @@ import {
     convertToNested,
     camelCase,
     clone,
+    getByKey,
 } from '../src'
 
 describe('isEqual', () => {
@@ -267,5 +268,25 @@ describe('convertToNested', () => {
         ).toEqual({
             nodeEnv: 'development',
         })
+    })
+})
+
+describe('getByKey', () => {
+    it('get value by string key', () => {
+        expect(
+            getByKey({ a: { b: [1, {a: 10}]}}, 'a.b.1.a')
+        ).toBe(10)
+    })
+
+    it('get string value by key path list', () => {
+        expect(
+            getByKey({ a: { b: [1, {a: 10}]}}, ['a', 'b', 1, 'a'])
+        ).toBe(10)
+    })
+
+    it('get unknown property', () => {
+        expect(
+            getByKey(new Date(), ['a', 'b', 1, 'a'])
+        ).toBeUndefined()
     })
 })

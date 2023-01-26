@@ -276,3 +276,38 @@ export function convertToNested<T = Record<string, unknown>>(
             {} as T
         )
 }
+
+/**
+ * Get object value by nested keys
+ * 
+ * @example
+ * ```
+ * getByKey({ key1: [1, 2, { key2: 'value' }]}, 'key1.2.key2')
+ * // 'value'
+ * 
+ * getByKey({ key1: [1, 2, { key2: 'value' }]}, ['key1', 2, 'key2'])
+ * // 'value'
+ * ```
+ * @group Object
+ */
+export function getByKey<T>(target: unknown, keys: (string | number)[] | string): T {
+    const keysList = keys instanceof Array ? keys : keys.split('.')
+    const key = keysList[0]
+    const restKeys = keysList.slice(1)
+
+    if (!key) {
+        return target as T
+    }
+
+    if (target instanceof Array) {
+        const numKey = parseInt(key.toString(), 10)
+
+        return isNaN(numKey) ? undefined as any : getByKey(target[numKey], restKeys)
+    }
+
+    if (typeof target === 'object') {
+        return getByKey((target as any)[key], restKeys)
+    }
+
+    return undefined as T
+}

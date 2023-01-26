@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/KiraLT/common-stuff/compare/v1.6.4...v1.7.0) (2023-01-26)
+
+
+### Features
+
+* `getByKey` function that gets object value by nested key ([6f4c963](https://github.com/KiraLT/common-stuff/commit/6f4c9639f768a0400abb14d186369c0d2e0327e0))
+
 ## [1.6.4](https://github.com/KiraLT/common-stuff/compare/v1.6.3...v1.6.4) (2023-01-02)
 
 

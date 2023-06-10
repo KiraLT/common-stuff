@@ -16,9 +16,9 @@ describe('base64Decode', () => {
 
 describe('base64Decode', () => {
     it('decodes string', () => {
-        expect(base64Decode('cnTEl8SZcmZndDU4xK/ElznEr8SXxaErxJcqLeOBr+S4qg==')).toBe(
-            'rtėęrfgt58įė9įėš+ė*-は个'
-        )
+        expect(
+            base64Decode('cnTEl8SZcmZndDU4xK/ElznEr8SXxaErxJcqLeOBr+S4qg==')
+        ).toBe('rtėęrfgt58įė9įėš+ė*-は个')
     })
 })
 

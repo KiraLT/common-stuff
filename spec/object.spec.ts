@@ -110,15 +110,21 @@ describe('merge', () => {
     })
 
     it('merges arrays', () => {
-        expect(merge([1, 2], [3, 4], { arrayPolicy: 'merge' })).toEqual([1, 2, 3, 4])
+        expect(merge([1, 2], [3, 4], { arrayPolicy: 'merge' })).toEqual([
+            1, 2, 3, 4,
+        ])
     })
 
     it('supports custom array merge function', () => {
-        expect(merge([1, 2], [3, 4], { arrayPolicy: (a, b) => b.concat(a) })).toEqual([3, 4, 1, 2])
+        expect(
+            merge([1, 2], [3, 4], { arrayPolicy: (a, b) => b.concat(a) })
+        ).toEqual([3, 4, 1, 2])
     })
 
     it('skip nulls', () => {
-        expect(merge({ a: 1 }, { a: null }, { skipNulls: true })).toEqual({ a: 1 })
+        expect(merge({ a: 1 }, { a: null }, { skipNulls: true })).toEqual({
+            a: 1,
+        })
     })
 })
 
@@ -273,20 +279,16 @@ describe('convertToNested', () => {
 
 describe('getByKey', () => {
     it('get value by string key', () => {
-        expect(
-            getByKey({ a: { b: [1, {a: 10}]}}, 'a.b.1.a')
-        ).toBe(10)
+        expect(getByKey({ a: { b: [1, { a: 10 }] } }, 'a.b.1.a')).toBe(10)
     })
 
     it('get string value by key path list', () => {
-        expect(
-            getByKey({ a: { b: [1, {a: 10}]}}, ['a', 'b', 1, 'a'])
-        ).toBe(10)
+        expect(getByKey({ a: { b: [1, { a: 10 }] } }, ['a', 'b', 1, 'a'])).toBe(
+            10
+        )
     })
 
     it('get unknown property', () => {
-        expect(
-            getByKey(new Date(), ['a', 'b', 1, 'a'])
-        ).toBeUndefined()
+        expect(getByKey(new Date(), ['a', 'b', 1, 'a'])).toBeUndefined()
     })
 })

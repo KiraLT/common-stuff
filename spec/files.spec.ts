@@ -1,4 +1,4 @@
-import { formatBytes, getFileParts, parseSize } from '../src'
+import { formatBytes, getFileParts, parseSize, getMimeType, getExtension } from '../src'
 
 describe('formatBytes', () => {
     it('handles zero', () => {
@@ -62,5 +62,57 @@ describe('getFileParts', () => {
 
     it('parses hidden file path', () => {
         expect(getFileParts('/my.home/.data')).toEqual(['/my.home/.data', ''])
+    })
+})
+
+describe('getMimeType', () => {
+    it('returns undefined for unknown extension', () => {
+        expect(getMimeType('myfile.unknown')).toBeUndefined()
+    })
+
+    it('returns undefined for empty extension', () => {
+        expect(getMimeType('myfile')).toBeUndefined()
+    })
+
+    it('returns undefined for empty file name', () => {
+        expect(getMimeType('')).toBeUndefined()
+    })
+
+    it('returns undefined for empty file name and empty extension', () => {
+        expect(getMimeType('.')).toBeUndefined()
+    })
+
+    it('returns undefined for dot file', () => {
+        expect(getMimeType('.data')).toBeUndefined()
+    })
+
+    it('returns mime type for text file with extension', () => {
+        expect(getMimeType('data.txt')).toEqual('text/plain')
+    })
+
+    it('returns mime type for json', () => {
+        expect(getMimeType('json')).toEqual('application/json')
+    })
+})
+
+describe('getExtension', () => {
+    it('returns undefined for unknown mime type', () => {
+        expect(getExtension('application/unknown')).toBeUndefined()
+    })
+
+    it('returns undefined for empty mime type', () => {
+        expect(getExtension('')).toBeUndefined()
+    })
+
+    it('returns undefined for empty mime type and empty extension', () => {
+        expect(getExtension('.')).toBeUndefined()
+    })
+
+    it('returns extension for text file with mime type', () => {
+        expect(getExtension('text/plain')).toEqual('txt')
+    })
+
+    it('returns extension for json', () => {
+        expect(getExtension('application/json')).toEqual('json')
     })
 })

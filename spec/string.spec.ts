@@ -1,4 +1,11 @@
-import { truncate, extractWords, camelCase, pascalCase, titleCase, isLetter } from '../src'
+import {
+    truncate,
+    extractWords,
+    camelCase,
+    pascalCase,
+    titleCase,
+    isLetter,
+} from '../src'
 
 describe('truncate', () => {
     it('truncates string', () => {
@@ -58,6 +65,8 @@ describe('isLetter', () => {
 
 describe('titleCase', () => {
     it('changes string', () => {
-        expect(titleCase('hello-world FTW,abc999t t')).toEqual('Hello-World Ftw,Abc999T T')
+        expect(titleCase('hello-world FTW,abc999t t')).toEqual(
+            'Hello-World Ftw,Abc999T T'
+        )
     })
 })

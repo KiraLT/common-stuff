@@ -20,7 +20,7 @@ describe('isPlainObject', () => {
     it('checks if is plain object', () => {
         expect(isPlainObject({ a: 1 })).toBeTruthy()
         expect(isPlainObject({})).toBeTruthy()
-        expect(isPlainObject({ a: [1, {}]})).toBeTruthy()
+        expect(isPlainObject({ a: [1, {}] })).toBeTruthy()
         expect(isPlainObject('a')).toBeFalsy()
         expect(isPlainObject(1)).toBeFalsy()
         expect(isPlainObject(new Boolean(false))).toBeFalsy()
@@ -28,7 +28,7 @@ describe('isPlainObject', () => {
         expect(isPlainObject([])).toBeFalsy()
         expect(isPlainObject(null)).toBeFalsy()
         expect(isPlainObject(undefined)).toBeFalsy()
-        expect(isPlainObject(new class A {})).toBeFalsy()
+        expect(isPlainObject(new (class A {})())).toBeFalsy()
     })
 })
 

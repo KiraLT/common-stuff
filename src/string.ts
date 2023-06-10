@@ -55,7 +55,7 @@ export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
  * ```
  * isLetter('a')
  * // true
-* isLetter('-')
+ * isLetter('-')
  * // false
  * ```
  * @group String

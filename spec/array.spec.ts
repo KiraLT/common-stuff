@@ -240,18 +240,8 @@ describe('intersection', () => {
     })
 
     it('supports empty array', () => {
-        expect(
-            intersection([
-                [],
-                [2, 3],
-            ])
-        ).toEqual([])
-        expect(
-            intersection([
-                [2, 3],
-                [],
-            ])
-        ).toEqual([])
+        expect(intersection([[], [2, 3]])).toEqual([])
+        expect(intersection([[2, 3], []])).toEqual([])
     })
 
     it('supports key callback', () => {

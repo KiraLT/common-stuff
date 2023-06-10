@@ -126,7 +126,7 @@ export function merge<T>(
     options?: {
         /**
          * When `source` has `null` or `undefined` value, do not overwrite `target`
-         * 
+         *
          * @default false
          */
         skipNulls?: boolean
@@ -137,7 +137,7 @@ export function merge<T>(
          * * `overwrite` - always replace `target` array with `source`
          * * `merge` - merge `target` and `source` array values
          * * `(target, source) => source` - custom array merge function
-         * 
+         *
          * @default 'overwrite'
          */
         arrayPolicy?:
@@ -279,18 +279,21 @@ export function convertToNested<T = Record<string, unknown>>(
 
 /**
  * Get object value by nested keys
- * 
+ *
  * @example
  * ```
  * getByKey({ key1: [1, 2, { key2: 'value' }]}, 'key1.2.key2')
  * // 'value'
- * 
+ *
  * getByKey({ key1: [1, 2, { key2: 'value' }]}, ['key1', 2, 'key2'])
  * // 'value'
  * ```
  * @group Object
  */
-export function getByKey<T>(target: unknown, keys: (string | number)[] | string): T {
+export function getByKey<T>(
+    target: unknown,
+    keys: (string | number)[] | string
+): T {
     const keysList = keys instanceof Array ? keys : keys.split('.')
     const key = keysList[0]
     const restKeys = keysList.slice(1)
@@ -302,7 +305,9 @@ export function getByKey<T>(target: unknown, keys: (string | number)[] | string)
     if (target instanceof Array) {
         const numKey = parseInt(key.toString(), 10)
 
-        return isNaN(numKey) ? undefined as any : getByKey(target[numKey], restKeys)
+        return isNaN(numKey)
+            ? (undefined as any)
+            : getByKey(target[numKey], restKeys)
     }
 
     if (typeof target === 'object') {

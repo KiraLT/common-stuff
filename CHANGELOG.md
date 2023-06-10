@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/KiraLT/common-stuff/compare/v1.7.0...v1.8.0) (2023-06-10)
+
+
+### Features
+
+* helpers that allows working with mime type and file extensions ([76fef41](https://github.com/KiraLT/common-stuff/commit/76fef41c118789bda14be4e7ffae556bee81ebe7))
+
 # [1.7.0](https://github.com/KiraLT/common-stuff/compare/v1.6.4...v1.7.0) (2023-01-26)
 
 

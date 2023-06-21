@@ -1,4 +1,4 @@
-import { delay, debounce } from '../src'
+import { delay, debounce, throttle } from '../src'
 
 describe('delay', () => {
     it('delay action', async () => {
@@ -24,6 +24,59 @@ describe('debounce', () => {
         await delay(90)
 
         expect(mock.mock.calls.length).toBe(0)
+
+        await delay(10)
+
+        expect(mock.mock.calls.length).toBe(1)
+    })
+})
+
+describe('throttle', () => {
+    it('should throttle function invocation', async () => {
+        const mock = jest.fn()
+        const cb = throttle(mock, 100)
+
+        cb(1)
+        expect(mock.mock.calls.length).toBe(1)
+
+        await delay(90)
+
+        cb(2)
+        expect(mock.mock.calls.length).toBe(1)
+
+        await delay(10)
+
+        expect(mock.mock.calls.length).toBe(2)
+    })
+
+    it('without leading', async () => {
+        const mock = jest.fn()
+        const cb = throttle(mock, 100, { leading: false })
+
+        cb(1)
+        expect(mock.mock.calls.length).toBe(0)
+
+        await delay(90)
+
+        cb(2)
+        expect(mock.mock.calls.length).toBe(0)
+
+        await delay(10)
+
+        expect(mock.mock.calls.length).toBe(1)
+    })
+
+    it('without trailing', async () => {
+        const mock = jest.fn()
+        const cb = throttle(mock, 100, { trailing: false })
+
+        cb(1)
+        expect(mock.mock.calls.length).toBe(1)
+
+        await delay(90)
+
+        cb(2)
+        expect(mock.mock.calls.length).toBe(1)
 
         await delay(10)
 

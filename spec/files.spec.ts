@@ -1,4 +1,10 @@
-import { formatBytes, getFileParts, parseSize, getMimeType, getExtension } from '../src'
+import {
+    formatBytes,
+    getFileParts,
+    parseSize,
+    getMimeType,
+    getExtension,
+} from '../src'
 
 describe('formatBytes', () => {
     it('handles zero', () => {

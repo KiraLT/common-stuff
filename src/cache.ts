@@ -1,5 +1,15 @@
 import { hashCode } from '.'
 
+/**
+ * Caches the result of a function call by its arguments.
+ *
+ * @example
+ * ```
+ * const cached = cache(() => Math.random())
+ * cached() // will be called immediately
+ * cached() // will return the same value
+ * ```
+ */
 export function cache<T extends Function>(func: T): T {
     const cachedCalls: Record<number, unknown> = {}
 

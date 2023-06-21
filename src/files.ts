@@ -381,7 +381,7 @@ export function getMimeType(name: string): string | undefined {
 
 /**
  * Returns file extension from mime type
- * 
+ *
  * @example
  * ```
  * getExtension('text/plain') // txt

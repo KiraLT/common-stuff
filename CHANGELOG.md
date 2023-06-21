@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/KiraLT/common-stuff/compare/v1.8.0...v1.9.0) (2023-06-21)
+
+
+### Features
+
+* `throttle` function ([9983e9b](https://github.com/KiraLT/common-stuff/commit/9983e9b0c2dcc4b4754584a03684adf67620a730))
+
 # [1.8.0](https://github.com/KiraLT/common-stuff/compare/v1.7.0...v1.8.0) (2023-06-10)
 
 

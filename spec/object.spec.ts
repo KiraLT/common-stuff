@@ -278,17 +278,21 @@ describe('convertToNested', () => {
 })
 
 describe('getByKey', () => {
-    it('get value by string key', () => {
+    it('gets value by string key', () => {
         expect(getByKey({ a: { b: [1, { a: 10 }] } }, 'a.b.1.a')).toBe(10)
     })
 
-    it('get string value by key path list', () => {
+    it('gets string value by key path list', () => {
         expect(getByKey({ a: { b: [1, { a: 10 }] } }, ['a', 'b', 1, 'a'])).toBe(
             10
         )
     })
 
-    it('get unknown property', () => {
+    it('gets unknown property', () => {
         expect(getByKey(new Date(), ['a', 'b', 1, 'a'])).toBeUndefined()
+    })
+
+    it('returns undefined when getting list property', () => {
+        expect(getByKey([1, 2, 3], 'length')).toBeUndefined()
     })
 })

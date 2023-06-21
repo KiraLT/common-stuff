@@ -255,6 +255,31 @@ describe('intersection', () => {
             )
         ).toEqual([2])
     })
+
+    it('supports empty array with key callback', () => {
+        expect(
+            intersection(
+                [
+                    [],
+                    ['2', '3'],
+                ],
+                (v) => parseInt(v.toString())
+            )
+        ).toEqual([])
+        expect(
+            intersection(
+                [
+                    ['2', '3'],
+                    [],
+                ],
+                (v) => parseInt(v.toString())
+            )
+        ).toEqual([])
+    })
+
+    it('supports empty array', () => {
+        expect(intersection([])).toEqual([])
+    })
 })
 
 describe('union', () => {

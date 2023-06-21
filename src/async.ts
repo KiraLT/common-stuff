@@ -25,6 +25,7 @@ export function delay(
  * until after wait milliseconds have elapsed since the last time it was invoked.
  *
  * @group Async
+ * @example
  * ```
  * const debounced = debounce(() => console.log('debounced'), 100)
  * debounced() // will be called after 100ms
@@ -102,7 +103,7 @@ export function throttle<A extends unknown[]>(
         if (leading && lastCallTime === undefined) {
             lastCallTime = now
             func.apply(lastThis, lastArgs)
-        } else if (lastCallTime !== undefined && now - (lastCallTime ?? 0) >= timeInMs) {
+        } else if (lastCallTime !== undefined && now - lastCallTime >= timeInMs) {
             clearTimeout(timer)
             lastCallTime = now
             func.apply(lastThis, lastArgs)

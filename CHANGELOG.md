@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/KiraLT/common-stuff/compare/v1.10.0...v1.10.1) (2023-10-09)
+
+
+### Bug Fixes
+
+* umd bundle fix ([2a84b85](https://github.com/KiraLT/common-stuff/commit/2a84b85e5199fb052a263a343133cee52636b5e5))
+
 # [1.10.0](https://github.com/KiraLT/common-stuff/compare/v1.9.0...v1.10.0) (2023-10-07)
 
 

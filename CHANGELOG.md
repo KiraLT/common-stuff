@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/KiraLT/common-stuff/compare/v1.9.0...v1.10.0) (2023-10-07)
+
+
+### Features
+
+* optimize build files ([1c5f8b0](https://github.com/KiraLT/common-stuff/commit/1c5f8b0f13f3835f7d1360b65edf187f4600e9c3))
+
 # [1.9.0](https://github.com/KiraLT/common-stuff/compare/v1.8.0...v1.9.0) (2023-06-21)
 
 

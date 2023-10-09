@@ -26,7 +26,7 @@
     "main": "./dist/common-stuff.js",
     "module": "./dist/common-stuff.module.js",
     "umd:main": "./dist/common-stuff.umd.js",
-    "unpkg": "./dist/common-stuff.min.js",
+    "unpkg": "./dist/common-stuff.umd.js",
     "exports": {
         "types": "./dist/index.d.ts",
         "browser": "./dist/common-stuff.module.js",

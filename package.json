@@ -31,7 +31,7 @@
         "types": "./dist/index.d.ts",
         "browser": "./dist/common-stuff.module.js",
         "umd": "./dist/common-stuff.umd.js",
-        "import": "./dist/preact.mjs",
+        "import": "./dist/common-stuff.mjs",
         "require": "./dist/common-stuff.js"
     },
     "scripts": {

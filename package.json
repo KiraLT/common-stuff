@@ -23,7 +23,7 @@
     "type": "module",
     "types": "./dist/index.d.ts",
     "source": "src/index.ts",
-    "main": "./dist/common-stuff.js",
+    "main": "./dist/common-stuff.cjs",
     "module": "./dist/common-stuff.module.js",
     "umd:main": "./dist/common-stuff.umd.js",
     "unpkg": "./dist/common-stuff.umd.js",
@@ -32,7 +32,7 @@
         "browser": "./dist/common-stuff.module.js",
         "umd": "./dist/common-stuff.umd.js",
         "import": "./dist/common-stuff.mjs",
-        "require": "./dist/common-stuff.js"
+        "require": "./dist/common-stuff.cjs"
     },
     "scripts": {
         "test": "jest spec",

@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/KiraLT/common-stuff/compare/v1.10.2...v1.10.3) (2023-10-20)
+
+
+### Bug Fixes
+
+* bundle fix for CommonJS ([d9f81b0](https://github.com/KiraLT/common-stuff/commit/d9f81b03757b85307f2daa5bdbd33e05bcf2a8ca))
+
 ## [1.10.2](https://github.com/KiraLT/common-stuff/compare/v1.10.1...v1.10.2) (2023-10-15)
 
 

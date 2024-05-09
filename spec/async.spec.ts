@@ -29,6 +29,39 @@ describe('debounce', () => {
 
         expect(mock.mock.calls.length).toBe(1)
     })
+
+    it('supports arguments', async () => {
+        const mock = jest.fn()
+        const cb = debounce(mock, 100)
+
+        cb(1)
+        cb(2)
+        cb(3)
+
+        await delay(110)
+
+        expect(mock.mock.calls.length).toBe(1)
+        expect(mock.mock.calls[0][0]).toBe(3)
+    })
+
+    it('supports async function', async () => {
+        const mock = jest.fn()
+        const cb = debounce(async (value: string) => {
+            await delay(50)
+            mock(value)
+        }, 50)
+
+        cb('nope')
+        await delay(1)
+        cb('nope 2')
+        await delay(1)
+        cb('it works')
+
+        await delay(110)
+
+        expect(mock.mock.calls.length).toBe(1)
+        expect(mock.mock.calls[0][0]).toBe('it works')
+    })
 })
 
 describe('throttle', () => {

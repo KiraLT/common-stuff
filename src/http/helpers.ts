@@ -10,6 +10,9 @@ import { flatMap, ensureArray, Primitive, isNullOrUndefined, isNot } from '../'
  *
  * // Create a cookie that expires 7 days from now, valid across the entire site:
  * document.cookie = generateCookie('name', 'value', { expires: 7 })
+ *
+ * // Delete a cookie by setting the expires parameter to zero:
+ * document.cookie = generateCookie('name', 'value', { expires: 0 })
  * ```
  * @param name cookie name
  * @param value cookie value
@@ -20,15 +23,45 @@ export function generateCookie(
     options?: {
         /**
          * Expire cookie after x days (negative to remove cookie)
+         *
+         * @default undefined Cookie is removed when the user closes the browser
          */
         expires?: number
-    }
+        /**
+         * A String indicating the path where the cookie is visible.
+         *
+         * @default undefined
+         */
+        path?: string
+        /**
+         * A String indicating a valid domain where the cookie should be visible. The cookie will also be visible to all subdomains.
+         *
+         * @default undefined Cookie is visible only to the domain or subdomain of the page where the cookie was created
+         */
+        domain?: string
+        /**
+         * A Boolean indicating if the cookie transmission requires a secure protocol (https).
+         *
+         * @default undefined No secure protocol requirement
+         */
+        secure?: boolean
+        /**
+         * A String, allowing to control whether the browser is sending a cookie along with cross-site requests.
+         *
+         * @default undefined No SameSite attribute set
+         */
+        sameSite?: 'strict' | 'lax' | 'none'
+    },
 ): string {
     const { expires } = options ?? {}
 
     return [
         `${encodeURIComponent(name)}=${encodeURIComponent(value)}`,
         expires ? `expires=${new Date(expires * 864e5).toUTCString()}` : '',
+        options?.path ? `path=${options.path}` : '',
+        options?.domain ? `domain=${options.domain}` : '',
+        options?.secure ? 'secure' : '',
+        options?.sameSite ? `samesite=${options.sameSite}` : '',
     ]
         .filter((v) => !!v)
         .join(';')
@@ -46,15 +79,18 @@ export function generateCookie(
  * @param cookieString `document.cookie` value
  */
 export function parseCookies(cookieString: string): Record<string, string> {
-    return cookieString.split(/; /).reduce((prev, cur) => {
-        const [name, value] = cur.split('=', 2)
-        if (name != null && value != null) {
-            prev[decodeURIComponent(name)] = decodeURIComponent(
-                value[0] === '"' ? value.slice(1, -1) : value
-            )
-        }
-        return prev
-    }, {} as Record<string, string>)
+    return cookieString.split(/; /).reduce(
+        (prev, cur) => {
+            const [name, value] = cur.split('=', 2)
+            if (name != null && value != null) {
+                prev[decodeURIComponent(name)] = decodeURIComponent(
+                    value[0] === '"' ? value.slice(1, -1) : value,
+                )
+            }
+            return prev
+        },
+        {} as Record<string, string>,
+    )
 }
 
 /**
@@ -77,7 +113,7 @@ export function parseQueryString(
          * @default `&`
          */
         separator?: string
-    }
+    },
 ): Record<string, string[]> {
     const { separator = '&' } = options ?? {}
 
@@ -98,13 +134,13 @@ export function parseQueryString(
             }
 
             return []
-        }
+        },
     ).reduce<Record<string, string[]>>(
         (prev, [key, value]) => ({
             ...prev,
             [key]: [...(prev[key] || []), ...value],
         }),
-        {}
+        {},
     )
 }
 
@@ -128,7 +164,7 @@ export function generateQueryString(
          * @default `&`
          */
         separator?: string
-    }
+    },
 ): string {
     const { separator = '&' } = options ?? {}
     return flatMap(Object.entries(query), ([key, values]) =>
@@ -137,9 +173,9 @@ export function generateQueryString(
             .map(
                 (v) =>
                     `${encodeURIComponent(key.toString())}=${encodeURIComponent(
-                        v.toString()
-                    ).replace(/%20/g, '+')}`
-            )
+                        v.toString(),
+                    ).replace(/%20/g, '+')}`,
+            ),
     ).join(separator)
 }
 

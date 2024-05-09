@@ -45,10 +45,10 @@ describe('HttpError', () => {
 
     it('has expose', () => {
         expect(
-            new HttpError(404, undefined, { expose: false }).expose
+            new HttpError(404, undefined, { expose: false }).expose,
         ).toBeFalsy()
         expect(
-            new HttpError(500, undefined, { expose: true }).expose
+            new HttpError(500, undefined, { expose: true }).expose,
         ).toBeTruthy()
     })
 
@@ -56,10 +56,10 @@ describe('HttpError', () => {
         expect(new HttpError(404).publicMessage).toBe('Not Found')
         expect(new HttpError(404, '404').publicMessage).toBe('404')
         expect(new HttpError(404, '404', { expose: false }).publicMessage).toBe(
-            'Not Found'
+            'Not Found',
         )
         expect(new HttpError(500, '500').publicMessage).toBe(
-            'Internal Server Error'
+            'Internal Server Error',
         )
     })
 
@@ -83,7 +83,41 @@ describe('generateCookie', () => {
 
     it('supports expiration', () => {
         expect(generateCookie('a', 'b', { expires: 1 })).toMatch(
-            /^a=b;expires=.*GMT$/
+            /^a=b;expires=.*GMT$/,
+        )
+    })
+
+    it('supports path', () => {
+        expect(generateCookie('a', 'b', { path: '/' })).toBe('a=b;path=/')
+    })
+
+    it('supports domain', () => {
+        expect(generateCookie('a', 'b', { domain: 'domain.com' })).toBe(
+            'a=b;domain=domain.com',
+        )
+    })
+
+    it('supports secure', () => {
+        expect(generateCookie('a', 'b', { secure: true })).toBe('a=b;secure')
+    })
+
+    it('supports samesite', () => {
+        expect(generateCookie('a', 'b', { sameSite: 'strict' })).toBe(
+            'a=b;samesite=strict',
+        )
+    })
+
+    it('supports multiple options', () => {
+        expect(
+            generateCookie('a', 'b', {
+                expires: 1,
+                path: '/',
+                domain: 'domain.com',
+                secure: true,
+                sameSite: 'strict',
+            }),
+        ).toMatch(
+            /^a=b;expires=.*GMT;path=\/;domain=domain.com;secure;samesite=strict$/,
         )
     })
 })
@@ -109,13 +143,13 @@ describe('decodeHtml', () => {
 describe('urlToRelative', () => {
     it('converts absolute URL to relative', () => {
         expect(urlToRelative('https://domain.com/index.html')).toBe(
-            '/index.html'
+            '/index.html',
         )
     })
 
     it('supports subdomains', () => {
         expect(urlToRelative('https://my-sub.domain.com/index.html')).toBe(
-            '/index.html'
+            '/index.html',
         )
     })
 })
@@ -146,7 +180,7 @@ describe('parseQueryString', () => {
         expect(
             parseQueryString('page=1;limit=20', {
                 separator: ';',
-            })
+            }),
         ).toEqual({ page: ['1'], limit: ['20'] })
     })
 
@@ -160,7 +194,7 @@ describe('parseQueryString', () => {
 describe('generateQueryString', () => {
     it('parses string', () => {
         expect(generateQueryString({ page: [1], limit: 20 })).toBe(
-            'page=1&limit=20'
+            'page=1&limit=20',
         )
     })
 
@@ -170,8 +204,8 @@ describe('generateQueryString', () => {
                 { page: [1], limit: 20 },
                 {
                     separator: ';',
-                }
-            )
+                },
+            ),
         ).toBe('page=1;limit=20')
     })
 })

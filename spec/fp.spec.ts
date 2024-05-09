@@ -17,8 +17,8 @@ describe('pipe', () => {
                 (v) => v,
                 (v) => v,
                 (v) => v,
-                (v) => v
-            ).map((v) => v.toFixed())
+                (v) => v,
+            ).map((v) => v.toFixed()),
         ).toEqual(['2', '6', '6'])
     })
 })
@@ -27,7 +27,7 @@ describe('compose', () => {
     it('applies pipe', () => {
         const func = compose(
             (value) => ({ value }),
-            (value: string) => parseInt(value)
+            (value: string) => parseInt(value),
         )
         expect(func('1')).toEqual({ value: 1 })
     })

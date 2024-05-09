@@ -59,7 +59,7 @@ export function randomChoices<T>(array: ReadonlyArray<T>, length: number): T[] {
  */
 export function randomString(
     length: number,
-    options?: { chars?: string }
+    options?: { chars?: string },
 ): string {
     const { chars = asciiLetters + digits + punctuation } = options ?? {}
 

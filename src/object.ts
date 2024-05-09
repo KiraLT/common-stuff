@@ -54,18 +54,26 @@ export function isEqual(a: unknown, b: unknown): boolean {
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return list of entry pairs
  * @returns new mapped object
  */
-export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
+export function flatMapRecord<
+    K extends string | number | symbol,
+    V,
+    RK extends string | number | symbol,
+    RV,
+>(
     obj: Record<K, V>,
-    callback: (entry: [K, V]) => Array<[RK, RV]>
+    callback: (entry: [K, V]) => Array<[RK, RV]>,
 ): Record<RK, RV> {
     const entries = Object.entries(obj) as Array<[K, V]>
 
-    return entries.map(callback).reduce((prev, values) => {
-        values.forEach(([key, value]) => {
-            prev[key] = value
-        })
-        return prev
-    }, {} as Record<RK, RV>)
+    return entries.map(callback).reduce(
+        (prev, values) => {
+            values.forEach(([key, value]) => {
+                prev[key] = value
+            })
+            return prev
+        },
+        {} as Record<RK, RV>,
+    )
 }
 
 /**
@@ -83,10 +91,12 @@ export function flatMapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return entry pair
  * @returns new mapped object
  */
-export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
-    obj: Record<K, V>,
-    callback: (entry: [K, V]) => [RK, RV]
-): Record<RK, RV> {
+export function mapRecord<
+    K extends string | number | symbol,
+    V,
+    RK extends string | number | symbol,
+    RV,
+>(obj: Record<K, V>, callback: (entry: [K, V]) => [RK, RV]): Record<RK, RV> {
     return flatMapRecord(obj, (v) => [callback(v)])
 }
 
@@ -103,9 +113,9 @@ export function mapRecord<K extends keyof any, V, RK extends keyof any, RV>(
  * @param callback map callback, accepts entry pair (`[key, value]`) and should boolean value
  * @returns new filtered object
  */
-export function filterRecord<K extends keyof any, V>(
+export function filterRecord<K extends string | number | symbol, V>(
     obj: Record<K, V>,
-    callback: (entry: [K, V]) => boolean
+    callback: (entry: [K, V]) => boolean,
 ): Record<K, V> {
     return flatMapRecord(obj, (v) => (callback(v) ? [v] : []))
 }
@@ -144,7 +154,7 @@ export function merge<T>(
             | 'overwrite'
             | 'merge'
             | ((target: unknown[], source: unknown[]) => unknown)
-    }
+    },
 ): T {
     const { skipNulls = false, arrayPolicy = 'overwrite' } = options ?? {}
 
@@ -154,17 +164,17 @@ export function merge<T>(
                 prev[key] = merge(prev[key], value, options)
                 return prev
             },
-            { ...target }
-        ) as any as T
+            { ...target },
+        ) as unknown as T
     }
 
     if (target instanceof Array && source instanceof Array) {
         if (arrayPolicy === 'merge') {
-            return target.concat(source) as any as T
+            return target.concat(source) as unknown as T
         } else if (typeof arrayPolicy === 'function') {
-            return arrayPolicy(target, source) as any as T
+            return arrayPolicy(target, source) as unknown as T
         } else {
-            return source as any as T
+            return source as unknown as T
         }
     }
 
@@ -184,14 +194,17 @@ export function merge<T>(
  */
 export function clone<T>(value: T, recursive = true): T {
     if (isPlainObject(value)) {
-        return Object.entries(value).reduce((prev, [k, v]) => {
-            prev[k] = recursive ? clone(v) : v
-            return prev
-        }, {} as Record<keyof any, unknown>) as any as T
+        return Object.entries(value).reduce(
+            (prev, [k, v]) => {
+                prev[k] = recursive ? clone(v) : v
+                return prev
+            },
+            {} as Record<string | number | symbol, unknown>,
+        ) as unknown as T
     }
 
     if (value instanceof Array) {
-        return value.map((v) => (recursive ? clone(v) : v)) as any as T
+        return value.map((v) => (recursive ? clone(v) : v)) as T
     }
 
     return value
@@ -232,7 +245,7 @@ export function convertToNested<T = Record<string, unknown>>(
          * Value transform function, by default `JSON.parse` is used.
          */
         transformValue?: (value: unknown) => unknown
-    }
+    },
 ): T {
     const sep = options?.separator ?? '.'
     const keyTransformer = options?.transformKey ?? ((v) => v)
@@ -251,7 +264,7 @@ export function convertToNested<T = Record<string, unknown>>(
 
     const createValue = (
         [target, ...keys]: string[],
-        value: unknown
+        value: unknown,
     ): unknown => {
         if (!target) {
             return value
@@ -267,13 +280,13 @@ export function convertToNested<T = Record<string, unknown>>(
                 [
                     key.split(sep).map(keyTransformer),
                     valueTransformer(value),
-                ] as const
+                ] as const,
         )
         .filter(([keys]) => keys.every((v) => !!v))
         .sort((a, b) => a[0].length - b[0].length)
         .reduce(
             (prev, [key, value]) => merge(prev, createValue(key, value)),
-            {} as T
+            {} as T,
         )
 }
 
@@ -292,7 +305,7 @@ export function convertToNested<T = Record<string, unknown>>(
  */
 export function getByKey<T>(
     target: unknown,
-    keys: (string | number)[] | string
+    keys: (string | number)[] | string,
 ): T {
     const keysList = keys instanceof Array ? keys : keys.split('.')
     const key = keysList[0]
@@ -306,12 +319,12 @@ export function getByKey<T>(
         const numKey = parseInt(key.toString(), 10)
 
         return isNaN(numKey)
-            ? (undefined as any)
+            ? (undefined as T)
             : getByKey(target[numKey], restKeys)
     }
 
-    if (typeof target === 'object') {
-        return getByKey((target as any)[key], restKeys)
+    if (isPlainObject(target)) {
+        return getByKey(target[key], restKeys)
     }
 
     return undefined as T

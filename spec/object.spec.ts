@@ -49,14 +49,14 @@ describe('isEqual', () => {
         expect(
             isEqual(
                 { a: [{ b: [9, 1] }, 3, { a: false }] },
-                { a: [{ b: [9, 1] }, 3, { a: false }] }
-            )
+                { a: [{ b: [9, 1] }, 3, { a: false }] },
+            ),
         ).toBeTruthy()
         expect(
             isEqual(
                 { a: [{ b: [9] }, 3, { a: false }] },
-                { a: [{ b: [9, 1] }, 3, { a: false }] }
-            )
+                { a: [{ b: [9, 1] }, 3, { a: false }] },
+            ),
         ).toBeFalsy()
     })
 })
@@ -73,15 +73,15 @@ describe('flatMapRecord', () => {
             flatMapRecord({ a: 'b' }, ([k, v]) => [
                 [k, v],
                 [`${k}2`, v],
-            ])
+            ]),
         ).toEqual({ a: 'b', a2: 'b' })
     })
 
     it('filters items', () => {
         expect(
             flatMapRecord({ a: 'b', b: 'c' }, ([k, v]) =>
-                k === 'a' ? [[k, v]] : []
-            )
+                k === 'a' ? [[k, v]] : [],
+            ),
         ).toEqual({ a: 'b' })
     })
 })
@@ -89,7 +89,10 @@ describe('flatMapRecord', () => {
 describe('filterRecord', () => {
     it('filters entries', () => {
         expect(
-            filterRecord({ a: 'b', b: 'c' }, ([k, v]) => k === 'b' && v === 'c')
+            filterRecord(
+                { a: 'b', b: 'c' },
+                ([k, v]) => k === 'b' && v === 'c',
+            ),
         ).toEqual({ b: 'c' })
     })
 })
@@ -101,7 +104,7 @@ describe('merge', () => {
 
     it('merges recursive objects', () => {
         expect(
-            merge({ a: 1, c: { a: 1 } }, { a: { b: 2 }, b: 2, c: { b: 1 } })
+            merge({ a: 1, c: { a: 1 } }, { a: { b: 2 }, b: 2, c: { b: 1 } }),
         ).toEqual({ a: { b: 2 }, b: 2, c: { a: 1, b: 1 } })
     })
 
@@ -117,7 +120,7 @@ describe('merge', () => {
 
     it('supports custom array merge function', () => {
         expect(
-            merge([1, 2], [3, 4], { arrayPolicy: (a, b) => b.concat(a) })
+            merge([1, 2], [3, 4], { arrayPolicy: (a, b) => b.concat(a) }),
         ).toEqual([3, 4, 1, 2])
     })
 
@@ -187,7 +190,7 @@ describe('convertToNested', () => {
             convertToNested({
                 'a.b': 1,
                 'a.a': 2,
-            })
+            }),
         ).toEqual({
             a: {
                 a: 2,
@@ -203,8 +206,8 @@ describe('convertToNested', () => {
                     a__b: 1,
                     a__a: 2,
                 },
-                { separator: '__' }
-            )
+                { separator: '__' },
+            ),
         ).toEqual({
             a: {
                 a: 2,
@@ -220,8 +223,8 @@ describe('convertToNested', () => {
                     CONFIG__PRIVATE_KEY: 'a',
                     CONFIG__PUBLIC_KEY: 'b',
                 },
-                { separator: '__', transformKey: camelCase }
-            )
+                { separator: '__', transformKey: camelCase },
+            ),
         ).toEqual({
             config: {
                 privateKey: 'a',
@@ -236,7 +239,7 @@ describe('convertToNested', () => {
                 'a.b': '[1, 2, 3]',
                 'a.a': `"abc"`,
                 'a.c': '["1", "2", "3"]',
-            })
+            }),
         ).toEqual({
             a: {
                 a: 'abc',
@@ -251,7 +254,7 @@ describe('convertToNested', () => {
             convertToNested({
                 'a.b': 2,
                 a: `{"b": 1}`,
-            })
+            }),
         ).toEqual({
             a: {
                 b: 2,
@@ -269,8 +272,8 @@ describe('convertToNested', () => {
                 {
                     separator: '__',
                     transformKey: camelCase,
-                }
-            )
+                },
+            ),
         ).toEqual({
             nodeEnv: 'development',
         })
@@ -284,7 +287,7 @@ describe('getByKey', () => {
 
     it('gets string value by key path list', () => {
         expect(getByKey({ a: { b: [1, { a: 10 }] } }, ['a', 'b', 1, 'a'])).toBe(
-            10
+            10,
         )
     })
 

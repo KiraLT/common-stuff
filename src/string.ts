@@ -77,7 +77,7 @@ export function isLetter(value: string): boolean {
 export function truncate(
     value: string,
     length: number,
-    ending = '...'
+    ending = '...',
 ): string {
     if (value.length > length) {
         return value.substring(0, length - ending.length) + ending

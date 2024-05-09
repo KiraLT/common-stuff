@@ -19,7 +19,7 @@ type NextLike = (err?: any) => void
 export function httpErrorHandler<
     Req extends ReqLike,
     Resp extends RespLike,
-    Next extends NextLike
+    Next extends NextLike,
 >(
     {
         serializer,
@@ -28,7 +28,7 @@ export function httpErrorHandler<
             err: { message: string; status: number; error: Error },
             req: Req,
             resp: Resp,
-            next: Next
+            next: Next,
         ) => void
     } = {
         serializer: ({ message, status }, _req, resp) => {
@@ -37,7 +37,7 @@ export function httpErrorHandler<
                 error: message,
             })
         },
-    }
+    },
 ): (err: unknown, req: Req, resp: Resp, next: Next) => void {
     return (err, req, resp, next) => {
         if (err) {
@@ -45,16 +45,15 @@ export function httpErrorHandler<
                 serializer(
                     {
                         status:
-                            'status' in err &&
-                            typeof (err as any).status === 'number'
-                                ? ((err as any).status as number)
+                            'status' in err && typeof err.status === 'number'
+                                ? (err.status as number)
                                 : 500,
                         message: err.message,
                         error: err,
                     },
                     req,
                     resp,
-                    next
+                    next,
                 )
             } else {
                 serializer(
@@ -65,7 +64,7 @@ export function httpErrorHandler<
                     },
                     req,
                     resp,
-                    next
+                    next,
                 )
             }
         }

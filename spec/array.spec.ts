@@ -122,7 +122,10 @@ describe('groupBy', () => {
 
     it('groups by multiple conditions', () => {
         expect(
-            groupBy(['one', 'two', 'three'], (v) => [v.length, v.includes('a')])
+            groupBy(['one', 'two', 'three'], (v) => [
+                v.length,
+                v.includes('a'),
+            ]),
         ).toEqual([
             [[5, false], ['three']],
             [
@@ -143,7 +146,7 @@ describe('indexBy', () => {
 
     it('supports array', () => {
         expect(
-            indexBy(['one', 'two', 'three'], (v) => [v.length, v.length + 1])
+            indexBy(['one', 'two', 'three'], (v) => [v.length, v.length + 1]),
         ).toEqual({
             '5': ['three'],
             '6': ['three'],
@@ -157,7 +160,7 @@ describe('deduplicate', () => {
     it('de-duplicates any type', () => {
         const obj1 = {}
         expect(
-            deduplicate([obj1, 1, '5', true, 5, 1, obj1, false, true])
+            deduplicate([obj1, 1, '5', true, 5, 1, obj1, false, true]),
         ).toEqual([obj1, 1, '5', true, 5, false])
     })
 })
@@ -187,8 +190,8 @@ describe('deduplicateBy', () => {
                         a: 1,
                     },
                 ],
-                (v) => v.a
-            )
+                (v) => v.a,
+            ),
         ).toEqual([
             {
                 a: obj1,
@@ -224,7 +227,7 @@ describe('difference', () => {
 
     it('supports key callback', () => {
         expect(
-            difference([2, 1], ['2', '3'], (v) => parseInt(v.toString()))
+            difference([2, 1], ['2', '3'], (v) => parseInt(v.toString())),
         ).toEqual([1])
     })
 })
@@ -235,7 +238,7 @@ describe('intersection', () => {
             intersection([
                 [2, 1],
                 [2, 3],
-            ])
+            ]),
         ).toEqual([2])
     })
 
@@ -251,29 +254,17 @@ describe('intersection', () => {
                     [2, 1],
                     ['2', '3'],
                 ],
-                (v) => parseInt(v.toString())
-            )
+                (v) => parseInt(v.toString()),
+            ),
         ).toEqual([2])
     })
 
     it('supports empty array with key callback', () => {
         expect(
-            intersection(
-                [
-                    [],
-                    ['2', '3'],
-                ],
-                (v) => parseInt(v.toString())
-            )
+            intersection([[], ['2', '3']], (v) => parseInt(v.toString())),
         ).toEqual([])
         expect(
-            intersection(
-                [
-                    ['2', '3'],
-                    [],
-                ],
-                (v) => parseInt(v.toString())
-            )
+            intersection([['2', '3'], []], (v) => parseInt(v.toString())),
         ).toEqual([])
     })
 
@@ -288,7 +279,7 @@ describe('union', () => {
             union([
                 [2, 1],
                 [2, 3],
-            ])
+            ]),
         ).toEqual([2, 1, 3])
     })
 
@@ -299,8 +290,8 @@ describe('union', () => {
                     [2, 1],
                     ['2', '3'],
                 ],
-                (v) => parseInt(v.toString())
-            )
+                (v) => parseInt(v.toString()),
+            ),
         ).toEqual([2, 1, '3'])
     })
 })
@@ -316,7 +307,7 @@ describe('includesAny', () => {
 
     it('supports key callback', () => {
         expect(
-            includesAny([2, 1], ['2', '3'], (v) => parseInt(v.toString()))
+            includesAny([2, 1], ['2', '3'], (v) => parseInt(v.toString())),
         ).toBeTruthy()
     })
 })
@@ -332,7 +323,7 @@ describe('includesAll', () => {
 
     it('supports key callback', () => {
         expect(
-            includesAll([2, 1], ['1', '2'], (v) => parseInt(v.toString()))
+            includesAll([2, 1], ['1', '2'], (v) => parseInt(v.toString())),
         ).toBeTruthy()
     })
 })

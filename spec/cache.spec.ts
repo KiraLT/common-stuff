@@ -13,7 +13,7 @@ describe('cache', () => {
 
     it('supports promises', async () => {
         const mockCallback = jest.fn((a: number, b: number) =>
-            Promise.resolve(a + b)
+            Promise.resolve(a + b),
         )
         const cachedCallback = cache(mockCallback)
 

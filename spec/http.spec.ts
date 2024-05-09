@@ -68,7 +68,7 @@ describe('HttpError', () => {
     })
 
     it('validates status input', () => {
-        expect(() => new HttpError(951 as any)).toThrow('Incorrect status code')
+        expect(() => new HttpError(951)).toThrow('Incorrect status code')
     })
 })
 

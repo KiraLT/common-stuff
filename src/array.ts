@@ -19,7 +19,7 @@ import { hashCode, ensureArray } from '.'
  * @returns `array.sort` compatible callback
  */
 export function sortByCb<T>(
-    key: (item: T) => unknown = (v) => v
+    key: (item: T) => unknown = (v) => v,
 ): (a: T, b: T) => number {
     return (a, b) => {
         const doCompare = (keyA: unknown, keyB: unknown): number => {
@@ -74,16 +74,16 @@ export function sortByCb<T>(
 export function sortBy<T>(arr: T[], key?: (item: T) => unknown): T[]
 export function sortBy<T>(
     arr: readonly T[],
-    key?: (item: T) => unknown
+    key?: (item: T) => unknown,
 ): readonly T[]
 export function sortBy<T, A extends ReadonlyArray<T>>(
     arr: A,
-    key: (item: T) => unknown = (v) => v
+    key: (item: T) => unknown = (v) => v,
 ): A {
     return arr
         .map((v, i) => [v, i] as const)
         .sort(sortByCb(([v, i]) => [key(v), i]))
-        .map((v) => v[0]) as any
+        .map((v) => v[0]) as unknown as A
 }
 
 /**
@@ -132,12 +132,12 @@ export function generateRange(stop: number): number[]
 export function generateRange(
     start: number,
     stop: number,
-    step?: number
+    step?: number,
 ): number[]
 export function generateRange(
     start: number,
     stop?: number,
-    step?: number
+    step?: number,
 ): number[] {
     if (stop === undefined) {
         stop = start
@@ -194,19 +194,19 @@ export function generateRange(
  */
 export function flatMap<T, U>(
     array: T[],
-    callback: (item: T, index: number, array: T[]) => U | readonly U[]
+    callback: (item: T, index: number, array: T[]) => U | readonly U[],
 ): U[]
 export function flatMap<T, U>(
     array: readonly T[],
-    callback: (item: T, index: number, array: readonly T[]) => U | readonly U[]
+    callback: (item: T, index: number, array: readonly T[]) => U | readonly U[],
 ): readonly U[]
 export function flatMap<T, U>(
     array: readonly T[],
-    callback: (item: T, index: number, array: T[]) => U | readonly U[]
+    callback: (item: T, index: number, array: T[]) => U | readonly U[],
 ): readonly U[] {
     return array.reduce(
         (acc, v, index) => acc.concat(callback(v, index, array as T[])),
-        [] as U[]
+        [] as U[],
     )
 }
 
@@ -237,7 +237,7 @@ type FlatArray<Arr, Depth extends number> = {
                   17,
                   18,
                   19,
-                  20
+                  20,
               ][Depth]
           >
         : Arr
@@ -250,7 +250,7 @@ type FlatArray<Arr, Depth extends number> = {
  *
  * ```
  * Array.prototype.flat = function(depth) {
- *     return flatten(this as any, depth)
+ *     return flatten(this, depth)
  * }
  * ```
  *
@@ -271,15 +271,15 @@ type FlatArray<Arr, Depth extends number> = {
  */
 export function flatten<A extends unknown[], D extends number = 1>(
     array: A,
-    depth?: D
+    depth?: D,
 ): FlatArray<A, D>[]
 export function flatten<A extends readonly unknown[], D extends number = 1>(
     array: A,
-    depth?: D
+    depth?: D,
 ): readonly FlatArray<A, D>[]
 export function flatten<A extends readonly unknown[], D extends number = 1>(
     array: A,
-    depth?: D
+    depth?: D,
 ): FlatArray<A, D>[] {
     const d = depth ?? 1
 
@@ -287,7 +287,7 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
         return array.reduce<unknown[]>(
             (acc, val) =>
                 acc.concat(val instanceof Array ? flatten(val, d - 1) : val),
-            []
+            [],
         ) as FlatArray<A, D>[]
     }
 
@@ -308,7 +308,7 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
 export function chunk<T>(array: T[], size: number): T[][]
 export function chunk<T>(
     array: ReadonlyArray<T>,
-    size: number
+    size: number,
 ): ReadonlyArray<ReadonlyArray<T>>
 export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
     return array.reduce((acc, _, i) => {
@@ -334,29 +334,32 @@ export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
  */
 export function groupBy<T, G>(
     array: T[],
-    keyCallback: (value: T) => G
+    keyCallback: (value: T) => G,
 ): [G, T[]][]
 export function groupBy<T, G>(
     array: ReadonlyArray<T>,
-    keyCallback: (value: T) => G
+    keyCallback: (value: T) => G,
 ): ReadonlyArray<[G, T[]]>
 export function groupBy<T, G>(
     array: ReadonlyArray<T>,
-    keyCallback: (value: T) => G
+    keyCallback: (value: T) => G,
 ): [G, T[]][] {
     return Object.values(
-        array.reduce((prev, cur) => {
-            const key = keyCallback(cur)
-            const keyHash = hashCode(keyCallback(cur))
+        array.reduce(
+            (prev, cur) => {
+                const key = keyCallback(cur)
+                const keyHash = hashCode(keyCallback(cur))
 
-            if (keyHash in prev) {
-                prev[keyHash]?.[1].push(cur)
-            } else {
-                prev[keyHash] = [key, [cur]]
-            }
+                if (keyHash in prev) {
+                    prev[keyHash]?.[1].push(cur)
+                } else {
+                    prev[keyHash] = [key, [cur]]
+                }
 
-            return prev
-        }, {} as Record<number, [G, T[]]>)
+                return prev
+            },
+            {} as Record<number, [G, T[]]>,
+        ),
     )
 }
 
@@ -377,27 +380,30 @@ export function groupBy<T, G>(
  */
 export function indexBy<T>(
     array: T[],
-    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>
+    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
 ): Record<string, T[]>
 export function indexBy<T>(
     array: ReadonlyArray<T>,
-    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>
+    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
 ): Record<string, ReadonlyArray<T>>
 export function indexBy<T>(
     array: ReadonlyArray<T>,
-    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>
+    keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
 ): Record<string, T[]> {
-    return array.reduce((prev, cur) => {
-        return ensureArray(keyCallback(cur)).reduce((prev2, key) => {
-            if (key in prev) {
-                prev2[key]?.push(cur)
-            } else {
-                prev2[key] = [cur]
-            }
+    return array.reduce(
+        (prev, cur) => {
+            return ensureArray(keyCallback(cur)).reduce((prev2, key) => {
+                if (key in prev) {
+                    prev2[key]?.push(cur)
+                } else {
+                    prev2[key] = [cur]
+                }
 
-            return prev
-        }, prev)
-    }, {} as Record<string, T[]>)
+                return prev
+            }, prev)
+        },
+        {} as Record<string, T[]>,
+    )
 }
 
 /**
@@ -429,33 +435,33 @@ export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
 export function deduplicateBy<T>(array: T[], key: (value: T) => unknown): T[]
 export function deduplicateBy<T>(
     array: ReadonlyArray<T>,
-    key: (value: T) => unknown
+    key: (value: T) => unknown,
 ): ReadonlyArray<T>
 export function deduplicateBy<T>(
     array: ReadonlyArray<T>,
-    key: (value: T) => unknown
+    key: (value: T) => unknown,
 ): ReadonlyArray<T>
 export function deduplicateBy<T>(
     array: ReadonlyArray<T>,
-    key: (value: T) => unknown
+    key: (value: T) => unknown,
 ): ReadonlyArray<T> {
     const prims = {
-        boolean: {} as Record<keyof any, boolean>,
-        number: {} as Record<keyof any, boolean>,
-        string: {} as Record<keyof any, boolean>,
+        boolean: {} as Record<string | number | symbol, boolean>,
+        number: {} as Record<string | number | symbol, boolean>,
+        string: {} as Record<string | number | symbol, boolean>,
     }
     type Prim = keyof typeof prims
 
     const objs: unknown[] = []
 
     return array.filter((rawItem) => {
-        const item = key(rawItem)
+        const item = key(rawItem) as string | number | symbol
         const type = typeof item
         if (type in prims) {
-            if ((item as any) in prims[type as Prim]) {
+            if (item in prims[type as Prim]) {
                 return false
             } else {
-                return (prims[type as Prim][item as any] = true)
+                return (prims[type as Prim][item] = true)
             }
         } else {
             return objs.indexOf(item) !== -1 ? false : objs.push(item)
@@ -479,17 +485,17 @@ export function deduplicateBy<T>(
 export function difference<T, T2>(
     array: ReadonlyArray<T>,
     values: ReadonlyArray<T2>,
-    key?: (value: T | T2) => unknown
+    key?: (value: T | T2) => unknown,
 ): ReadonlyArray<T>
 export function difference<T, T2>(
     array: T[],
     values: T2[],
-    key?: (value: T) => unknown
+    key?: (value: T) => unknown,
 ): T[]
 export function difference<T, T2>(
     array: ReadonlyArray<T>,
     values: ReadonlyArray<T2>,
-    key: (value: T | T2) => unknown = (v) => v
+    key: (value: T | T2) => unknown = (v) => v,
 ): T[] {
     return array.filter((v) => !values.some((v2) => key(v) === key(v2)))
 }
@@ -506,17 +512,17 @@ export function difference<T, T2>(
  */
 export function intersection<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
-    key?: (value: T) => unknown
+    key?: (value: T) => unknown,
 ): ReadonlyArray<T>
 export function intersection<T>(values: T[][], key?: (value: T) => unknown): T[]
 export function intersection<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
-    key: (value: T) => unknown = (v) => v
+    key: (value: T) => unknown = (v) => v,
 ): T[] {
     const [first, ...rest] = values
     return first
         ? first.filter((v) =>
-              rest.every((v2) => v2.some((v3) => key(v) === key(v3)))
+              rest.every((v2) => v2.some((v3) => key(v) === key(v3))),
           )
         : []
 }
@@ -533,19 +539,19 @@ export function intersection<T>(
  */
 export function union<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
-    key?: (value: T) => unknown
+    key?: (value: T) => unknown,
 ): ReadonlyArray<T>
 export function union<T>(values: T[][], key?: (value: T) => unknown): T[]
 export function union<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
-    key: (value: T) => unknown = (v) => v
+    key: (value: T) => unknown = (v) => v,
 ): T[] {
     return deduplicateBy(
         values.reduce<T[]>((prev, cur) => {
             prev.push(...cur)
             return prev
         }, []),
-        key
+        key,
     )
 }
 
@@ -562,7 +568,7 @@ export function union<T>(
 export function includesAny<T, T2>(
     array: ReadonlyArray<T>,
     values: ReadonlyArray<T2>,
-    key: (value: T | T2) => unknown = (v) => v
+    key: (value: T | T2) => unknown = (v) => v,
 ): boolean {
     return values.some((v) => array.some((v2) => key(v2) === key(v)))
 }
@@ -580,7 +586,7 @@ export function includesAny<T, T2>(
 export function includesAll<T, T2>(
     array: ReadonlyArray<T>,
     values: ReadonlyArray<T2>,
-    key: (value: T | T2) => unknown = (v) => v
+    key: (value: T | T2) => unknown = (v) => v,
 ): boolean {
     return values.every((v) => array.some((v2) => key(v2) === key(v)))
 }
@@ -602,7 +608,7 @@ export function includesAll<T, T2>(
  */
 export function findIndex<T>(
     array: ReadonlyArray<T>,
-    compare: (value: T) => boolean
+    compare: (value: T) => boolean,
 ): number {
     for (let index = 0; index < array.length; index++) {
         if (compare(array[index] as T)) {

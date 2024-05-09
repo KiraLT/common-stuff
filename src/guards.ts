@@ -51,7 +51,7 @@ export function isString<T>(value: T | string): value is string {
  * @group Guard
  */
 export function isArray<T>(
-    value: T | Array<T> | ReadonlyArray<T>
+    value: T | Array<T> | ReadonlyArray<T>,
 ): value is Array<T> {
     return value instanceof Array
 }
@@ -121,7 +121,7 @@ export function isNull<T>(value: T | null): value is null {
  * @group Guard
  */
 export function isNullOrUndefined<T>(
-    value: T | null | undefined
+    value: T | null | undefined,
 ): value is null | undefined {
     return value == null
 }
@@ -178,7 +178,7 @@ export function isEmpty<T>(value: T): boolean {
  * @group Guard
  */
 export function isNot<T, S extends T>(
-    guard: (data: T) => data is S
+    guard: (data: T) => data is S,
 ): (data: T) => data is Exclude<T, S> {
     return (data: T): data is Exclude<T, S> => !guard(data)
 }
@@ -196,8 +196,8 @@ export function isNot<T, S extends T>(
  * ```
  * @group Guard
  */
-export function isPlainObject<T = Record<keyof any, unknown>>(
-    value: unknown
+export function isPlainObject<T = Record<string | number | symbol, unknown>>(
+    value: unknown,
 ): value is T {
     const isObject = (v: unknown): v is object =>
         String(v) === '[object Object]'
@@ -282,13 +282,16 @@ export function ensureError(value: unknown): Error {
  * ```
  * @group Guard
  */
-export function hasKeys<T extends unknown, Key extends keyof any>(
+export function hasKeys<
+    T extends unknown,
+    Key extends string | number | symbol,
+>(
     obj: T,
-    keys: ReadonlyArray<Key>
+    keys: ReadonlyArray<Key>,
 ): obj is T extends { [K in Key]: any }
     ? Extract<{ [K in Key]: any }, T>
     : Extract<{ [K in Key]: unknown }, T> {
-    if (typeof obj === 'object' && keys.every((v) => v in (obj as any))) {
+    if (isPlainObject(obj) && keys.every((v) => v in obj)) {
         return true
     }
 

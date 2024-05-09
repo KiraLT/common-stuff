@@ -31,5 +31,5 @@ export function cache<T extends Function>(func: T): T {
         }
 
         return cachedCalls[argsHash]
-    } as any
+    } as unknown as T
 }

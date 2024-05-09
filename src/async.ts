@@ -11,7 +11,7 @@ export function delay(
     /**
      * The number of milliseconds to delay.
      */
-    timeInMs: number
+    timeInMs: number,
 ): Promise<void> {
     return new Promise((resolve) => {
         setTimeout(() => {
@@ -39,7 +39,7 @@ export function debounce<A extends unknown[]>(
     /**
      * The number of milliseconds to delay.
      */
-    timeInMs: number
+    timeInMs: number,
 ): (...args: A) => void {
     let timer: ReturnType<typeof setTimeout>
     return function (this: unknown, ...args: A) {
@@ -86,7 +86,7 @@ export function throttle<A extends unknown[]>(
          * @defaultValue `true`
          */
         trailing?: boolean
-    }
+    },
 ): (...args: A) => void {
     let lastCallTime: number | undefined
     let timer: ReturnType<typeof setTimeout> | undefined
@@ -103,16 +103,24 @@ export function throttle<A extends unknown[]>(
         if (leading && lastCallTime === undefined) {
             lastCallTime = now
             func.apply(lastThis, lastArgs)
-        } else if (lastCallTime !== undefined && now - lastCallTime >= timeInMs) {
+        } else if (
+            lastCallTime !== undefined &&
+            now - lastCallTime >= timeInMs
+        ) {
             clearTimeout(timer)
             lastCallTime = now
             func.apply(lastThis, lastArgs)
         } else if (trailing && !timer) {
-            timer = setTimeout(() => {
-                lastCallTime = now
-                func.apply(lastThis, lastArgs)
-                timer = undefined
-            }, lastCallTime === undefined ? timeInMs : timeInMs - (now - lastCallTime))
+            timer = setTimeout(
+                () => {
+                    lastCallTime = now
+                    func.apply(lastThis, lastArgs)
+                    timer = undefined
+                },
+                lastCallTime === undefined
+                    ? timeInMs
+                    : timeInMs - (now - lastCallTime),
+            )
         }
     }
 }

@@ -6,7 +6,7 @@ const codeToReason = Object.entries(HttpStatusCodes).reduce(
             HttpStatusReasons[key as keyof typeof HttpStatusReasons]
         return prev
     },
-    {} as Record<number, string>
+    {} as Record<number, string>,
 )
 
 /**
@@ -62,7 +62,7 @@ export class HttpError extends Error {
              * Should error message be exposed to the user
              */
             expose: boolean
-        }
+        },
     ) {
         if (!(status in codeToReason)) {
             throw new Error('Incorrect status code')

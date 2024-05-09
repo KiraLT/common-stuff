@@ -47,7 +47,7 @@ describe('randomString', () => {
         expect(
             randomString(5, {
                 chars: 'abc',
-            })
+            }),
         ).toMatch(/[abc]{5}/)
     })
 })

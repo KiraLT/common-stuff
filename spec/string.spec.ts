@@ -66,7 +66,7 @@ describe('isLetter', () => {
 describe('titleCase', () => {
     it('changes string', () => {
         expect(titleCase('hello-world FTW,abc999t t')).toEqual(
-            'Hello-World Ftw,Abc999T T'
+            'Hello-World Ftw,Abc999T T',
         )
     })
 })

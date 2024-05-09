@@ -10,7 +10,7 @@ const tagsToDecode = Object.entries(tagsToEncode).reduce(
         prev[value] = key
         return prev
     },
-    {} as Record<string, string>
+    {} as Record<string, string>,
 )
 
 /**

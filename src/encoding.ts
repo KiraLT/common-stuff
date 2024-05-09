@@ -33,7 +33,7 @@ export function generateUUID(): string {
             var r = (Math.random() * 16) | 0,
                 v = c == 'x' ? r : (r & 0x3) | 0x8
             return v.toString(16)
-        }
+        },
     )
 }
 
@@ -146,7 +146,7 @@ function decodeUTF8(utf8Text: string): string {
             c2 = utf8Text.charCodeAt(i + 1)
             c3 = utf8Text.charCodeAt(i + 2)
             str += String.fromCharCode(
-                ((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63)
+                ((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63),
             )
             i += 3
         }

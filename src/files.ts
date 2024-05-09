@@ -370,12 +370,12 @@ export function getMimeType(name: string): string | undefined {
         const extensionWithoutDot = extension.slice(1)
 
         return Object.entries(mimeTypes).find(([_, value]) =>
-            value.extensions.includes(extensionWithoutDot)
+            value.extensions.includes(extensionWithoutDot),
         )?.[0]
     }
 
     return Object.entries(mimeTypes).find(([_, value]) =>
-        value.extensions.includes(name)
+        value.extensions.includes(name),
     )?.[0]
 }
 

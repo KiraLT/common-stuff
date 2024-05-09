@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/KiraLT/common-stuff/compare/v1.10.3...v1.11.0) (2024-05-09)
+
+
+### Features
+
+* Add support for additional options in generateCookie function ([16dc60e](https://github.com/KiraLT/common-stuff/commit/16dc60e34b71250b05eaac6c74117db972f81d25))
+
 ## [1.10.3](https://github.com/KiraLT/common-stuff/compare/v1.10.2...v1.10.3) (2023-10-20)
 
 

@@ -39,7 +39,6 @@ describe('debounce', () => {
         cb(3)
 
         await delay(110)
-
         expect(mock.mock.calls.length).toBe(1)
         expect(mock.mock.calls[0][0]).toBe(3)
     })

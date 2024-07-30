@@ -40,11 +40,12 @@ export function debounce<A extends unknown[]>(
      * The number of milliseconds to delay.
      */
     timeInMs: number,
-): (...args: A) => void {
+): (this: unknown, ...args: A) => void {
     let timer: ReturnType<typeof setTimeout>
-    return function (this: unknown, ...args: A) {
+    return function () {
+        const args = arguments as unknown as A
         clearTimeout(timer)
-        timer = setTimeout(async () => {
+        timer = setTimeout(() => {
             func.apply(this, args)
         }, timeInMs)
     }
@@ -87,7 +88,7 @@ export function throttle<A extends unknown[]>(
          */
         trailing?: boolean
     },
-): (...args: A) => void {
+): (this: unknown, ...args: A) => void {
     let lastCallTime: number | undefined
     let timer: ReturnType<typeof setTimeout> | undefined
     let lastArgs: A
@@ -95,8 +96,9 @@ export function throttle<A extends unknown[]>(
 
     const { leading = true, trailing = true } = options ?? {}
 
-    return function (this: unknown, ...args: A) {
+    return function () {
         const now = Date.now()
+        const args = arguments as unknown as A
         lastArgs = args
         lastThis = this
 

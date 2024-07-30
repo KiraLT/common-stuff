@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/KiraLT/common-stuff/compare/v1.11.0...v1.11.1) (2024-07-30)
+
+
+### Bug Fixes
+
+* fixed debounce arguments due to compiler bug ([def5e73](https://github.com/KiraLT/common-stuff/commit/def5e735fb887ec231292179de6b4dbcc45e61f5))
+
 # [1.11.0](https://github.com/KiraLT/common-stuff/compare/v1.10.3...v1.11.0) (2024-05-09)
 
 

@@ -1,3 +1,10 @@
+## [1.11.2](https://github.com/KiraLT/common-stuff/compare/v1.11.1...v1.11.2) (2025-05-19)
+
+
+### Bug Fixes
+
+* enhance HTML encoding/decoding to support additional entities ([1fe5d20](https://github.com/KiraLT/common-stuff/commit/1fe5d2067eb865abdcea675ae448f35736f5a1da))
+
 ## [1.11.1](https://github.com/KiraLT/common-stuff/compare/v1.11.0...v1.11.1) (2024-07-30)
 
 

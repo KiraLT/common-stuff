@@ -136,7 +136,15 @@ describe('encodeHtml', () => {
 
 describe('decodeHtml', () => {
     it('decodes HTML', () => {
-        expect(decodeHtml('&lt; &gt; &quot; &apos; &amp;')).toBe('< > " \' &')
+        expect(decodeHtml('&lt; &gt; &quot; &apos; &amp; &arm;')).toBe(
+            '< > " \' & &arm;',
+        )
+    })
+
+    it('decodes dec HTML', () => {
+        expect(decodeHtml('&#60; &#62; &#34; &#39; &#38; &#10;')).toBe(
+            '< > " \' & &#10;',
+        )
     })
 })
 

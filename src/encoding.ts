@@ -27,14 +27,11 @@ export function hashCode(value: unknown): number {
  * ```
  **/
 export function generateUUID(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-        /[xy]/g,
-        function (c) {
-            var r = (Math.random() * 16) | 0,
-                v = c == 'x' ? r : (r & 0x3) | 0x8
-            return v.toString(16)
-        },
-    )
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        var r = (Math.random() * 16) | 0,
+            v = c == 'x' ? r : (r & 0x3) | 0x8
+        return v.toString(16)
+    })
 }
 
 const keyStr =
@@ -47,7 +44,7 @@ export function base64Decode(input: string): string {
     let output = ''
     let i = 0
 
-    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '')
+    input = input.replace(/[^A-Za-z0-9+/=]/g, '')
 
     while (i < input.length) {
         const enc1 = keyStr.indexOf(input.charAt(i++))

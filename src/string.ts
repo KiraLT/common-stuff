@@ -157,3 +157,38 @@ export function titleCase(value: string): string {
         })
         .join('')
 }
+
+/**
+ * Remove leading indentation from multiline string literals.
+ * @param strings
+ * @param values
+ * @returns
+ */
+export function outdent(
+    strings: TemplateStringsArray,
+    ...values: unknown[]
+): string {
+    const interpolate = (s: TemplateStringsArray, v: unknown[]) =>
+        s.reduce(
+            (acc, part, i) => acc + part + (i < v.length ? String(v[i]) : ''),
+            '',
+        )
+
+    const trimOuterBlankLine = (t: string) =>
+        t
+            .replace(/^[ \t]*(?:\r\n|\r|\n)/, '')
+            .replace(/(?:\r\n|\r|\n)[ \t]*$/, '')
+
+    const text = trimOuterBlankLine(interpolate(strings, values))
+    const lines = text.split(/\r\n|\n|\r/)
+    const lead = lines.map((l) => l.match(/^[ \t]*/)?.[0].length ?? 0)
+    const hasContent = lines.some((l) => l.trim().length > 0)
+    if (!hasContent) return ''
+
+    const indents = lead.filter((_, i) => (lines[i] || '').trim().length > 0)
+    const common = Math.min(...indents)
+
+    return lines
+        .map((l, i) => l.slice(Math.min(lead[i] ?? 0, common)))
+        .join('\n')
+}

@@ -1,22 +1,26 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
-    truncate,
-    extractWords,
     camelCase,
+    extractWords,
+    isLetter,
+    outdent,
     pascalCase,
     titleCase,
-    isLetter,
-} from '../src'
+    truncate,
+} from '../src/index.ts'
 
-describe('truncate', () => {
-    it('truncates string', () => {
-        expect(truncate('Hello world', 8)).toEqual('Hello...')
-        expect(truncate('Hello', 8)).toEqual('Hello')
+test('truncate', async (t) => {
+    await t.test('truncates string', () => {
+        assert.equal(truncate('Hello world', 8), 'Hello...')
+        assert.equal(truncate('Hello', 8), 'Hello')
     })
 })
 
-describe('extractWords', () => {
-    it('extract words from text', () => {
-        expect(extractWords('Hell_o "WĄRLD", [with-unicode]!')).toEqual([
+test('extractWords', async (t) => {
+    await t.test('extract words from text', () => {
+        assert.deepEqual(extractWords('Hell_o "WĄRLD", [with-unicode]!'), [
             'Hell_o',
             'WĄRLD',
             'with',
@@ -25,48 +29,58 @@ describe('extractWords', () => {
     })
 })
 
-describe('camelCase', () => {
-    it('changes string', () => {
-        expect(camelCase('--foo bar')).toEqual('fooBar')
+test('camelCase', async (t) => {
+    await t.test('changes string', () => {
+        assert.equal(camelCase('--foo bar'), 'fooBar')
     })
-
-    it('uppercases string after the number', () => {
-        expect(camelCase('--foo1bar')).toEqual('foo1Bar')
-    })
-})
-
-describe('pascalCase', () => {
-    it('changes string', () => {
-        expect(pascalCase('--foo bar')).toEqual('FooBar')
-    })
-
-    it('uppercases string after the number', () => {
-        expect(pascalCase('--foo1bar')).toEqual('Foo1Bar')
+    await t.test('uppercases string after the number', () => {
+        assert.equal(camelCase('--foo1bar'), 'foo1Bar')
     })
 })
 
-describe('isLetter', () => {
-    it('checks if `a` is letter', () => {
-        expect(isLetter('a')).toBeTruthy()
+test('pascalCase', async (t) => {
+    await t.test('changes string', () => {
+        assert.equal(pascalCase('--foo bar'), 'FooBar')
     })
-
-    it('checks if `-` is letter', () => {
-        expect(isLetter('-')).toBeFalsy()
-    })
-
-    it('checks if `Ž` is letter', () => {
-        expect(isLetter('Ž')).toBeTruthy()
-    })
-
-    it('checks if `9` is letter', () => {
-        expect(isLetter('9')).toBeFalsy()
+    await t.test('uppercases string after the number', () => {
+        assert.equal(pascalCase('--foo1bar'), 'Foo1Bar')
     })
 })
 
-describe('titleCase', () => {
-    it('changes string', () => {
-        expect(titleCase('hello-world FTW,abc999t t')).toEqual(
+test('isLetter', async (t) => {
+    await t.test('checks if `a` is letter', () => {
+        assert.equal(isLetter('a'), true)
+    })
+    await t.test('checks if `-` is letter', () => {
+        assert.equal(isLetter('-'), false)
+    })
+    await t.test('checks if `Ž` is letter', () => {
+        assert.equal(isLetter('Ž'), true)
+    })
+    await t.test('checks if `9` is letter', () => {
+        assert.equal(isLetter('9'), false)
+    })
+})
+
+test('titleCase', async (t) => {
+    await t.test('changes string', () => {
+        assert.equal(
+            titleCase('hello-world FTW,abc999t t'),
             'Hello-World Ftw,Abc999T T',
+        )
+    })
+})
+
+test('outdent', async (t) => {
+    await t.test('removes indentation from text', () => {
+        const text = outdent`
+            function test() {
+                console.log('test')
+            }
+        `
+        assert.equal(
+            text,
+            ['function test() {', "    console.log('test')", '}'].join('\n'),
         )
     })
 })

@@ -1,53 +1,54 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
-    randomInt,
     randomChoice,
-    shuffle,
     randomChoices,
+    randomInt,
     randomString,
-} from '../src'
+    shuffle,
+} from '../src/index.ts'
 
-describe('randomInt', () => {
-    it('generates random int', () => {
+test('randomInt', async (t) => {
+    await t.test('generates random int', () => {
         const value = randomInt(5, 10)
-        expect(value).toBeGreaterThanOrEqual(5)
-        expect(value).toBeLessThanOrEqual(10)
+        assert.ok(value >= 5)
+        assert.ok(value <= 10)
     })
 })
 
-describe('randomChoice', () => {
-    it('gets random element from the array', () => {
-        expect([1, 2, 3]).toContain(randomChoice([1, 2, 3]))
+test('randomChoice', async (t) => {
+    await t.test('gets random element from the array', () => {
+        const val = randomChoice([1, 2, 3])
+        assert.notEqual(val, undefined)
+        assert.ok([1, 2, 3].includes(val as number))
     })
 })
 
-describe('randomChoices', () => {
-    it('gets random element from the array', () => {
-        expect(randomChoices([1, 2, 3], 4).length).toBe(4)
+test('randomChoices', async (t) => {
+    await t.test('gets random element from the array', () => {
+        assert.equal(randomChoices([1, 2, 3], 4).length, 4)
     })
-
-    it('works with empty array', () => {
-        expect(randomChoices([], 4).length).toEqual(0)
+    await t.test('works with empty array', () => {
+        assert.equal(randomChoices([], 4).length, 0)
     })
 })
 
-describe('shuffle', () => {
-    it('shuffles array', () => {
+test('shuffle', async (t) => {
+    await t.test('shuffles array', () => {
         const value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        expect(shuffle(value)).not.toEqual(value)
-        expect([...shuffle(value)].sort()).toEqual(value.slice().sort())
+        const shuffled = shuffle(value)
+        assert.notDeepEqual(shuffled, value)
+        assert.deepEqual([...shuffle(value)].sort(), value.slice().sort())
     })
 })
 
-describe('randomString', () => {
-    it('generates random string', () => {
-        expect(randomString(5).length).toBe(5)
+test('randomString', async (t) => {
+    await t.test('generates random string', () => {
+        assert.equal(randomString(5).length, 5)
     })
-
-    it('supports custom chars', () => {
-        expect(
-            randomString(5, {
-                chars: 'abc',
-            }),
-        ).toMatch(/[abc]{5}/)
+    await t.test('supports custom chars', () => {
+        const str = randomString(5, { chars: 'abc' })
+        assert.match(str, /[abc]{5}/)
     })
 })

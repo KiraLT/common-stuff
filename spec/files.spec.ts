@@ -1,124 +1,115 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
     formatBytes,
-    getFileParts,
-    parseSize,
-    getMimeType,
     getExtension,
-} from '../src'
+    getFileParts,
+    getMimeType,
+    parseSize,
+} from '../src/index.ts'
 
-describe('formatBytes', () => {
-    it('handles zero', () => {
-        expect(formatBytes(0)).toEqual('0 Bytes')
+test('formatBytes', async (t) => {
+    await t.test('handles zero', () => {
+        assert.equal(formatBytes(0), '0 Bytes')
     })
-
-    it('handles negative number', () => {
-        expect(formatBytes(-158)).toEqual('0 Bytes')
+    await t.test('handles negative number', () => {
+        assert.equal(formatBytes(-158), '0 Bytes')
     })
-
-    it('support decimals', () => {
-        expect(formatBytes(1688, 1)).toEqual('1.6 KB')
+    await t.test('support decimals', () => {
+        assert.equal(formatBytes(1688, 1), '1.6 KB')
     })
-
-    it('just works', () => {
-        expect(formatBytes(1648 * 9884)).toEqual('15.53 MB')
-    })
-})
-
-describe('parseSize', () => {
-    it('parses bytes', () => {
-        expect(parseSize('10 Bytes')).toEqual(10)
-    })
-
-    it('returns -1 on error', () => {
-        expect(parseSize('zero bytes')).toEqual(0)
-    })
-
-    it('support decimals', () => {
-        expect(parseSize('1.6 KB')).toEqual(1638.4)
-    })
-
-    it('just works', () => {
-        expect(parseSize('15.53 MB')).toEqual(16284385.28)
+    await t.test('just works', () => {
+        assert.equal(formatBytes(1648 * 9884), '15.53 MB')
     })
 })
 
-describe('getFileParts', () => {
-    it('parses file name', () => {
-        expect(getFileParts('myfile.txt')).toEqual(['myfile', '.txt'])
+test('parseSize', async (t) => {
+    await t.test('parses bytes', () => {
+        assert.equal(parseSize('10 Bytes'), 10)
     })
-
-    it('parses file name without extension', () => {
-        expect(getFileParts('myfile')).toEqual(['myfile', ''])
+    await t.test('returns -1 on error', () => {
+        assert.equal(parseSize('zero bytes'), 0)
     })
-
-    it('parses hidden file name', () => {
-        expect(getFileParts('.data')).toEqual(['.data', ''])
+    await t.test('support decimals', () => {
+        assert.equal(parseSize('1.6 KB'), 1638.4)
     })
+    await t.test('just works', () => {
+        assert.equal(parseSize('15.53 MB'), 16284385.28)
+    })
+})
 
-    it('parses file path', () => {
-        expect(getFileParts('/my.home/myfile.txt')).toEqual([
+test('getFileParts', async (t) => {
+    await t.test('parses file name', () => {
+        assert.deepEqual(getFileParts('myfile.txt'), ['myfile', '.txt'])
+    })
+    await t.test('parses file name without extension', () => {
+        assert.deepEqual(getFileParts('myfile'), ['myfile', ''])
+    })
+    await t.test('parses hidden file name', () => {
+        assert.deepEqual(getFileParts('.data'), ['.data', ''])
+    })
+    await t.test('parses file path', () => {
+        assert.deepEqual(getFileParts('/my.home/myfile.txt'), [
             '/my.home/myfile',
             '.txt',
         ])
     })
-
-    it('parses file path without extension', () => {
-        expect(getFileParts('/my.home/myfile')).toEqual(['/my.home/myfile', ''])
+    await t.test('parses file path without extension', () => {
+        assert.deepEqual(getFileParts('/my.home/myfile'), [
+            '/my.home/myfile',
+            '',
+        ])
     })
-
-    it('parses hidden file path', () => {
-        expect(getFileParts('/my.home/.data')).toEqual(['/my.home/.data', ''])
-    })
-})
-
-describe('getMimeType', () => {
-    it('returns undefined for unknown extension', () => {
-        expect(getMimeType('myfile.unknown')).toBeUndefined()
-    })
-
-    it('returns undefined for empty extension', () => {
-        expect(getMimeType('myfile')).toBeUndefined()
-    })
-
-    it('returns undefined for empty file name', () => {
-        expect(getMimeType('')).toBeUndefined()
-    })
-
-    it('returns undefined for empty file name and empty extension', () => {
-        expect(getMimeType('.')).toBeUndefined()
-    })
-
-    it('returns undefined for dot file', () => {
-        expect(getMimeType('.data')).toBeUndefined()
-    })
-
-    it('returns mime type for text file with extension', () => {
-        expect(getMimeType('data.txt')).toEqual('text/plain')
-    })
-
-    it('returns mime type for json', () => {
-        expect(getMimeType('json')).toEqual('application/json')
+    await t.test('parses hidden file path', () => {
+        assert.deepEqual(getFileParts('/my.home/.data'), ['/my.home/.data', ''])
     })
 })
 
-describe('getExtension', () => {
-    it('returns undefined for unknown mime type', () => {
-        expect(getExtension('application/unknown')).toBeUndefined()
+test('getMimeType', async (t) => {
+    await t.test('returns undefined for unknown extension', () => {
+        assert.equal(getMimeType('myfile.unknown'), undefined)
     })
-
-    it('returns undefined for empty mime type', () => {
-        expect(getExtension('')).toBeUndefined()
+    await t.test('returns undefined for empty extension', () => {
+        assert.equal(getMimeType('myfile'), undefined)
     })
-
-    it('returns undefined for empty mime type and empty extension', () => {
-        expect(getExtension('.')).toBeUndefined()
+    await t.test('returns undefined for empty file name', () => {
+        assert.equal(getMimeType(''), undefined)
     })
-
-    it('returns extension for text file with mime type', () => {
-        expect(getExtension('text/plain')).toEqual('txt')
+    await t.test(
+        'returns undefined for empty file name and empty extension',
+        () => {
+            assert.equal(getMimeType('.'), undefined)
+        },
+    )
+    await t.test('returns undefined for dot file', () => {
+        assert.equal(getMimeType('.data'), undefined)
     })
+    await t.test('returns mime type for text file with extension', () => {
+        assert.equal(getMimeType('data.txt'), 'text/plain')
+    })
+    await t.test('returns mime type for json', () => {
+        assert.equal(getMimeType('json'), 'application/json')
+    })
+})
 
-    it('returns extension for json', () => {
-        expect(getExtension('application/json')).toEqual('json')
+test('getExtension', async (t) => {
+    await t.test('returns undefined for unknown mime type', () => {
+        assert.equal(getExtension('application/unknown'), undefined)
+    })
+    await t.test('returns undefined for empty mime type', () => {
+        assert.equal(getExtension(''), undefined)
+    })
+    await t.test(
+        'returns undefined for empty mime type and empty extension',
+        () => {
+            assert.equal(getExtension('.'), undefined)
+        },
+    )
+    await t.test('returns extension for text file with mime type', () => {
+        assert.equal(getExtension('text/plain'), 'txt')
+    })
+    await t.test('returns extension for json', () => {
+        assert.equal(getExtension('application/json'), 'json')
     })
 })

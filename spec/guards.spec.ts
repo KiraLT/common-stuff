@@ -1,207 +1,192 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
-    isPlainObject,
-    isArray,
-    isBoolean,
-    isNumber,
-    isString,
-    isError,
-    isNot,
-    isNull,
-    isUndefined,
-    isNullOrUndefined,
-    isEmpty,
+    assertNotError,
     ensureArray,
     ensureError,
     hasKeys,
-    assertNotError,
-} from '../src'
+    isArray,
+    isBoolean,
+    isEmpty,
+    isError,
+    isNot,
+    isNull,
+    isNullOrUndefined,
+    isNumber,
+    isPlainObject,
+    isString,
+    isUndefined,
+} from '../src/index.ts'
 
-describe('isPlainObject', () => {
-    it('checks if is plain object', () => {
-        expect(isPlainObject({ a: 1 })).toBeTruthy()
-        expect(isPlainObject({})).toBeTruthy()
-        expect(isPlainObject({ a: [1, {}] })).toBeTruthy()
-        expect(isPlainObject('a')).toBeFalsy()
-        expect(isPlainObject(1)).toBeFalsy()
-        expect(isPlainObject(new Boolean(false))).toBeFalsy()
-        expect(isPlainObject(new Date())).toBeFalsy()
-        expect(isPlainObject([])).toBeFalsy()
-        expect(isPlainObject(null)).toBeFalsy()
-        expect(isPlainObject(undefined)).toBeFalsy()
-        expect(isPlainObject(new (class A {})())).toBeFalsy()
+test('isPlainObject', async (t) => {
+    await t.test('checks if is plain object', () => {
+        assert.equal(isPlainObject({ a: 1 }), true)
+        assert.equal(isPlainObject({}), true)
+        assert.equal(isPlainObject({ a: [1, {}] }), true)
+        assert.equal(isPlainObject('a' as unknown), false)
+        assert.equal(isPlainObject(1 as unknown), false)
+        assert.equal(isPlainObject(new Boolean(false) as unknown), false)
+        assert.equal(isPlainObject(new Date() as unknown), false)
+        assert.equal(isPlainObject([] as unknown), false)
+        assert.equal(isPlainObject(null as unknown), false)
+        assert.equal(isPlainObject(undefined as unknown), false)
+        assert.equal(isPlainObject(new (class A {})() as unknown), false)
     })
 })
 
-describe('isArray', () => {
-    it('checks if is array', () => {
-        expect(isArray(['a'])).toBeTruthy()
-        expect(isArray('a')).toBeFalsy()
-        expect(isArray({})).toBeFalsy()
+test('isArray', async (t) => {
+    await t.test('checks if is array', () => {
+        assert.equal(isArray(['a']), true)
+        assert.equal(isArray('a' as unknown), false)
+        assert.equal(isArray({} as unknown), false)
     })
 })
 
-describe('isBoolean', () => {
-    it('checks if is boolean', () => {
-        expect(isBoolean(true)).toBeTruthy()
-        expect(isBoolean(false)).toBeTruthy()
-        expect(isBoolean('a')).toBeFalsy()
-        expect(isBoolean({})).toBeFalsy()
+test('isBoolean', async (t) => {
+    await t.test('checks if is boolean', () => {
+        assert.equal(isBoolean(true), true)
+        assert.equal(isBoolean(false), true)
+        assert.equal(isBoolean('a' as unknown), false)
+        assert.equal(isBoolean({} as unknown), false)
     })
 })
 
-describe('isNumber', () => {
-    it('checks if is number', () => {
-        expect(isNumber(1)).toBeTruthy()
-        expect(isNumber(15.59)).toBeTruthy()
-        expect(isNumber('1')).toBeFalsy()
-        expect(isNumber(new Date())).toBeFalsy()
+test('isNumber', async (t) => {
+    await t.test('checks if is number', () => {
+        assert.equal(isNumber(1), true)
+        assert.equal(isNumber(15.59), true)
+        assert.equal(isNumber('1' as unknown), false)
+        assert.equal(isNumber(new Date() as unknown), false)
     })
 })
 
-describe('isString', () => {
-    it('checks if is string', () => {
-        expect(isString('aa')).toBeTruthy()
-        expect(isString(String(1))).toBeTruthy()
-        expect(isString(['a'])).toBeFalsy()
-        expect(isString(1)).toBeFalsy()
-        expect(isString(new Date())).toBeFalsy()
+test('isString', async (t) => {
+    await t.test('checks if is string', () => {
+        assert.equal(isString('aa'), true)
+        assert.equal(isString(String(1)), true)
+        assert.equal(isString(['a'] as unknown), false)
+        assert.equal(isString(1 as unknown), false)
+        assert.equal(isString(new Date() as unknown), false)
     })
 })
 
-describe('isError', () => {
-    it('checks if is error', () => {
-        expect(isError(new Error('abc'))).toBeTruthy()
-        expect(isError(new Object('abc'))).toBeFalsy()
+test('isError', async (t) => {
+    await t.test('checks if is error', () => {
+        assert.equal(isError(new Error('abc')), true)
+        assert.equal(isError(new Object('abc') as unknown), false)
     })
-
-    it('supports negative filtering', () => {
+    await t.test('supports negative filtering', () => {
         const err = new Error('ab')
-        expect(['a', 'b', err].filter(isNot(isError))).toEqual(['a', 'b'])
+        assert.deepEqual(['a', 'b', err].filter(isNot(isError)), ['a', 'b'])
     })
 })
 
-describe('isNull', () => {
-    it('checks if is null', () => {
-        expect(isNull(null)).toBeTruthy()
-        expect(isNull(undefined)).toBeFalsy()
+test('isNull', async (t) => {
+    await t.test('checks if is null', () => {
+        assert.equal(isNull(null), true)
+        assert.equal(isNull(undefined as unknown), false)
     })
 })
 
-describe('isUndefined', () => {
-    it('checks if is undefined', () => {
-        expect(isUndefined(undefined)).toBeTruthy()
-        expect(isUndefined(null)).toBeFalsy()
+test('isUndefined', async (t) => {
+    await t.test('checks if is undefined', () => {
+        assert.equal(isUndefined(undefined), true)
+        assert.equal(isUndefined(null as unknown), false)
     })
 })
 
-describe('isNullOrUndefined', () => {
-    it('checks if is null or undefined', () => {
-        expect(isNullOrUndefined(undefined)).toBeTruthy()
-        expect(isNullOrUndefined(null)).toBeTruthy()
-        expect(isNullOrUndefined('')).toBeFalsy()
+test('isNullOrUndefined', async (t) => {
+    await t.test('checks if is null or undefined', () => {
+        assert.equal(isNullOrUndefined(undefined), true)
+        assert.equal(isNullOrUndefined(null), true)
+        assert.equal(isNullOrUndefined('' as unknown), false)
     })
 })
 
-describe('isEmpty', () => {
-    it('supports null and undefined', () => {
-        expect(isEmpty(null)).toBeFalsy()
-        expect(isEmpty(undefined)).toBeFalsy()
+test('isEmpty', async (t) => {
+    await t.test('supports null and undefined', () => {
+        assert.equal(isEmpty(null), false)
+        assert.equal(isEmpty(undefined), false)
     })
-
-    it('supports boolean', () => {
-        expect(isEmpty(false)).toBeTruthy()
-        expect(isEmpty(true)).toBeFalsy()
+    await t.test('supports boolean', () => {
+        assert.equal(isEmpty(false), true)
+        assert.equal(isEmpty(true), false)
     })
-
-    it('supports string', () => {
-        expect(isEmpty('')).toBeTruthy()
-        expect(isEmpty(' ')).toBeFalsy()
+    await t.test('supports string', () => {
+        assert.equal(isEmpty(''), true)
+        assert.equal(isEmpty(' '), false)
     })
-
-    it('supports number', () => {
-        expect(isEmpty(0)).toBeTruthy()
-        expect(isEmpty(-1)).toBeFalsy()
+    await t.test('supports number', () => {
+        assert.equal(isEmpty(0), true)
+        assert.equal(isEmpty(-1 as unknown), false)
     })
-
-    it('supports array', () => {
-        expect(isEmpty([])).toBeTruthy()
-        expect(isEmpty([1])).toBeFalsy()
+    await t.test('supports array', () => {
+        assert.equal(isEmpty([]), true)
+        assert.equal(isEmpty([1]), false)
     })
-
-    it('supports object', () => {
-        expect(isEmpty({})).toBeTruthy()
-        expect(isEmpty({ a: 1 })).toBeFalsy()
+    await t.test('supports object', () => {
+        assert.equal(isEmpty({}), true)
+        assert.equal(isEmpty({ a: 1 }), false)
     })
-
-    it('supports other', () => {
-        expect(isEmpty(new Date())).toBeFalsy()
+    await t.test('supports other', () => {
+        assert.equal(isEmpty(new Date() as unknown), false)
     })
 })
 
-describe('ensureArray', () => {
-    it('returns original value if array', () => {
+test('ensureArray', async (t) => {
+    await t.test('returns original value if array', () => {
         const value = [1]
-        expect(ensureArray(value)).toBe(value)
+        assert.equal(ensureArray(value), value)
     })
-
-    it('wraps to array if value is not an array', () => {
-        expect(ensureArray(1)).toEqual([1])
+    await t.test('wraps to array if value is not an array', () => {
+        assert.deepEqual(ensureArray(1), [1])
     })
 })
 
-describe('ensureError', () => {
-    it('returns original value if error', () => {
+test('ensureError', async (t) => {
+    await t.test('returns original value if error', () => {
         const value = new Error()
-        expect(ensureError(value)).toBe(value)
+        assert.equal(ensureError(value), value)
     })
-
-    it('wraps to error if value is not an error', () => {
-        expect(ensureError('a')).toBeInstanceOf(Error)
+    await t.test('wraps to error if value is not an error', () => {
+        assert.ok(ensureError('a') instanceof Error)
     })
 })
 
-describe('hasKeys', () => {
-    it('checks object keys', () => {
-        expect(hasKeys({ a: 1, b: 1 }, ['a', 'b'])).toBeTruthy()
-        expect(hasKeys({ a: 1, b: 1 }, ['c', 'b'])).toBeFalsy()
+test('hasKeys', async (t) => {
+    await t.test('checks object keys', () => {
+        assert.equal(hasKeys({ a: 1, b: 1 }, ['a', 'b']), true)
+        assert.equal(hasKeys({ a: 1, b: 1 }, ['c', 'b']), false)
     })
-
-    it('Supports object', () => {
+    await t.test('Supports object', () => {
         const a = { a: 1, b: 1 }
-
         if (hasKeys(a, ['a', 'b'])) {
-            expect(a.a.toFixed(1)).toBe(a.b.toFixed(1))
+            assert.equal(a.a.toFixed(1), a.b.toFixed(1))
         }
     })
-
-    it('Supports unknown', () => {
+    await t.test('Supports unknown', () => {
         const a = { a: 1, b: 1 } as unknown
-
         if (hasKeys(a, ['a', 'b'])) {
-            expect(a.a).toBe(a.b)
-
-            // @ts-expect-error
-            expect(a.a.toFixed(1)).toBe('1.0')
+            const aObj = a as { a: number; b: number }
+            assert.equal(aObj.a, aObj.b)
+            assert.equal(aObj.a.toFixed(1), '1.0')
         }
     })
-
-    it('Supports unions', () => {
+    await t.test('Supports unions', () => {
         const a = { a: 1, b: 1 } as { a: number } | { b: number }
-
         if (hasKeys(a, ['a'])) {
-            expect(a.a.toFixed(1)).toBe('1.0')
+            assert.equal(a.a.toFixed(1), '1.0')
         }
     })
 })
 
-describe('assertNotError', () => {
-    it('returns original value if not error', () => {
+test('assertNotError', async (t) => {
+    await t.test('returns original value if not error', () => {
         const value = new Object()
-
-        expect(assertNotError(value)).toBe(value)
+        assert.equal(assertNotError(value), value)
     })
-
-    it('throws value if error', () => {
-        expect(() => assertNotError(new Error('abc'))).toThrowError('abc')
+    await t.test('throws value if error', () => {
+        assert.throws(() => assertNotError(new Error('abc')), /abc/)
     })
 })

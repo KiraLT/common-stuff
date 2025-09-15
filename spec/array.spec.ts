@@ -1,40 +1,49 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
-    sortBy,
-    generateRange,
-    flatMap,
-    flatten,
-    groupBy,
-    indexBy,
+    chunk,
     deduplicate,
     deduplicateBy,
-    chunk,
     difference,
-    includesAny,
-    includesAll,
-    intersection,
-    union,
     findIndex,
-} from '../src'
+    flatMap,
+    flatten,
+    generateRange,
+    groupBy,
+    includesAll,
+    includesAny,
+    indexBy,
+    intersection,
+    sortBy,
+    union,
+} from '../src/index.ts'
 
-describe('sortBy', () => {
-    it('is stable', () => {
-        expect(sortBy([1, 2, 3, 4, 5], (k) => k <= 3)).toEqual([4, 5, 1, 2, 3])
+test('sortBy', async (t) => {
+    await t.test('is stable', () => {
+        assert.deepEqual(
+            sortBy([1, 2, 3, 4, 5], (k) => k <= 3),
+            [4, 5, 1, 2, 3],
+        )
     })
 
-    it('supports readonly array', () => {
-        expect(sortBy([1, 2] as const)).toEqual([1, 2])
+    await t.test('supports readonly array', () => {
+        assert.deepEqual(sortBy([1, 2] as const), [1, 2])
     })
 
-    it('sorts by number', () => {
-        expect(sortBy([4, 5, 1, 2, 3])).toEqual([1, 2, 3, 4, 5])
+    await t.test('sorts by number', () => {
+        assert.deepEqual(sortBy([4, 5, 1, 2, 3]), [1, 2, 3, 4, 5])
     })
 
-    it('sorts by number in reverse', () => {
-        expect(sortBy([4, 5, 1, 2, 3], (v) => v * -1)).toEqual([5, 4, 3, 2, 1])
+    await t.test('sorts by number in reverse', () => {
+        assert.deepEqual(
+            sortBy([4, 5, 1, 2, 3], (v) => v * -1),
+            [5, 4, 3, 2, 1],
+        )
     })
 
-    it('sorts boolean', () => {
-        expect(sortBy([false, true, false, true])).toEqual([
+    await t.test('sorts boolean', () => {
+        assert.deepEqual(sortBy([false, true, false, true]), [
             false,
             false,
             true,
@@ -42,133 +51,139 @@ describe('sortBy', () => {
         ])
     })
 
-    it('sorts date', () => {
+    await t.test('sorts date', () => {
         const d1 = new Date('Sun, 01 Apr 2021 13:57:03 GMT')
         const d2 = new Date('Sun, 02 Apr 2021 13:57:03 GMT')
         const d3 = new Date('Sun, 03 Apr 2021 13:57:03 GMT')
-        expect(sortBy([d2, d1, d3])).toEqual([d1, d2, d3])
+        assert.deepEqual(sortBy([d2, d1, d3]), [d1, d2, d3])
     })
 
-    it('sorts by array', () => {
+    await t.test('sorts by array', () => {
         const v1 = { a: 1, b: true, c: 'A' }
         const v2 = { a: 1, b: false, c: 'B' }
         const v3 = { a: 2, b: true, c: 'C' }
         const v4 = { a: 2, b: false, c: 'D' }
 
-        expect(sortBy([v1, v2, v3, v4], (k) => [k.a, k.b, k.c])).toEqual([
-            v2,
-            v1,
-            v4,
-            v3,
-        ])
+        assert.deepEqual(
+            sortBy([v1, v2, v3, v4], (k) => [k.a, k.b, k.c]),
+            [v2, v1, v4, v3],
+        )
     })
 })
 
-describe('generateRange', () => {
-    it('generates range', () => {
-        expect(generateRange(4)).toEqual([0, 1, 2, 3])
-        expect(generateRange(3, 6)).toEqual([3, 4, 5])
-        expect(generateRange(8, 2)).toEqual([])
+test('generateRange', async (t) => {
+    await t.test('generates range', () => {
+        assert.deepEqual(generateRange(4), [0, 1, 2, 3])
+        assert.deepEqual(generateRange(3, 6), [3, 4, 5])
+        assert.deepEqual(generateRange(8, 2), [])
     })
 
-    it('supports step', () => {
-        expect(generateRange(0, 10, 2)).toEqual([0, 2, 4, 6, 8])
-        expect(generateRange(10, 0, -1)).toEqual([
-            10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
-        ])
-        expect(generateRange(8, 2, -2)).toEqual([8, 6, 4])
-        expect(generateRange(8, 2, 2)).toEqual([])
-        expect(generateRange(1, 5, -1)).toEqual([])
-        expect(generateRange(1, 5, -2)).toEqual([])
-    })
-})
-
-describe('flatMap', () => {
-    it('flattens response', () => {
-        expect(flatMap([1, 2, 3, 4], (x) => [x * 2])).toEqual([2, 4, 6, 8])
-    })
-
-    it('only one level is flattened', () => {
-        expect(flatMap([1, 2, 3, 4], (x) => [[x * 2]])).toEqual([
-            [2],
-            [4],
-            [6],
-            [8],
-        ])
+    await t.test('supports step', () => {
+        assert.deepEqual(generateRange(0, 10, 2), [0, 2, 4, 6, 8])
+        assert.deepEqual(
+            generateRange(10, 0, -1),
+            [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+        )
+        assert.deepEqual(generateRange(8, 2, -2), [8, 6, 4])
+        assert.deepEqual(generateRange(8, 2, 2), [])
+        assert.deepEqual(generateRange(1, 5, -1), [])
+        assert.deepEqual(generateRange(1, 5, -2), [])
     })
 })
 
-describe('flatten', () => {
-    it('flattens array', () => {
-        expect(flatten([1, 2, [3, 4]])).toEqual([1, 2, 3, 4])
+test('flatMap', async (t) => {
+    await t.test('flattens response', () => {
+        assert.deepEqual(
+            flatMap([1, 2, 3, 4], (x) => [x * 2]),
+            [2, 4, 6, 8],
+        )
     })
 
-    it('flattens one level by default', () => {
-        expect(flatten([1, 2, [3, 4, [5, 6]]])).toEqual([1, 2, 3, 4, [5, 6]])
-    })
-
-    it('supports custom depth', () => {
-        expect(flatten([1, 2, [3, 4, [5, 6]]], 2)).toEqual([1, 2, 3, 4, 5, 6])
+    await t.test('only one level is flattened', () => {
+        assert.deepEqual(
+            flatMap([1, 2, 3, 4], (x) => [[x * 2]]),
+            [[2], [4], [6], [8]],
+        )
     })
 })
 
-describe('groupBy', () => {
-    it('groups by number', () => {
-        expect(groupBy([6.1, 4.2, 6.3], Math.floor)).toEqual([
+test('flatten', async (t) => {
+    await t.test('flattens array', () => {
+        assert.deepEqual(flatten([1, 2, [3, 4]]), [1, 2, 3, 4])
+    })
+
+    await t.test('flattens one level by default', () => {
+        assert.deepEqual(flatten([1, 2, [3, 4, [5, 6]]]), [1, 2, 3, 4, [5, 6]])
+    })
+
+    await t.test('supports custom depth', () => {
+        assert.deepEqual(flatten([1, 2, [3, 4, [5, 6]]], 2), [1, 2, 3, 4, 5, 6])
+    })
+})
+
+test('groupBy', async (t) => {
+    await t.test('groups by number', () => {
+        assert.deepEqual(groupBy([6.1, 4.2, 6.3], Math.floor), [
             [4, [4.2]],
             [6, [6.1, 6.3]],
         ])
     })
 
-    it('groups by multiple conditions', () => {
-        expect(
+    await t.test('groups by multiple conditions', () => {
+        assert.deepEqual(
             groupBy(['one', 'two', 'three'], (v) => [
                 v.length,
                 v.includes('a'),
             ]),
-        ).toEqual([
-            [[5, false], ['three']],
             [
-                [3, false],
-                ['one', 'two'],
+                [[5, false], ['three']],
+                [
+                    [3, false],
+                    ['one', 'two'],
+                ],
             ],
-        ])
+        )
     })
 })
 
-describe('indexBy', () => {
-    it('creates index', () => {
-        expect(indexBy(['one', 'two', 'three'], (v) => v.length)).toEqual({
-            '5': ['three'],
-            '3': ['one', 'two'],
-        })
+test('indexBy', async (t) => {
+    await t.test('creates index', () => {
+        assert.deepEqual(
+            indexBy(['one', 'two', 'three'], (v) => v.length),
+            {
+                '5': ['three'],
+                '3': ['one', 'two'],
+            },
+        )
     })
 
-    it('supports array', () => {
-        expect(
+    await t.test('supports array', async (t) => {
+        assert.deepEqual(
             indexBy(['one', 'two', 'three'], (v) => [v.length, v.length + 1]),
-        ).toEqual({
-            '5': ['three'],
-            '6': ['three'],
-            '3': ['one', 'two'],
-            '4': ['one', 'two'],
-        })
+            {
+                '5': ['three'],
+                '6': ['three'],
+                '3': ['one', 'two'],
+                '4': ['one', 'two'],
+            },
+        )
     })
 })
 
-describe('deduplicate', () => {
-    it('de-duplicates any type', () => {
+test('deduplicate', async (t) => {
+    await t.test('de-duplicates any type', () => {
         const obj1 = {}
-        expect(
+        assert.deepEqual(
             deduplicate([obj1, 1, '5', true, 5, 1, obj1, false, true]),
-        ).toEqual([obj1, 1, '5', true, 5, false])
+            [obj1, 1, '5', true, 5, false],
+        )
     })
 })
 
-describe('deduplicateBy', () => {
-    it('de-duplicates any type by callback', () => {
+test('deduplicateBy', async (t) => {
+    await t.test('de-duplicates any type by callback', () => {
         const obj1 = {}
-        expect(
+        assert.deepEqual(
             deduplicateBy(
                 [
                     {
@@ -192,148 +207,162 @@ describe('deduplicateBy', () => {
                 ],
                 (v) => v.a,
             ),
-        ).toEqual([
-            {
-                a: obj1,
-            },
-            {
-                a: 1,
-            },
-            {
-                a: 5,
-            },
-            {
-                a: true,
-            },
-        ])
+            [
+                {
+                    a: obj1,
+                },
+                {
+                    a: 1,
+                },
+                {
+                    a: 5,
+                },
+                {
+                    a: true,
+                },
+            ],
+        )
     })
 })
 
-describe('chunk', () => {
-    it('chunks array', () => {
-        expect(chunk([1, 2, 3, 4], 2)).toEqual([
+test('chunk', async (t) => {
+    await t.test('chunks array', () => {
+        assert.deepEqual(chunk([1, 2, 3, 4], 2), [
             [1, 2],
             [3, 4],
         ])
-        expect(chunk([1, 2, 3], 2)).toEqual([[1, 2], [3]])
-        expect(chunk([], 2)).toEqual([])
+        assert.deepEqual(chunk([1, 2, 3], 2), [[1, 2], [3]])
+        assert.deepEqual(chunk([], 2), [])
     })
 })
 
-describe('difference', () => {
-    it('finds difference', () => {
-        expect(difference([2, 1], [2, 3])).toEqual([1])
+test('difference', async (t) => {
+    await t.test('finds difference', () => {
+        assert.deepEqual(difference([2, 1], [2, 3]), [1])
     })
 
-    it('supports key callback', () => {
-        expect(
-            difference([2, 1], ['2', '3'], (v) => parseInt(v.toString())),
-        ).toEqual([1])
+    await t.test('supports key callback', () => {
+        assert.deepEqual(
+            difference([2, 1], ['2', '3'], (v) => parseInt(v.toString(), 10)),
+            [1],
+        )
     })
 })
 
-describe('intersection', () => {
-    it('finds intersection', () => {
-        expect(
+test('intersection', async (t) => {
+    await t.test('finds intersection', () => {
+        assert.deepEqual(
             intersection([
                 [2, 1],
                 [2, 3],
             ]),
-        ).toEqual([2])
+            [2],
+        )
     })
 
-    it('supports empty array', () => {
-        expect(intersection([[], [2, 3]])).toEqual([])
-        expect(intersection([[2, 3], []])).toEqual([])
+    await t.test('supports empty array', () => {
+        assert.deepEqual(intersection([[], [2, 3]]), [])
+        assert.deepEqual(intersection([[2, 3], []]), [])
     })
 
-    it('supports key callback', () => {
-        expect(
+    await t.test('supports key callback', () => {
+        assert.deepEqual(
             intersection<string | number>(
                 [
                     [2, 1],
                     ['2', '3'],
                 ],
-                (v) => parseInt(v.toString()),
+                (v) => parseInt(v.toString(), 10),
             ),
-        ).toEqual([2])
+            [2],
+        )
     })
 
-    it('supports empty array with key callback', () => {
-        expect(
-            intersection([[], ['2', '3']], (v) => parseInt(v.toString())),
-        ).toEqual([])
-        expect(
-            intersection([['2', '3'], []], (v) => parseInt(v.toString())),
-        ).toEqual([])
+    await t.test('supports empty array key callback', () => {
+        assert.deepEqual(
+            intersection([[], ['2', '3']], (v) => parseInt(v.toString(), 10)),
+            [],
+        )
+        assert.deepEqual(
+            intersection([['2', '3'], []], (v) => parseInt(v.toString(), 10)),
+            [],
+        )
     })
 
-    it('supports empty array', () => {
-        expect(intersection([])).toEqual([])
+    await t.test('supports empty array', () => {
+        assert.deepEqual(intersection([]), [])
     })
 })
 
-describe('union', () => {
-    it('finds intersection', () => {
-        expect(
+test('union', async (t) => {
+    await t.test('finds intersection', () => {
+        assert.deepEqual(
             union([
                 [2, 1],
                 [2, 3],
             ]),
-        ).toEqual([2, 1, 3])
+            [2, 1, 3],
+        )
     })
 
-    it('supports key callback', () => {
-        expect(
+    await t.test('supports key callback', () => {
+        assert.deepEqual(
             union<string | number>(
                 [
                     [2, 1],
                     ['2', '3'],
                 ],
-                (v) => parseInt(v.toString()),
+                (v) => parseInt(v.toString(), 10),
             ),
-        ).toEqual([2, 1, '3'])
+            [2, 1, '3'],
+        )
     })
 })
 
-describe('includesAny', () => {
-    it('checks if includes', () => {
-        expect(includesAny([2, 1], [2, 3])).toBeTruthy()
+test('includesAny', async (t) => {
+    await t.test('checks if includes', () => {
+        assert.ok(includesAny([2, 1], [2, 3]))
     })
 
-    it('checks if not includes', () => {
-        expect(includesAny([2, 1], [0, 3])).toBeFalsy()
+    await t.test('checks if not includes', () => {
+        assert.ok(!includesAny([2, 1], [0, 3]))
     })
 
-    it('supports key callback', () => {
-        expect(
-            includesAny([2, 1], ['2', '3'], (v) => parseInt(v.toString())),
-        ).toBeTruthy()
-    })
-})
-
-describe('includesAll', () => {
-    it('checks if includes', () => {
-        expect(includesAll([3, 2, 1], [2, 3])).toBeTruthy()
-    })
-
-    it('checks if not includes', () => {
-        expect(includesAll([2, 1], [2, 3])).toBeFalsy()
-    })
-
-    it('supports key callback', () => {
-        expect(
-            includesAll([2, 1], ['1', '2'], (v) => parseInt(v.toString())),
-        ).toBeTruthy()
+    await t.test('supports key callback', () => {
+        assert.ok(
+            includesAny([2, 1], ['2', '3'], (v) => parseInt(v.toString(), 10)),
+        )
     })
 })
 
-describe('findIndex', () => {
-    it('finds index', () => {
-        expect(findIndex([1, 2, 3, 4], (v) => v === 4)).toBe(3)
+test('includesAll', async (t) => {
+    await t.test('checks if includes', () => {
+        assert.ok(includesAll([3, 2, 1], [2, 3]))
     })
 
-    it('returns -1 if not found', () => {
-        expect(findIndex([1, 2, 3, 4], (v) => v === 10)).toBe(-1)
+    await t.test('checks if not includes', () => {
+        assert.ok(!includesAll([2, 1], [2, 3]))
+    })
+
+    await t.test('supports key callback', () => {
+        assert.ok(
+            includesAll([2, 1], ['1', '2'], (v) => parseInt(v.toString(), 10)),
+        )
+    })
+})
+
+test('findIndex', async (t) => {
+    await t.test('finds index', () => {
+        assert.equal(
+            findIndex([1, 2, 3, 4], (v) => v === 4),
+            3,
+        )
+    })
+
+    await t.test('returns -1 if not found', () => {
+        assert.equal(
+            findIndex([1, 2, 3, 4], (v) => v === 10),
+            -1,
+        )
     })
 })

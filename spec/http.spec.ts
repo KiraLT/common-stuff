@@ -1,114 +1,109 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
+    decodeHtml,
+    encodeHtml,
+    generateCookie,
+    generateQueryString,
     HttpError,
     HttpStatusCodes,
     HttpStatusReasons,
-    generateCookie,
     parseCookies,
-    decodeHtml,
-    encodeHtml,
-    urlToRelative,
     parseQueryString,
-    generateQueryString,
-} from '../src'
+    urlToRelative,
+} from '../src/index.ts'
 
-describe('httpStatusCodes', () => {
-    it('just works', () => {
-        expect(HttpStatusReasons.NOT_FOUND).toBe('Not Found')
+test('httpStatusCodes', async (t) => {
+    await t.test('just works', () => {
+        assert.equal(HttpStatusReasons.NOT_FOUND, 'Not Found')
     })
 })
 
-describe('httpStatusMessages', () => {
-    it('just works', () => {
-        expect(HttpStatusCodes.NOT_FOUND).toBe(404)
+test('httpStatusMessages', async (t) => {
+    await t.test('just works', () => {
+        assert.equal(HttpStatusCodes.NOT_FOUND, 404)
     })
 })
 
-describe('HttpError', () => {
-    // Typescript bug: https://github.com/microsoft/TypeScript/issues/22585
-    it('supports instanceof', () => {
-        expect(new HttpError(404) instanceof HttpError).toBeTruthy()
+test('HttpError', async (t) => {
+    await t.test('supports instanceof', () => {
+        assert.ok(new HttpError(404) instanceof HttpError)
     })
-
-    it('has status', () => {
-        expect(new HttpError(404).status).toBe(404)
+    await t.test('has status', () => {
+        assert.equal(new HttpError(404).status, 404)
     })
-
-    it('has message', () => {
-        expect(new HttpError(404).message).toBe('Not Found')
-        expect(new HttpError(404, '404').message).toBe('404')
+    await t.test('has message', () => {
+        assert.equal(new HttpError(404).message, 'Not Found')
+        assert.equal(new HttpError(404, '404').message, '404')
     })
-
-    it('auto expose', () => {
-        expect(new HttpError(404).expose).toBeTruthy()
-        expect(new HttpError(500).expose).toBeFalsy()
+    await t.test('auto expose', () => {
+        assert.equal(new HttpError(404).expose, true)
+        assert.equal(new HttpError(500).expose, false)
     })
-
-    it('has expose', () => {
-        expect(
+    await t.test('has expose', () => {
+        assert.equal(
             new HttpError(404, undefined, { expose: false }).expose,
-        ).toBeFalsy()
-        expect(
+            false,
+        )
+        assert.equal(
             new HttpError(500, undefined, { expose: true }).expose,
-        ).toBeTruthy()
+            true,
+        )
     })
-
-    it('has public message', () => {
-        expect(new HttpError(404).publicMessage).toBe('Not Found')
-        expect(new HttpError(404, '404').publicMessage).toBe('404')
-        expect(new HttpError(404, '404', { expose: false }).publicMessage).toBe(
+    await t.test('has public message', () => {
+        assert.equal(new HttpError(404).publicMessage, 'Not Found')
+        assert.equal(new HttpError(404, '404').publicMessage, '404')
+        assert.equal(
+            new HttpError(404, '404', { expose: false }).publicMessage,
             'Not Found',
         )
-        expect(new HttpError(500, '500').publicMessage).toBe(
+        assert.equal(
+            new HttpError(500, '500').publicMessage,
             'Internal Server Error',
         )
     })
-
-    it('supports status text input', () => {
-        expect(new HttpError(HttpStatusCodes.NOT_FOUND).status).toBe(404)
+    await t.test('supports status text input', () => {
+        assert.equal(new HttpError(HttpStatusCodes.NOT_FOUND).status, 404)
     })
-
-    it('validates status input', () => {
-        expect(() => new HttpError(951)).toThrow('Incorrect status code')
+    await t.test('validates status input', () => {
+        assert.throws(() => new HttpError(951), /Incorrect status code/)
     })
 })
 
-describe('generateCookie', () => {
-    it('generates cookie', () => {
-        expect(generateCookie('a', 'b')).toBe('a=b')
+test('generateCookie', async (t) => {
+    await t.test('generates cookie', () => {
+        assert.equal(generateCookie('a', 'b'), 'a=b')
     })
-
-    it('escapes value', () => {
-        expect(generateCookie('=', '=')).toBe('%3D=%3D')
+    await t.test('escapes value', () => {
+        assert.equal(generateCookie('=', '='), '%3D=%3D')
     })
-
-    it('supports expiration', () => {
-        expect(generateCookie('a', 'b', { expires: 1 })).toMatch(
+    await t.test('supports expiration', () => {
+        assert.match(
+            generateCookie('a', 'b', { expires: 1 }),
             /^a=b;expires=.*GMT$/,
         )
     })
-
-    it('supports path', () => {
-        expect(generateCookie('a', 'b', { path: '/' })).toBe('a=b;path=/')
+    await t.test('supports path', () => {
+        assert.equal(generateCookie('a', 'b', { path: '/' }), 'a=b;path=/')
     })
-
-    it('supports domain', () => {
-        expect(generateCookie('a', 'b', { domain: 'domain.com' })).toBe(
+    await t.test('supports domain', () => {
+        assert.equal(
+            generateCookie('a', 'b', { domain: 'domain.com' }),
             'a=b;domain=domain.com',
         )
     })
-
-    it('supports secure', () => {
-        expect(generateCookie('a', 'b', { secure: true })).toBe('a=b;secure')
+    await t.test('supports secure', () => {
+        assert.equal(generateCookie('a', 'b', { secure: true }), 'a=b;secure')
     })
-
-    it('supports samesite', () => {
-        expect(generateCookie('a', 'b', { sameSite: 'strict' })).toBe(
+    await t.test('supports samesite', () => {
+        assert.equal(
+            generateCookie('a', 'b', { sameSite: 'strict' }),
             'a=b;samesite=strict',
         )
     })
-
-    it('supports multiple options', () => {
-        expect(
+    await t.test('supports multiple options', () => {
+        assert.match(
             generateCookie('a', 'b', {
                 expires: 1,
                 path: '/',
@@ -116,47 +111,48 @@ describe('generateCookie', () => {
                 secure: true,
                 sameSite: 'strict',
             }),
-        ).toMatch(
             /^a=b;expires=.*GMT;path=\/;domain=domain.com;secure;samesite=strict$/,
         )
     })
 })
 
-describe('parseCookies', () => {
-    it('parses cookie string', () => {
-        expect(parseCookies('%3D=%3D')).toEqual({ '=': '=' })
+test('parseCookies', async (t) => {
+    await t.test('parses cookie string', () => {
+        assert.deepEqual(parseCookies('%3D=%3D'), { '=': '=' })
     })
 })
 
-describe('encodeHtml', () => {
-    it('encodes HTML', () => {
-        expect(encodeHtml('< > " \' &')).toBe('&lt; &gt; &quot; &apos; &amp;')
+test('encodeHtml', async (t) => {
+    await t.test('encodes HTML', () => {
+        assert.equal(encodeHtml('< > " \' &'), '&lt; &gt; &quot; &apos; &amp;')
     })
 })
 
-describe('decodeHtml', () => {
-    it('decodes HTML', () => {
-        expect(decodeHtml('&lt; &gt; &quot; &apos; &amp; &arm;')).toBe(
+test('decodeHtml', async (t) => {
+    await t.test('decodes HTML', () => {
+        assert.equal(
+            decodeHtml('&lt; &gt; &quot; &apos; &amp; &arm;'),
             '< > " \' & &arm;',
         )
     })
-
-    it('decodes dec HTML', () => {
-        expect(decodeHtml('&#60; &#62; &#34; &#39; &#38; &#10;')).toBe(
+    await t.test('decodes dec HTML', () => {
+        assert.equal(
+            decodeHtml('&#60; &#62; &#34; &#39; &#38; &#10;'),
             '< > " \' & &#10;',
         )
     })
 })
 
-describe('urlToRelative', () => {
-    it('converts absolute URL to relative', () => {
-        expect(urlToRelative('https://domain.com/index.html')).toBe(
+test('urlToRelative', async (t) => {
+    await t.test('converts absolute URL to relative', () => {
+        assert.equal(
+            urlToRelative('https://domain.com/index.html'),
             '/index.html',
         )
     })
-
-    it('supports subdomains', () => {
-        expect(urlToRelative('https://my-sub.domain.com/index.html')).toBe(
+    await t.test('supports subdomains', () => {
+        assert.equal(
+            urlToRelative('https://my-sub.domain.com/index.html'),
             '/index.html',
         )
     })
@@ -169,51 +165,41 @@ describe('urlToRelative', () => {
 //     })
 // })
 
-describe('parseQueryString', () => {
-    it('parses string with ?', () => {
-        expect(parseQueryString('?page=1&limit=20')).toEqual({
+test('parseQueryString', async (t) => {
+    await t.test('parses string with ?', () => {
+        assert.deepEqual(parseQueryString('?page=1&limit=20'), {
             page: ['1'],
             limit: ['20'],
         })
     })
-
-    it('parses string without ?', () => {
-        expect(parseQueryString('page=1&limit=20')).toEqual({
+    await t.test('parses string without ?', () => {
+        assert.deepEqual(parseQueryString('page=1&limit=20'), {
             page: ['1'],
             limit: ['20'],
         })
     })
-
-    it('supports separator', () => {
-        expect(
-            parseQueryString('page=1;limit=20', {
-                separator: ';',
-            }),
-        ).toEqual({ page: ['1'], limit: ['20'] })
+    await t.test('supports separator', () => {
+        assert.deepEqual(
+            parseQueryString('page=1;limit=20', { separator: ';' }),
+            { page: ['1'], limit: ['20'] },
+        )
     })
-
-    it('removes values without keys', () => {
-        expect(parseQueryString('?=1&limit=20')).toEqual({
-            limit: ['20'],
-        })
+    await t.test('removes values without keys', () => {
+        assert.deepEqual(parseQueryString('?=1&limit=20'), { limit: ['20'] })
     })
 })
 
-describe('generateQueryString', () => {
-    it('parses string', () => {
-        expect(generateQueryString({ page: [1], limit: 20 })).toBe(
+test('generateQueryString', async (t) => {
+    await t.test('parses string', () => {
+        assert.equal(
+            generateQueryString({ page: [1], limit: 20 }),
             'page=1&limit=20',
         )
     })
-
-    it('supports separator', () => {
-        expect(
-            generateQueryString(
-                { page: [1], limit: 20 },
-                {
-                    separator: ';',
-                },
-            ),
-        ).toBe('page=1;limit=20')
+    await t.test('supports separator', () => {
+        assert.equal(
+            generateQueryString({ page: [1], limit: 20 }, { separator: ';' }),
+            'page=1;limit=20',
+        )
     })
 })

@@ -1,37 +1,57 @@
-import { delay, debounce, throttle } from '../src'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 
-describe('delay', () => {
-    it('delay action', async () => {
+import { debounce, delay, throttle } from '../src'
+
+type MockFn<Args extends unknown[] = unknown[], R = void> = ((
+    ...args: Args
+) => R) & {
+    mock: { calls: Args[] }
+}
+
+function createMock<Args extends unknown[] = unknown[], R = void>(): MockFn<
+    Args,
+    R
+> {
+    const fn = ((...args: Args) => {
+        fn.mock.calls.push(args)
+    }) as MockFn<Args, R>
+    fn.mock = { calls: [] as Args[] }
+    return fn
+}
+
+test('delay', async (t) => {
+    await t.test('delay action', async () => {
         const start = Date.now()
         await delay(250)
-        expect(Math.abs(Date.now() - start - 250)).toBeLessThan(10)
+        assert.ok(Math.abs(Date.now() - start - 250) < 10)
     })
 })
 
-describe('debounce', () => {
-    it('debounce action', async () => {
-        const mock = jest.fn()
+test('debounce', async (t) => {
+    await t.test('debounce action', async () => {
+        const mock = createMock<[number]>()
         const cb = debounce(mock, 100)
 
         cb(1)
         await delay(90)
-        expect(mock.mock.calls.length).toBe(0)
+        assert.equal(mock.mock.calls.length, 0)
 
         cb(2)
 
-        expect(mock.mock.calls.length).toBe(0)
+        assert.equal(mock.mock.calls.length, 0)
 
         await delay(90)
 
-        expect(mock.mock.calls.length).toBe(0)
+        assert.equal(mock.mock.calls.length, 0)
 
         await delay(10)
 
-        expect(mock.mock.calls.length).toBe(1)
+        assert.equal(mock.mock.calls.length, 1)
     })
 
-    it('supports arguments', async () => {
-        const mock = jest.fn()
+    await t.test('supports arguments', async () => {
+        const mock = createMock<[number]>()
         const cb = debounce(mock, 100)
 
         cb(1)
@@ -39,12 +59,12 @@ describe('debounce', () => {
         cb(3)
 
         await delay(110)
-        expect(mock.mock.calls.length).toBe(1)
-        expect(mock.mock.calls[0][0]).toBe(3)
+        assert.equal(mock.mock.calls.length, 1)
+        assert.equal(mock.mock.calls[0][0], 3)
     })
 
-    it('supports async function', async () => {
-        const mock = jest.fn()
+    await t.test('supports async function', async () => {
+        const mock = createMock<[string]>()
         const cb = debounce(async (value: string) => {
             await delay(50)
             mock(value)
@@ -58,70 +78,70 @@ describe('debounce', () => {
 
         await delay(110)
 
-        expect(mock.mock.calls.length).toBe(1)
-        expect(mock.mock.calls[0][0]).toBe('it works')
+        assert.equal(mock.mock.calls.length, 1)
+        assert.equal(mock.mock.calls[0][0], 'it works')
     })
 })
 
-describe('throttle', () => {
-    it('should throttle function invocation', async () => {
-        const mock = jest.fn()
+test('throttle', async (t) => {
+    await t.test('should throttle function invocation', async () => {
+        const mock = createMock<[number]>()
         const cb = throttle(mock, 100)
 
         cb(1)
-        expect(mock.mock.calls.length).toBe(1)
+        assert.equal(mock.mock.calls.length, 1)
 
         await delay(90)
 
         cb(2)
-        expect(mock.mock.calls.length).toBe(1)
+        assert.equal(mock.mock.calls.length, 1)
 
         await delay(10)
 
-        expect(mock.mock.calls.length).toBe(2)
+        assert.equal(mock.mock.calls.length, 2)
     })
 
-    it('without leading', async () => {
-        const mock = jest.fn()
+    await t.test('without leading', async () => {
+        const mock = createMock<[number]>()
         const cb = throttle(mock, 100, { leading: false })
 
         cb(1)
-        expect(mock.mock.calls.length).toBe(0)
+        assert.equal(mock.mock.calls.length, 0)
 
         await delay(90)
 
         cb(2)
-        expect(mock.mock.calls.length).toBe(0)
+        assert.equal(mock.mock.calls.length, 0)
 
         await delay(10)
 
-        expect(mock.mock.calls.length).toBe(1)
+        assert.equal(mock.mock.calls.length, 1)
     })
 
-    it('without trailing', async () => {
-        const mock = jest.fn()
+    await t.test('without trailing', async () => {
+        const mock = createMock<[number]>()
         const cb = throttle(mock, 100, { trailing: false })
 
-        expect(mock.mock.calls.length).toBe(0)
+        assert.equal(mock.mock.calls.length, 0)
 
         cb(1)
-        expect(mock.mock.calls.length).toBe(1)
+        assert.equal(mock.mock.calls.length, 1)
 
         await delay(50)
 
         cb(2)
-        expect(mock.mock.calls.length).toBe(1)
+        assert.equal(mock.mock.calls.length, 1)
 
         await delay(50)
 
-        expect(mock.mock.calls.length).toBe(1)
+        assert.equal(mock.mock.calls.length, 1)
 
         cb(3)
 
-        expect(mock.mock.calls.length).toBe(2)
+        assert.equal(mock.mock.calls.length, 2)
 
         await delay(100)
 
-        expect(mock.mock.calls.length).toBe(2)
+        assert.equal(mock.mock.calls.length, 2)
     })
 })

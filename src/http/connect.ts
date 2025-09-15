@@ -1,11 +1,11 @@
 type ReqLike = {
-    body: any
+    body: unknown
 }
 type RespLike = {
     status(status: unknown): unknown
     json(value: unknown): unknown
 }
-type NextLike = (err?: any) => void
+type NextLike = (err?: unknown) => void
 
 /**
  * Creates [connect](https://www.npmjs.com/package/connect) style error handle compatible with ExpressJS and other similar frameworks.

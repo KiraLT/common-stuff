@@ -1,206 +1,197 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
-    isEqual,
-    mapRecord,
-    flatMapRecord,
-    filterRecord,
-    merge,
-    convertToNested,
     camelCase,
     clone,
+    convertToNested,
+    filterRecord,
+    flatMapRecord,
     getByKey,
-} from '../src'
+    isEqual,
+    mapRecord,
+    merge,
+} from '../src/index.ts'
 
-describe('isEqual', () => {
-    it('compares strings', () => {
-        expect(isEqual('aa', 'aa')).toBeTruthy()
-        expect(isEqual('aa', 'a')).toBeFalsy()
+test('isEqual', async (t) => {
+    await t.test('compares strings', () => {
+        assert.equal(isEqual('aa', 'aa'), true)
+        assert.equal(isEqual('aa', 'a'), false)
     })
-
-    it('compares numbers', () => {
-        expect(isEqual(1, 1)).toBeTruthy()
-        expect(isEqual(1, -1)).toBeFalsy()
+    await t.test('compares numbers', () => {
+        assert.equal(isEqual(1, 1), true)
+        assert.equal(isEqual(1, -1), false)
     })
-
-    it('compares booleans', () => {
-        expect(isEqual(true, true)).toBeTruthy()
-        expect(isEqual(true, false)).toBeFalsy()
+    await t.test('compares booleans', () => {
+        assert.equal(isEqual(true, true), true)
+        assert.equal(isEqual(true, false), false)
     })
-
-    it('compares dates', () => {
-        expect(isEqual(new Date('2019'), new Date('2019'))).toBeTruthy()
-        expect(isEqual(new Date('2019'), new Date('2018'))).toBeFalsy()
+    await t.test('compares dates', () => {
+        assert.equal(isEqual(new Date('2019'), new Date('2019')), true)
+        assert.equal(isEqual(new Date('2019'), new Date('2018')), false)
     })
-
-    it('compares arrays', () => {
-        expect(isEqual(['a', 9], ['a', 9])).toBeTruthy()
-        expect(isEqual([9, 'a'], [9, 'c'])).toBeFalsy()
-        expect(isEqual([9, 'a'], [9])).toBeFalsy()
-        expect(isEqual([9], [9, 'a'])).toBeFalsy()
+    await t.test('compares arrays', () => {
+        assert.equal(isEqual(['a', 9], ['a', 9]), true)
+        assert.equal(isEqual([9, 'a'], [9, 'c']), false)
+        assert.equal(isEqual([9, 'a'], [9]), false)
+        assert.equal(isEqual([9], [9, 'a']), false)
     })
-
-    it('compares objects', () => {
-        expect(isEqual({ a: 9, b: 'b' }, { a: 9, b: 'b' })).toBeTruthy()
-        expect(isEqual({ a: 9, b: 'b' }, { a: 9, b: 'd' })).toBeFalsy()
-        expect(isEqual({ a: 9, b: 'b' }, { a: 9 })).toBeFalsy()
-        expect(isEqual({ a: 9, b: 'b' }, { b: 'b' })).toBeFalsy()
+    await t.test('compares objects', () => {
+        assert.equal(isEqual({ a: 9, b: 'b' }, { a: 9, b: 'b' }), true)
+        assert.equal(isEqual({ a: 9, b: 'b' }, { a: 9, b: 'd' }), false)
+        assert.equal(isEqual({ a: 9, b: 'b' }, { a: 9 }), false)
+        assert.equal(isEqual({ a: 9, b: 'b' }, { b: 'b' }), false)
     })
-
-    it('compares nested', () => {
-        expect(
+    await t.test('compares nested', () => {
+        assert.equal(
             isEqual(
                 { a: [{ b: [9, 1] }, 3, { a: false }] },
                 { a: [{ b: [9, 1] }, 3, { a: false }] },
             ),
-        ).toBeTruthy()
-        expect(
+            true,
+        )
+        assert.equal(
             isEqual(
                 { a: [{ b: [9] }, 3, { a: false }] },
                 { a: [{ b: [9, 1] }, 3, { a: false }] },
             ),
-        ).toBeFalsy()
+            false,
+        )
     })
 })
 
-describe('mapRecord', () => {
-    it('swaps entries', () => {
-        expect(mapRecord({ a: 'b' }, ([k, v]) => [v, k])).toEqual({ b: 'a' })
+test('mapRecord', async (t) => {
+    await t.test('swaps entries', () => {
+        assert.deepEqual(
+            mapRecord({ a: 'b' }, ([k, v]) => [v, k]),
+            { b: 'a' },
+        )
     })
 })
 
-describe('flatMapRecord', () => {
-    it('create multiple items', () => {
-        expect(
+test('flatMapRecord', async (t) => {
+    await t.test('create multiple items', () => {
+        assert.deepEqual(
             flatMapRecord({ a: 'b' }, ([k, v]) => [
                 [k, v],
                 [`${k}2`, v],
             ]),
-        ).toEqual({ a: 'b', a2: 'b' })
+            { a: 'b', a2: 'b' },
+        )
     })
-
-    it('filters items', () => {
-        expect(
+    await t.test('filters items', () => {
+        assert.deepEqual(
             flatMapRecord({ a: 'b', b: 'c' }, ([k, v]) =>
                 k === 'a' ? [[k, v]] : [],
             ),
-        ).toEqual({ a: 'b' })
+            { a: 'b' },
+        )
     })
 })
 
-describe('filterRecord', () => {
-    it('filters entries', () => {
-        expect(
+test('filterRecord', async (t) => {
+    await t.test('filters entries', () => {
+        assert.deepEqual(
             filterRecord(
                 { a: 'b', b: 'c' },
                 ([k, v]) => k === 'b' && v === 'c',
             ),
-        ).toEqual({ b: 'c' })
+            { b: 'c' },
+        )
     })
 })
 
-describe('merge', () => {
-    it('merges objects', () => {
-        expect(merge({ a: 1 }, { b: 2 })).toEqual({ a: 1, b: 2 })
+test('merge', async (t) => {
+    await t.test('merges objects', () => {
+        assert.deepEqual(merge({ a: 1 }, { b: 2 }), { a: 1, b: 2 })
     })
-
-    it('merges recursive objects', () => {
-        expect(
+    await t.test('merges recursive objects', () => {
+        assert.deepEqual(
             merge({ a: 1, c: { a: 1 } }, { a: { b: 2 }, b: 2, c: { b: 1 } }),
-        ).toEqual({ a: { b: 2 }, b: 2, c: { a: 1, b: 1 } })
+            { a: { b: 2 }, b: 2, c: { a: 1, b: 1 } },
+        )
     })
-
-    it('overwrites arrays', () => {
-        expect(merge({ a: [1, 2], b: 3 }, { a: [1] })).toEqual({ a: [1], b: 3 })
+    await t.test('overwrites arrays', () => {
+        assert.deepEqual(merge({ a: [1, 2], b: 3 }, { a: [1] }), {
+            a: [1],
+            b: 3,
+        })
     })
-
-    it('merges arrays', () => {
-        expect(merge([1, 2], [3, 4], { arrayPolicy: 'merge' })).toEqual([
-            1, 2, 3, 4,
-        ])
+    await t.test('merges arrays', () => {
+        assert.deepEqual(
+            merge([1, 2], [3, 4], { arrayPolicy: 'merge' }),
+            [1, 2, 3, 4],
+        )
     })
-
-    it('supports custom array merge function', () => {
-        expect(
+    await t.test('supports custom array merge function', () => {
+        assert.deepEqual(
             merge([1, 2], [3, 4], { arrayPolicy: (a, b) => b.concat(a) }),
-        ).toEqual([3, 4, 1, 2])
+            [3, 4, 1, 2],
+        )
     })
-
-    it('skip nulls', () => {
-        expect(merge({ a: 1 }, { a: null }, { skipNulls: true })).toEqual({
+    await t.test('skip nulls', () => {
+        assert.deepEqual(merge({ a: 1 }, { a: null }, { skipNulls: true }), {
             a: 1,
         })
     })
 })
 
-describe('clone', () => {
-    it('clones object', () => {
+test('clone', async (t) => {
+    await t.test('clones object', () => {
         const obj = { a: 1 }
-
         const objClone = clone(obj)
         objClone.a = 10
-
-        expect(obj).toEqual({ a: 1 })
+        assert.deepEqual(obj, { a: 1 })
     })
-
-    it('clones array', () => {
+    await t.test('clones array', () => {
         const obj = [1, 2]
-
         const objClone = clone(obj)
         objClone.push(3)
-
-        expect(obj).toEqual([1, 2])
+        assert.deepEqual(obj, [1, 2])
     })
-
-    it('clones recursive object', () => {
+    await t.test('clones recursive object', () => {
         const obj = { a: { b: 1 } }
-
         const objClone = clone(obj)
         objClone.a.b = 10
-
-        expect(obj).toEqual({ a: { b: 1 } })
+        assert.deepEqual(obj, { a: { b: 1 } })
     })
-
-    it('clones recursive array', () => {
+    await t.test('clones recursive array', () => {
         const obj = [
             [1, 2],
             [3, 4],
         ]
-
         const objClone = clone(obj)
         objClone[0]?.push(3)
-
-        expect(obj).toEqual([
+        assert.deepEqual(obj, [
             [1, 2],
             [3, 4],
         ])
     })
-
-    it('supports shallow clone', () => {
+    await t.test('supports shallow clone', () => {
         const obj = { a: { b: 1 } }
-
         const objClone = clone(obj, false)
         objClone.a.b = 10
-
-        expect(obj).toEqual({ a: { b: 10 } })
+        assert.deepEqual(obj, { a: { b: 10 } })
     })
 })
 
-describe('convertToNested', () => {
-    it('converts nested', () => {
-        expect(
+test('convertToNested', async (t) => {
+    await t.test('converts nested', () => {
+        assert.deepEqual(
             convertToNested({
                 'a.b': 1,
                 'a.a': 2,
             }),
-        ).toEqual({
-            a: {
-                a: 2,
-                b: 1,
+            {
+                a: {
+                    a: 2,
+                    b: 1,
+                },
             },
-        })
+        )
     })
-
-    it('supports separator', () => {
-        expect(
+    await t.test('supports separator', () => {
+        assert.deepEqual(
             convertToNested(
                 {
                     a__b: 1,
@@ -208,16 +199,16 @@ describe('convertToNested', () => {
                 },
                 { separator: '__' },
             ),
-        ).toEqual({
-            a: {
-                a: 2,
-                b: 1,
+            {
+                a: {
+                    a: 2,
+                    b: 1,
+                },
             },
-        })
+        )
     })
-
-    it('supports custom key transformation', () => {
-        expect(
+    await t.test('supports custom key transformation', () => {
+        assert.deepEqual(
             convertToNested(
                 {
                     CONFIG__PRIVATE_KEY: 'a',
@@ -225,45 +216,45 @@ describe('convertToNested', () => {
                 },
                 { separator: '__', transformKey: camelCase },
             ),
-        ).toEqual({
-            config: {
-                privateKey: 'a',
-                publicKey: 'b',
+            {
+                config: {
+                    privateKey: 'a',
+                    publicKey: 'b',
+                },
             },
-        })
+        )
     })
-
-    it('parses JSON values', () => {
-        expect(
+    await t.test('parses JSON values', () => {
+        assert.deepEqual(
             convertToNested({
                 'a.b': '[1, 2, 3]',
                 'a.a': `"abc"`,
                 'a.c': '["1", "2", "3"]',
             }),
-        ).toEqual({
-            a: {
-                a: 'abc',
-                b: [1, 2, 3],
-                c: ['1', '2', '3'],
+            {
+                a: {
+                    a: 'abc',
+                    b: [1, 2, 3],
+                    c: ['1', '2', '3'],
+                },
             },
-        })
+        )
     })
-
-    it('longer keys applied last', () => {
-        expect(
+    await t.test('longer keys applied last', () => {
+        assert.deepEqual(
             convertToNested({
                 'a.b': 2,
                 a: `{"b": 1}`,
             }),
-        ).toEqual({
-            a: {
-                b: 2,
+            {
+                a: {
+                    b: 2,
+                },
             },
-        })
+        )
     })
-
-    it('ignore empty keys', () => {
-        expect(
+    await t.test('ignore empty keys', () => {
+        assert.deepEqual(
             convertToNested(
                 {
                     NODE_ENV: 'development',
@@ -274,28 +265,27 @@ describe('convertToNested', () => {
                     transformKey: camelCase,
                 },
             ),
-        ).toEqual({
-            nodeEnv: 'development',
-        })
+            {
+                nodeEnv: 'development',
+            },
+        )
     })
 })
 
-describe('getByKey', () => {
-    it('gets value by string key', () => {
-        expect(getByKey({ a: { b: [1, { a: 10 }] } }, 'a.b.1.a')).toBe(10)
+test('getByKey', async (t) => {
+    await t.test('gets value by string key', () => {
+        assert.equal(getByKey({ a: { b: [1, { a: 10 }] } }, 'a.b.1.a'), 10)
     })
-
-    it('gets string value by key path list', () => {
-        expect(getByKey({ a: { b: [1, { a: 10 }] } }, ['a', 'b', 1, 'a'])).toBe(
+    await t.test('gets string value by key path list', () => {
+        assert.equal(
+            getByKey({ a: { b: [1, { a: 10 }] } }, ['a', 'b', 1, 'a']),
             10,
         )
     })
-
-    it('gets unknown property', () => {
-        expect(getByKey(new Date(), ['a', 'b', 1, 'a'])).toBeUndefined()
+    await t.test('gets unknown property', () => {
+        assert.equal(getByKey(new Date(), ['a', 'b', 1, 'a']), undefined)
     })
-
-    it('returns undefined when getting list property', () => {
-        expect(getByKey([1, 2, 3], 'length')).toBeUndefined()
+    await t.test('returns undefined when getting list property', () => {
+        assert.equal(getByKey([1, 2, 3], 'length'), undefined)
     })
 })

@@ -1,4 +1,4 @@
-import { hashCode, ensureArray } from '.'
+import { ensureArray, hashCode } from '.'
 
 /**
  * Creates sort callback which can be used for `array.sort` input.

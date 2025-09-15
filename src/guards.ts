@@ -53,7 +53,7 @@ export function isString<T>(value: T | string): value is string {
 export function isArray<T>(
     value: T | Array<T> | ReadonlyArray<T>,
 ): value is Array<T> {
-    return value instanceof Array
+    return Array.isArray(value)
 }
 
 /**
@@ -155,7 +155,7 @@ export function isEmpty<T>(value: T): boolean {
         return value === 0
     }
 
-    if (value instanceof Array) {
+    if (Array.isArray(value)) {
         return value.length === 0
     }
 
@@ -204,14 +204,14 @@ export function isPlainObject<T = Record<string | number | symbol, unknown>>(
 
     if (!isObject(value)) return false
 
-    const constructor = value.constructor
-    if (constructor === undefined) return true
+    const construct = value.constructor
+    if (construct === undefined) return true
 
-    const prototype = constructor.prototype
+    const prototype = construct.prototype
     if (!isObject(prototype)) return false
 
     // Checks if it is not a class
-    if (!prototype.hasOwnProperty('isPrototypeOf')) {
+    if (!Object.hasOwn(prototype, 'isPrototypeOf')) {
         return false
     }
 
@@ -254,7 +254,7 @@ export function assertNotError<T>(value: Error | T): T {
 export function ensureArray<T>(value: T | T[]): T[]
 export function ensureArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>
 export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
-    return value instanceof Array ? value : [value]
+    return Array.isArray(value) ? value : [value as T]
 }
 
 /**
@@ -282,10 +282,7 @@ export function ensureError(value: unknown): Error {
  * ```
  * @group Guard
  */
-export function hasKeys<
-    T extends unknown,
-    Key extends string | number | symbol,
->(
+export function hasKeys<T, Key extends string | number | symbol>(
     obj: T,
     keys: ReadonlyArray<Key>,
 ): obj is T extends { [K in Key]: any }

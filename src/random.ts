@@ -1,4 +1,4 @@
-import { generateRange, asciiLetters, digits, punctuation } from '.'
+import { asciiLetters, digits, generateRange, punctuation } from '.'
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive).

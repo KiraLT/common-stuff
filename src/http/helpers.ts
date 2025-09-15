@@ -1,4 +1,10 @@
-import { flatMap, ensureArray, Primitive, isNullOrUndefined, isNot } from '../'
+import {
+    ensureArray,
+    flatMap,
+    isNot,
+    isNullOrUndefined,
+    type Primitive,
+} from '../index'
 
 /**
  * Generates cookie string

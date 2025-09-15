@@ -168,7 +168,7 @@ export function merge<T>(
         ) as unknown as T
     }
 
-    if (target instanceof Array && source instanceof Array) {
+    if (Array.isArray(target) && Array.isArray(source)) {
         if (arrayPolicy === 'merge') {
             return target.concat(source) as unknown as T
         } else if (typeof arrayPolicy === 'function') {

@@ -1,14 +1,17 @@
-import { pipe, compose, curry, __, tryCatch } from '../src'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 
-describe('pipe', () => {
-    it('applies pipe', () => {
-        expect(pipe([1.5, 5.6, 6.1], (v) => v.map(Math.round))).toEqual([
-            2, 6, 6,
-        ])
+import { __, compose, curry, pipe, tryCatch } from '../src/index.ts'
+
+test('pipe', async (t) => {
+    await t.test('applies pipe', () => {
+        assert.deepEqual(
+            pipe([1.5, 5.6, 6.1], (v) => v.map(Math.round)),
+            [2, 6, 6],
+        )
     })
-
-    it('supports up to 7 functions', () => {
-        expect(
+    await t.test('supports up to 7 functions', () => {
+        assert.deepEqual(
             pipe(
                 [1.5, 5.6, 6.1],
                 (v) => v.map(Math.round),
@@ -19,91 +22,76 @@ describe('pipe', () => {
                 (v) => v,
                 (v) => v,
             ).map((v) => v.toFixed()),
-        ).toEqual(['2', '6', '6'])
+            ['2', '6', '6'],
+        )
     })
 })
 
-describe('compose', () => {
-    it('applies pipe', () => {
+test('compose', async (t) => {
+    await t.test('applies pipe', () => {
         const func = compose(
             (value) => ({ value }),
-            (value: string) => parseInt(value),
+            (value: string) => parseInt(value, 10),
         )
-        expect(func('1')).toEqual({ value: 1 })
+        assert.deepEqual(func('1'), { value: 1 })
     })
 })
 
-describe('curry', () => {
-    it('accepts one argument at the time', () => {
+test('curry', async (t) => {
+    await t.test('accepts one argument at the time', () => {
         const myFunc = (a: number, b: string, c: boolean) => a + b + c
-        expect(curry(myFunc)(5)('5')(true)).toBe('55true')
+        assert.equal(curry(myFunc)(5)('5')(true), '55true')
     })
-
-    it('accepts multiple arguments', () => {
+    await t.test('accepts multiple arguments', () => {
         const myFunc = (a: number, b: string, c: boolean) => a + b + c
-        expect(curry(myFunc)(5, '5')(true)).toBe('55true')
+        assert.equal(curry(myFunc)(5, '5')(true), '55true')
     })
-
-    it('accepts all arguments', () => {
+    await t.test('accepts all arguments', () => {
         const myFunc = (a: number, b: string, c: boolean) => a + b + c
-        expect(curry(myFunc)(5, '5', true)).toBe('55true')
+        assert.equal(curry(myFunc)(5, '5', true), '55true')
     })
-
-    it('supports placeholder', () => {
+    await t.test('supports placeholder', () => {
         const myFunc = (a: number, b: string, c: boolean) => a + b + c
-        expect(curry(myFunc)(__, '5', __)(5, true)).toBe('55true')
-        expect(curry(myFunc)(__, '5', __)(5)(true)).toBe('55true')
+        assert.equal(curry(myFunc)(__, '5', __)(5, true), '55true')
+        assert.equal(curry(myFunc)(__, '5', __)(5)(true), '55true')
     })
 })
 
-describe('tryCatch', () => {
-    it('returns value and error union', () => {
+test('tryCatch', async (t) => {
+    await t.test('returns value and error union', () => {
         const value = tryCatch(() => 'abc')
-
-        expect<string | Error>(value).toBe('abc')
+        assert.equal(value, 'abc')
     })
-
-    it('catches error', () => {
+    await t.test('catches error', () => {
         const value = tryCatch(() => {
-            if (1 < 10) {
-                throw new Error('abc')
-            }
+            const shouldThrow = true
+            if (shouldThrow) throw new Error('abc')
             return 'abc'
         })
-
-        expect<string | Error>(value).toBeInstanceOf(Error)
+        assert.ok(value instanceof Error)
     })
-
-    it('supports promise', async () => {
+    await t.test('supports promise', async () => {
         const value = tryCatch(async () => {
-            if (1 < 10) {
-                throw new Error('abc')
-            }
+            const shouldThrow = true
+            if (shouldThrow) throw new Error('abc')
             return 'abc'
         })
-
-        expect<Promise<string | Error>>(value).resolves.toBeInstanceOf(Error)
+        assert.ok((await value) instanceof Error)
     })
-
-    it('supports default value', () => {
+    await t.test('supports default value', () => {
         const value = tryCatch(() => {
-            if (1 < 10) {
-                throw new Error('abc')
-            }
+            const shouldThrow = true
+            if (shouldThrow) throw new Error('abc')
             return 'abc'
         }, 'bc')
-
-        expect<string>(value.toLocaleLowerCase()).toBe('bc')
+        assert.equal(value.toLocaleLowerCase(), 'bc')
     })
-
-    it('supports promise with default value', async () => {
+    await t.test('supports promise with default value', async () => {
         const value = tryCatch(async () => {
-            if (1 < 10) {
-                throw new Error('abc')
-            }
+            const shouldThrow = true
+            if (shouldThrow) throw new Error('abc')
             return 'abc'
         }, 'bc')
-
-        expect<Promise<string>>(value).resolves.toBe('bc')
+        assert.equal(await value, 'bc')
     })
 })

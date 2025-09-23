@@ -28,10 +28,10 @@ yarn add common-stuff
 Import what you need:
 
 ```typescript
-import { isEqual } from 'common-stuff'
+import { isEqual } from "common-stuff";
 
-if (isEqual({'a': 1}, {'a': 1})) {
-    console.log('Hello')
+if (isEqual({ a: 1 }, { a: 1 })) {
+    console.log("Hello");
 }
 ```
 
@@ -46,9 +46,9 @@ Include script from CDN and use `commonStuff` global variable:
 ```html
 <script src="https://unpkg.com/common-stuff"></script>
 <script>
-  if (commonStuff.isEqual({'a': 1}, {'a': 1})) {
-    console.log('Hello')
-  }
+    if (commonStuff.isEqual({ a: 1 }, { a: 1 })) {
+        console.log("Hello");
+    }
 </script>
 ```
 
@@ -58,20 +58,65 @@ Use [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/S
 
 ```html
 <script>
-  import('https://unpkg.com/common-stuff?module').then(({ isEqual }) => {
-    if (isEqual({'a': 1}, {'a': 1})) {
-      console.log('Hello')
-    }
-  })
+    import("https://unpkg.com/common-stuff?module").then(({ isEqual }) => {
+        if (isEqual({ a: 1 }, { a: 1 })) {
+            console.log("Hello");
+        }
+    });
 </script>
 ```
 
 ## Examples
 
+### Universal flatMap
+
+`flatMap` now works across arrays, sets, generic iterables, async iterables, maps (entries or values), and plain records, with optional async mapper support.
+
+```typescript
+import { flatMap } from "common-stuff";
+
+// Array
+flatMap([1, 2, 3], (v) => [v, v * 2]);
+// [1,2,2,4,3,6]
+
+// Set (iterable)
+flatMap(new Set([1, 2]), (v) => [v, v]);
+// [1,1,2,2]
+
+// Map (entries default)
+flatMap(new Map([[1, "a"]]), ([k, v]) => [[k, v.toUpperCase()]]);
+// [[1,'A']]
+
+// Map values mode
+flatMap(new Map([[1, "a"]]), (v) => [v.toUpperCase()], { mode: "value" });
+// ['A']
+
+// Record (object) iterated as entries
+flatMap({ a: 1, b: 2 }, ([k, v]) => (v % 2 ? [[k, v]] : []));
+// [['a',1]]
+
+// Async iterable + async mapper
+async function* gen() {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+await flatMap(gen(), async (v) => [v * 2]);
+// [2,4,6]
+```
+
 ### Using FP patterns
 
 ```typescript
-import { pipe, sortBy, deduplicateBy, chunk, ensureArray, groupBy } from 'common-stuff'
+import {
+    pipe,
+    sortBy,
+    deduplicateBy,
+    chunk,
+    ensureArray,
+    groupBy,
+    reduce,
+} from "common-stuff";
 
 const result = pipe(
     [{ value: 4 }, { value: 6 }, { value: 8 }],
@@ -80,8 +125,16 @@ const result = pipe(
     (v) => v.map((o) => ensureArray(o.value)),
     (v) => chunk(v, 2),
     (v) => groupBy(v, (o) => o.length)
-)
+);
 // [ [1, [[[ 8 ]]]],[ 2, [[[ 4 ], [ 6 ]]]] ]
+
+// Using reduce with async iterable
+async function* gen() {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+const total = await reduce(gen(), (a, b) => a + b); // 6
 ```
 
 > With arrow functions you can easily use `pipe` with any function
@@ -97,35 +150,38 @@ CONFIG__ALLOWED_IPS='["127.0.0.1", "localhost"]'
 ```
 
 ```typescript
-import { convertToNested, camelCase } from 'common-stuff'
+import { convertToNested, camelCase } from "common-stuff";
 
 const config = convertToNested(process.env, {
-    separator: '__',
-    transformKey: camelCase
-}).config
+    separator: "__",
+    transformKey: camelCase,
+}).config;
 // { privateKey: 'my key', publicKey: 'my key', allowedIps: ['127.0.0.1', 'localhost'] }
 ```
 
 ### Using Http errors
 
 ```typescript
-import { HttpError, HttpStatusCodes } from 'common-stuff'
+import { HttpError, HttpStatusCodes } from "common-stuff";
 
-app.get('/', function (req, res) {
-    throw new HttpError(HttpStatusCodes.INTERNAL_SERVER_ERROR, 'Some secret error message')
-})
+app.get("/", function (req, res) {
+    throw new HttpError(
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        "Some secret error message"
+    );
+});
 
 // Handle unknown errors
 app.use(function (err, req, res, next) {
     if (err instanceof HttpError) {
         // Log full error message
-        console.error(err.message)
+        console.error(err.message);
 
         // Return safe error message without private details
-        return res.status(err.status).send(err.publicMessage)
+        return res.status(err.status).send(err.publicMessage);
     }
-    next()
-})
+    next();
+});
 ```
 
 > This example returns 500 error message with text `Internal Server Error` and logs private message to console.
@@ -134,13 +190,13 @@ app.use(function (err, req, res, next) {
 ### Common browser helpers
 
 ```typescript
-import { parseCookies, generateCookie, parseQueryString } from 'common-stuff'
+import { parseCookies, generateCookie, parseQueryString } from "common-stuff";
 
-parseCookies(document.cookie)
+parseCookies(document.cookie);
 // {session: '26e761be168533cbf0742f8c295176c7'}
 
-document.cookie = generateCookie('name', 'John', { expires: 7 })
+document.cookie = generateCookie("name", "John", { expires: 7 });
 
-parseQueryString(location.search)
+parseQueryString(location.search);
 // { page: ['1'], limit: ['20']}
 ```

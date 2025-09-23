@@ -294,3 +294,71 @@ export function hasKeys<T, Key extends string | number | symbol>(
 
     return false
 }
+
+/**
+ * Checks if value is `AsyncIterable`, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isAsyncIterable((async function* () { yield 5 })())
+ * // true
+ * isAsyncIterable([1, 2, 3])
+ * // false
+ * ```
+ */
+export function isAsyncIterable<T = unknown>(
+    v: unknown,
+): v is AsyncIterable<T> {
+    return (
+        !!v &&
+        typeof (v as { [Symbol.asyncIterator]?: unknown })[
+            Symbol.asyncIterator
+        ] === 'function'
+    )
+}
+
+/**
+ * Checks if value is `Iterable`, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isIterable([1, 2, 3])
+ * // true
+ * isIterable((async function* () { yield 5 })())
+ * // false
+ * ```
+ */
+export function isIterable<T = unknown>(v: unknown): v is Iterable<T> {
+    return (
+        !!v &&
+        typeof (v as { [Symbol.iterator]?: unknown })[Symbol.iterator] ===
+            'function'
+    )
+}
+
+/**
+ * Checks if value is `Promise`, acts as a typescript safeguard.
+ *
+ * * @group Guard
+ * @example
+ * ```
+ * isPromise(Promise.resolve(5))
+ * // true
+ * isPromise(5)
+ * // false
+ * ```
+ */
+export function isPromise<T>(v: T | Promise<T>): v is Promise<T> {
+    if (typeof Promise !== 'undefined') {
+        return v instanceof Promise
+    }
+
+    return (
+        !!v &&
+        (typeof v === 'object' || typeof v === 'function') &&
+        'then' in (v as { then?: unknown }) &&
+        typeof (v as { then?: unknown }).then === 'function'
+    )
+}

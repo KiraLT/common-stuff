@@ -1,4 +1,4 @@
-import { isPlainObject } from '.'
+import { isPlainObject } from './guards.ts'
 
 /**
  * Compares two values.
@@ -19,7 +19,7 @@ export function isEqual(a: unknown, b: unknown): boolean {
         return a.getTime() === b.getTime()
     }
 
-    if (a instanceof Array && b instanceof Array) {
+    if (Array.isArray(a) && Array.isArray(b)) {
         if (a.length !== b.length) {
             return false
         }
@@ -203,7 +203,7 @@ export function clone<T>(value: T, recursive = true): T {
         ) as unknown as T
     }
 
-    if (value instanceof Array) {
+    if (Array.isArray(value)) {
         return value.map((v) => (recursive ? clone(v) : v)) as T
     }
 
@@ -307,7 +307,7 @@ export function getByKey<T>(
     target: unknown,
     keys: (string | number)[] | string,
 ): T {
-    const keysList = keys instanceof Array ? keys : keys.split('.')
+    const keysList = Array.isArray(keys) ? keys : keys.split('.')
     const key = keysList[0]
     const restKeys = keysList.slice(1)
 
@@ -315,10 +315,10 @@ export function getByKey<T>(
         return target as T
     }
 
-    if (target instanceof Array) {
+    if (Array.isArray(target)) {
         const numKey = parseInt(key.toString(), 10)
 
-        return isNaN(numKey)
+        return Number.isNaN(numKey)
             ? (undefined as T)
             : getByKey(target[numKey], restKeys)
     }

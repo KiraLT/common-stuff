@@ -1,4 +1,4 @@
-import { findIndex } from '.'
+import { findIndex } from './array.ts'
 
 /**
  * Converts bytes number to string representation (e.g. `15.25 GB`).
@@ -18,7 +18,7 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
 
     const i = Math.floor(Math.log(bytes) / Math.log(k))
 
-    return parseFloat((bytes / k ** i).toFixed(dm)) + ' ' + sizes[i]
+    return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`
 }
 
 /**

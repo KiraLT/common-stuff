@@ -1,4 +1,4 @@
-import { HttpStatusCodes, HttpStatusReasons } from './codes'
+import { HttpStatusCodes, HttpStatusReasons } from './codes.ts'
 
 const codeToReason = Object.entries(HttpStatusCodes).reduce(
     (prev, [key, value]) => {

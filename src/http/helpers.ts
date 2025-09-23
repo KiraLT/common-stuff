@@ -1,10 +1,6 @@
-import {
-    ensureArray,
-    flatMap,
-    isNot,
-    isNullOrUndefined,
-    type Primitive,
-} from '../index'
+import { flatMap } from '../array.ts'
+import { ensureArray, isNot, isNullOrUndefined } from '../guards.ts'
+import type { Primitive } from '../types.ts'
 
 /**
  * Generates cookie string

@@ -29,7 +29,7 @@ export function hashCode(value: unknown): number {
 export function generateUUID(): string {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         var r = (Math.random() * 16) | 0,
-            v = c == 'x' ? r : (r & 0x3) | 0x8
+            v = c === 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
     })
 }
@@ -86,9 +86,9 @@ export function base64Encode(input: string): string {
         const enc2 = ((chr1 & 3) << 4) | (chr2 >> 4)
         let enc3 = ((chr2 & 15) << 2) | (chr3 >> 6)
         let enc4 = chr3 & 63
-        if (isNaN(chr2)) {
+        if (Number.isNaN(chr2)) {
             enc3 = enc4 = 64
-        } else if (isNaN(chr3)) {
+        } else if (Number.isNaN(chr3)) {
             enc4 = 64
         }
         output =

@@ -1,9 +1,10 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
         "target": "es6",
         "lib": ["es6", "dom", "ESNext"],
-        "module": "esnext",
-        "moduleResolution": "bundler",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
         "declaration": true,
         "outDir": "./dist",
         "rootDir": "./src",
@@ -12,7 +13,8 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedIndexedAccess": true,
         "esModuleInterop": true,
-        "erasableSyntaxOnly": true
+        "erasableSyntaxOnly": true,
+        "rewriteRelativeImportExtensions": true
     },
-    "include": ["./src/**/*"]
+    "include": ["./src/**/*.ts"]
 }

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { debounce, delay, throttle } from '../src'
+import { debounce, delay, throttle } from '../src/index.ts'
 
 type MockFn<Args extends unknown[] = unknown[], R = void> = ((
     ...args: Args
@@ -60,7 +60,7 @@ test('debounce', async (t) => {
 
         await delay(110)
         assert.equal(mock.mock.calls.length, 1)
-        assert.equal(mock.mock.calls[0][0], 3)
+        assert.equal(mock.mock.calls[0]?.[0], 3)
     })
 
     await t.test('supports async function', async () => {
@@ -79,7 +79,7 @@ test('debounce', async (t) => {
         await delay(110)
 
         assert.equal(mock.mock.calls.length, 1)
-        assert.equal(mock.mock.calls[0][0], 'it works')
+        assert.equal(mock.mock.calls[0]?.[0], 'it works')
     })
 })
 

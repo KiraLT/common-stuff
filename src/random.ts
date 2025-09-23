@@ -1,4 +1,5 @@
-import { asciiLetters, digits, generateRange, punctuation } from '.'
+import { generateRange } from './array.ts'
+import { asciiLetters, digits, punctuation } from './string.ts'
 
 /**
  * Returns a random integer between min (inclusive) and max (inclusive).

@@ -1,4 +1,5 @@
-import { ensureArray, hashCode } from '.'
+import { hashCode } from './encoding.ts'
+import { ensureArray } from './guards.ts'
 
 /**
  * Creates sort callback which can be used for `array.sort` input.
@@ -35,7 +36,7 @@ export function sortByCb<T>(
                 return doCompare(keyA.getTime(), keyB.getTime())
             }
 
-            if (keyA instanceof Array && keyB instanceof Array) {
+            if (Array.isArray(keyA) && Array.isArray(keyB)) {
                 const res = keyA
                     .map((v, i) => doCompare(v, keyB[i]))
                     .filter((v) => v !== 0)
@@ -188,7 +189,7 @@ export function generateRange(
  * // [[2], [4], [6], [8]]
  * ```
  * @group Array
- * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
  * @param array any array
  * @param callback A function that accepts up to three arguments. The flatMap method calls the callback function one time for each element in the array.
  */
@@ -266,7 +267,7 @@ type FlatArray<Arr, Depth extends number> = {
  * // [1, 2, 3, 4, 5, 6]
  * ```
  * @group Array
- * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
  * @param depth The maximum recursion depth
  */
 export function flatten<A extends unknown[], D extends number = 1>(
@@ -286,7 +287,7 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
     if (d > 0) {
         return array.reduce<unknown[]>(
             (acc, val) =>
-                acc.concat(val instanceof Array ? flatten(val, d - 1) : val),
+                acc.concat(Array.isArray(val) ? flatten(val, d - 1) : val),
             [],
         ) as FlatArray<A, D>[]
     }
@@ -601,7 +602,7 @@ export function includesAll<T, T2>(
  * const index = findIndex(obj, v => v.name = 'abc')
  * // 0
  * ```
- * @param predicate find calls predicate once for each element of the array, in ascending
+ * @param compare find calls predicate once for each element of the array, in ascending
  * order, until it finds one where predicate returns true. If such an element is found,
  * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
  * @group Array

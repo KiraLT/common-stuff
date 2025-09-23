@@ -1,4 +1,4 @@
-import { hashCode } from '.'
+import { hashCode } from './encoding.ts'
 
 /**
  * Caches the result of a function call by its arguments.

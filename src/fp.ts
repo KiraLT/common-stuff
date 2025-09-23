@@ -1,4 +1,4 @@
-import { ensureError } from '.'
+import { ensureError } from './guards.ts'
 
 class Placeholder {
     __PLACEHOLDER__ = '__PLACEHOLDER__'

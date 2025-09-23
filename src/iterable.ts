@@ -1,4 +1,4 @@
-import { isAsyncIterable, isIterable, isPromise } from './guards'
+import { isAsyncIterable, isIterable, isPromise } from './guards.ts'
 
 /**
  * Reduces values of an iterable (Array, Set, Iterable, AsyncIterable) into a single value using the provided reducer function.

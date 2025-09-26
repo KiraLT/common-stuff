@@ -23,7 +23,8 @@
     "type": "module",
     "types": "./dist/index.d.ts",
     "source": "./src/index.ts",
-    "main": "./dist/index.js",
+    "exports": "./dist/index.js",
+    "sideEffects": false,
     "scripts": {
         "test": "node --test --experimental-test-coverage --test-reporter=spec \"spec/**/*.spec.ts\"",
         "test-cov": "node --test --experimental-test-coverage --test-reporter-destination=lcov.info --test-reporter=lcov \"spec/**/*.spec.ts\"",

@@ -4,7 +4,6 @@
         "target": "es6",
         "lib": ["es6", "dom", "ESNext"],
         "module": "nodenext",
-        "moduleResolution": "nodenext",
         "declaration": true,
         "outDir": "./dist",
         "rootDir": "./src",

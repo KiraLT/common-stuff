@@ -311,11 +311,20 @@ export function isAsyncIterable<T = unknown>(
     v: unknown,
 ): v is AsyncIterable<T> {
     return (
+        typeof Symbol !== 'undefined' &&
         !!v &&
         typeof (v as { [Symbol.asyncIterator]?: unknown })[
             Symbol.asyncIterator
         ] === 'function'
     )
+}
+
+export async function* toAsyncIterable<T>(
+    iterable: Iterable<T>,
+): AsyncIterable<T> {
+    for (const item of iterable) {
+        yield item
+    }
 }
 
 /**
@@ -332,6 +341,7 @@ export function isAsyncIterable<T = unknown>(
  */
 export function isIterable<T = unknown>(v: unknown): v is Iterable<T> {
     return (
+        typeof Symbol !== 'undefined' &&
         !!v &&
         typeof (v as { [Symbol.iterator]?: unknown })[Symbol.iterator] ===
             'function'
@@ -361,4 +371,12 @@ export function isPromise<T>(v: T | Promise<T>): v is Promise<T> {
         'then' in (v as { then?: unknown }) &&
         typeof (v as { then?: unknown }).then === 'function'
     )
+}
+
+export function isSet<T = unknown>(v: unknown): v is Set<T> {
+    return v instanceof Set
+}
+
+export function isMap<K = unknown, V = unknown>(v: unknown): v is Map<K, V> {
+    return v instanceof Map
 }

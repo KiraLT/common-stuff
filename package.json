@@ -45,7 +45,7 @@
     "homepage": "https://github.com/KiraLT/common-stuff#readme",
     "devDependencies": {
         "@biomejs/biome": "2.2.4",
-        "@types/node": "^24.5.2",
+        "@types/node": "^24.12.2",
         "typedoc": "^0.28.13",
         "typescript": "^5.9.2"
     },

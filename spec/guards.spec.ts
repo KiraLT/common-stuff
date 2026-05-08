@@ -7,16 +7,22 @@ import {
     ensureError,
     hasKeys,
     isArray,
+    isAsyncIterable,
     isBoolean,
     isEmpty,
     isError,
+    isIterable,
+    isMap,
     isNot,
     isNull,
     isNullOrUndefined,
     isNumber,
     isPlainObject,
+    isPromise,
+    isSet,
     isString,
     isUndefined,
+    toAsyncIterable,
 } from '../src/index.ts'
 
 test('isPlainObject', async (t) => {
@@ -188,5 +194,61 @@ test('assertNotError', async (t) => {
     })
     await t.test('throws value if error', () => {
         assert.throws(() => assertNotError(new Error('abc')), /abc/)
+    })
+})
+
+test('isSet', async (t) => {
+    await t.test('checks if is Set', () => {
+        assert.equal(isSet(new Set([1, 2])), true)
+        assert.equal(isSet([1, 2] as unknown), false)
+        assert.equal(isSet(null as unknown), false)
+    })
+})
+
+test('isMap', async (t) => {
+    await t.test('checks if is Map', () => {
+        assert.equal(isMap(new Map()), true)
+        assert.equal(isMap({} as unknown), false)
+        assert.equal(isMap(null as unknown), false)
+    })
+})
+
+test('isPromise', async (t) => {
+    await t.test('checks if is Promise', () => {
+        assert.equal(isPromise(Promise.resolve(5)), true)
+        assert.equal(isPromise(5 as unknown as Promise<number>), false)
+        assert.equal(isPromise({} as unknown as Promise<unknown>), false)
+    })
+})
+
+test('isIterable', async (t) => {
+    await t.test('checks if is iterable', () => {
+        assert.equal(isIterable([1, 2, 3]), true)
+        assert.equal(isIterable(new Set([1])), true)
+        assert.equal(isIterable('abc'), true)
+        assert.equal(isIterable({} as unknown), false)
+        assert.equal(isIterable(null as unknown), false)
+        assert.equal(isIterable(42 as unknown), false)
+    })
+})
+
+test('isAsyncIterable', async (t) => {
+    await t.test('checks if is async iterable', () => {
+        async function* gen() {
+            yield 1
+        }
+        assert.equal(isAsyncIterable(gen()), true)
+        assert.equal(isAsyncIterable([1, 2, 3] as unknown), false)
+        assert.equal(isAsyncIterable(null as unknown), false)
+    })
+})
+
+test('toAsyncIterable', async (t) => {
+    await t.test('wraps iterable as async iterable', async () => {
+        const out: number[] = []
+        for await (const v of toAsyncIterable([1, 2, 3])) {
+            out.push(v)
+        }
+        assert.deepEqual(out, [1, 2, 3])
     })
 })

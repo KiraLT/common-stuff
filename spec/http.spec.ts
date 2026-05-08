@@ -120,6 +120,9 @@ test('parseCookies', async (t) => {
     await t.test('parses cookie string', () => {
         assert.deepEqual(parseCookies('%3D=%3D'), { '=': '=' })
     })
+    await t.test('strips wrapping quotes from value', () => {
+        assert.deepEqual(parseCookies('a="b"'), { a: 'b' })
+    })
 })
 
 test('encodeHtml', async (t) => {

@@ -83,4 +83,17 @@ test('outdent', async (t) => {
             ['function test() {', "    console.log('test')", '}'].join('\n'),
         )
     })
+    await t.test('returns empty string for blank-only template', () => {
+        assert.equal(outdent`   `, '')
+        assert.equal(outdent``, '')
+    })
+    await t.test('interpolates values', () => {
+        const name = 'world'
+        const n = 42
+        const text = outdent`
+            hello ${name}
+            count ${n}
+        `
+        assert.equal(text, 'hello world\ncount 42')
+    })
 })

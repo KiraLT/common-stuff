@@ -1,4 +1,3 @@
-import { flatMap } from '../array.ts'
 import { ensureArray, isNot, isNullOrUndefined } from '../guards.ts'
 import type { Primitive } from '../types.ts'
 
@@ -119,11 +118,10 @@ export function parseQueryString(
 ): Record<string, string[]> {
     const { separator = '&' } = options ?? {}
 
-    return flatMap(
-        (query[0] === '?' ? query.slice(1) : query)
-            .split(separator)
-            .filter((part) => part.indexOf('=') !== -1),
-        (part) => {
+    return (query[0] === '?' ? query.slice(1) : query)
+        .split(separator)
+        .filter((part) => part.indexOf('=') !== -1)
+        .flatMap((part) => {
             const [key = '', value = ''] = part.split('=', 2)
 
             if (key) {
@@ -136,14 +134,14 @@ export function parseQueryString(
             }
 
             return []
-        },
-    ).reduce<Record<string, string[]>>(
-        (prev, [key, value]) => ({
-            ...prev,
-            [key]: [...(prev[key] || []), ...value],
-        }),
-        {},
-    )
+        })
+        .reduce<Record<string, string[]>>(
+            (prev, [key, value]) => ({
+                ...prev,
+                [key]: [...(prev[key] || []), ...value],
+            }),
+            {},
+        )
 }
 
 /**
@@ -169,16 +167,18 @@ export function generateQueryString(
     },
 ): string {
     const { separator = '&' } = options ?? {}
-    return flatMap(Object.entries(query), ([key, values]) =>
-        ensureArray(values)
-            .filter(isNot(isNullOrUndefined))
-            .map(
-                (v) =>
-                    `${encodeURIComponent(key.toString())}=${encodeURIComponent(
-                        v.toString(),
-                    ).replace(/%20/g, '+')}`,
-            ),
-    ).join(separator)
+    return Object.entries(query)
+        .flatMap(([key, values]) =>
+            ensureArray(values)
+                .filter(isNot(isNullOrUndefined))
+                .map(
+                    (v) =>
+                        `${encodeURIComponent(key.toString())}=${encodeURIComponent(
+                            v.toString(),
+                        ).replace(/%20/g, '+')}`,
+                ),
+        )
+        .join(separator)
 }
 
 /**

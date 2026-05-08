@@ -19,6 +19,9 @@ test('formatBytes', async (t) => {
     await t.test('support decimals', () => {
         assert.equal(formatBytes(1688, 1), '1.6 KB')
     })
+    await t.test('clamps negative decimals to 0', () => {
+        assert.equal(formatBytes(1688, -1), '2 KB')
+    })
     await t.test('just works', () => {
         assert.equal(formatBytes(1648 * 9884), '15.53 MB')
     })

@@ -7,7 +7,6 @@ import {
     deduplicateBy,
     difference,
     findIndex,
-    flatMap,
     flatten,
     generateRange,
     groupBy,
@@ -88,22 +87,6 @@ test('generateRange', async (t) => {
         assert.deepEqual(generateRange(8, 2, 2), [])
         assert.deepEqual(generateRange(1, 5, -1), [])
         assert.deepEqual(generateRange(1, 5, -2), [])
-    })
-})
-
-test('flatMap', async (t) => {
-    await t.test('flattens response', () => {
-        assert.deepEqual(
-            flatMap([1, 2, 3, 4], (x) => [x * 2]),
-            [2, 4, 6, 8],
-        )
-    })
-
-    await t.test('only one level is flattened', () => {
-        assert.deepEqual(
-            flatMap([1, 2, 3, 4], (x) => [[x * 2]]),
-            [[2], [4], [6], [8]],
-        )
     })
 })
 

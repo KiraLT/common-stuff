@@ -8,10 +8,58 @@ import {
     isSet,
 } from './guards.ts'
 
-type AnyRecord = Record<PropertyKey, unknown>
-
 // biome-ignore lint/suspicious/noExplicitAny: required for overload implementation variance
 type AnyFn = (...args: any[]) => any
+
+/**
+ * Awaits all promises in the array if any is found, otherwise returns the array as-is.
+ * Lets a single code path handle both sync and async callback returns.
+ */
+function resolveAll<T>(
+    values: ReadonlyArray<T | Promise<T>>,
+): T[] | Promise<T[]> {
+    return values.some(isPromise) ? Promise.all(values) : (values as T[])
+}
+
+/**
+ * Materializes any sync iterable structure into an array of items.
+ * For Maps and plain objects the items are `[key, value]` entries.
+ */
+function toItems(input: unknown): unknown[] {
+    if (isArray(input)) return input
+    if (isSet(input)) return Array.from(input)
+    if (isMap(input)) return Array.from(input)
+    if (isIterable(input)) return Array.from(input)
+    if (isPlainObject(input)) return Object.entries(input)
+    throw new TypeError('Provided source is not iterable')
+}
+
+/**
+ * Returns the index of the first element where `predicate` returns truthy, or `-1`.
+ * Switches to async mode automatically when `predicate` returns a Promise.
+ */
+function findIndexMaybeAsync(
+    items: ReadonlyArray<unknown>,
+    predicate: (value: unknown, index: number) => unknown,
+): number | Promise<number> {
+    for (let i = 0; i < items.length; i++) {
+        const r = predicate(items[i], i)
+        if (isPromise(r)) return continueAsync(i, r)
+        if (r) return i
+    }
+    return -1
+
+    async function continueAsync(
+        idx: number,
+        currentResult: Promise<unknown>,
+    ): Promise<number> {
+        if (await currentResult) return idx
+        for (let i = idx + 1; i < items.length; i++) {
+            if (await predicate(items[i], i)) return i
+        }
+        return -1
+    }
+}
 
 /**
  * Reduces values of an iterable (Array, Set, Iterable, AsyncIterable) into a single value using the provided reducer function.
@@ -152,26 +200,39 @@ export function reduce(
  * * `Set` → `Set`
  * * `Map` → `Map` (mapper receives and returns `[key, value]`)
  * * `Record` → `Record` (mapper receives and returns `[key, value]`)
- * * `Iterable` → lazy `Iterable`
+ * * `Iterable` → lazy `Iterable` (eagerly resolved when mapper is async)
  * * `AsyncIterable` → lazy `AsyncIterable` (mapper may be async)
+ *
+ * When the mapper returns a `Promise`, the function returns a `Promise` of the resulting container.
  *
  * @example
  * ```ts
- * map([1, 2, 3], v => v * 2) // [2, 4, 6]
- * map(new Set([1, 2]), v => v + 1) // Set { 2, 3 }
- * map(new Map([['a', 1]]), ([k, v]) => [k, v + 1]) // Map { 'a' => 2 }
- * map({ a: 1, b: 2 }, ([k, v]) => [k, v * 2]) // { a: 2, b: 4 }
+ * map([1, 2, 3], v => v * 2)            // [2, 4, 6]
+ * await map([1, 2, 3], async v => v*2)  // [2, 4, 6] (Promise)
+ * map(new Set([1, 2]), v => v + 1)      // Set { 2, 3 }
  * ```
  * @group Iterable
  */
+export function map<V, R>(
+    input: V[],
+    mapper: (value: V, index: number) => Promise<R>,
+): Promise<R[]>
 export function map<V, R>(
     input: V[],
     mapper: (value: V, index: number) => R,
 ): R[]
 export function map<K, V, K2, V2>(
     input: Map<K, V>,
+    mapper: (value: [K, V], index: number) => Promise<[K2, V2]>,
+): Promise<Map<K2, V2>>
+export function map<K, V, K2, V2>(
+    input: Map<K, V>,
     mapper: (value: [K, V], index: number) => [K2, V2],
 ): Map<K2, V2>
+export function map<T, R>(
+    input: Set<T>,
+    mapper: (value: T, index: number) => Promise<R>,
+): Promise<Set<R>>
 export function map<T, R>(
     input: Set<T>,
     mapper: (value: T, index: number) => R,
@@ -180,6 +241,10 @@ export function map<T, R>(
     input: AsyncIterable<T>,
     mapper: (value: T, index: number) => R | Promise<R>,
 ): AsyncIterable<R>
+export function map<T, R>(
+    input: Iterable<T>,
+    mapper: (value: T, index: number) => Promise<R>,
+): Promise<Iterable<R>>
 export function map<T, R>(
     input: Iterable<T>,
     mapper: (value: T, index: number) => R,
@@ -191,33 +256,105 @@ export function map<
     V2,
 >(
     input: Record<K, V>,
+    mapper: (value: [K, V], index: number) => Promise<[K2, V2]>,
+): Promise<Record<K2, V2>>
+export function map<
+    K extends PropertyKey,
+    V,
+    K2 extends PropertyKey,
+    V2,
+>(
+    input: Record<K, V>,
     mapper: (value: [K, V], index: number) => [K2, V2],
 ): Record<K2, V2>
 export function map(input: unknown, mapper: AnyFn): unknown {
-    return flatMap(input as Iterable<unknown>, ((value: unknown, index: number) => [
-        mapper(value, index),
-    ]) as AnyFn)
+    if (isAsyncIterable(input)) {
+        return (async function* () {
+            let i = 0
+            for await (const value of input) {
+                yield await mapper(value, i++)
+            }
+        })()
+    }
+
+    if (isArray(input)) {
+        const results = input.map(mapper)
+        return resolveAll(results)
+    }
+
+    if (isSet(input)) {
+        const results = Array.from(input).map(mapper)
+        const resolved = resolveAll(results)
+        return isPromise(resolved)
+            ? resolved.then((r) => new Set(r))
+            : new Set(resolved)
+    }
+
+    if (isMap(input)) {
+        const results = Array.from(input).map(mapper)
+        const resolved = resolveAll(results)
+        return isPromise(resolved)
+            ? resolved.then(
+                  (entries) =>
+                      new Map(entries as Iterable<[unknown, unknown]>),
+              )
+            : new Map(resolved as Iterable<[unknown, unknown]>)
+    }
+
+    if (isIterable(input)) {
+        const results = Array.from(input).map(mapper)
+        const resolved = resolveAll(results)
+        if (isPromise(resolved)) return resolved
+        return (function* () {
+            for (const v of resolved) yield v
+        })()
+    }
+
+    if (isPlainObject(input)) {
+        const entries = Object.entries(input).map(mapper)
+        const resolved = resolveAll(entries)
+        return isPromise(resolved)
+            ? resolved.then((es) =>
+                  Object.fromEntries(es as Iterable<[PropertyKey, unknown]>),
+              )
+            : Object.fromEntries(resolved as Iterable<[PropertyKey, unknown]>)
+    }
+
+    throw new TypeError('Provided source is not iterable')
 }
 
 /**
  * Maps each element to an iterable, then flattens one level — preserving the original container type.
  *
+ * When the mapper returns a `Promise`, the function returns a `Promise` of the resulting container.
+ *
  * @example
  * ```ts
  * flatMap([1, 2, 3], v => [v, v]) // [1, 1, 2, 2, 3, 3]
- * flatMap(new Set([1, 2]), v => [v, v + 10]) // Set { 1, 11, 2, 12 }
- * flatMap({ a: 1 }, ([k, v]) => [[k, v], [k + '!', v + 1]]) // { a: 1, 'a!': 2 }
+ * await flatMap([1, 2], async v => [v, v + 10]) // [1, 11, 2, 12]
  * ```
  * @group Iterable
  */
+export function flatMap<V, R>(
+    input: V[],
+    mapper: (value: V, index: number) => Promise<Iterable<R>>,
+): Promise<R[]>
 export function flatMap<V, R>(
     input: V[],
     mapper: (value: V, index: number) => Iterable<R>,
 ): R[]
 export function flatMap<K, V, K2, V2>(
     input: Map<K, V>,
+    mapper: (value: [K, V], index: number) => Promise<Iterable<[K2, V2]>>,
+): Promise<Map<K2, V2>>
+export function flatMap<K, V, K2, V2>(
+    input: Map<K, V>,
     mapper: (value: [K, V], index: number) => Iterable<[K2, V2]>,
 ): Map<K2, V2>
+export function flatMap<T, R>(
+    input: Set<T>,
+    mapper: (value: T, index: number) => Promise<Iterable<R>>,
+): Promise<Set<R>>
 export function flatMap<T, R>(
     input: Set<T>,
     mapper: (value: T, index: number) => Iterable<R>,
@@ -234,8 +371,21 @@ export function flatMap<T, R>(
 ): AsyncIterable<R>
 export function flatMap<T, R>(
     input: Iterable<T>,
+    mapper: (value: T, index: number) => Promise<Iterable<R>>,
+): Promise<Iterable<R>>
+export function flatMap<T, R>(
+    input: Iterable<T>,
     mapper: (value: T, index: number) => Iterable<R>,
 ): Iterable<R>
+export function flatMap<
+    K extends PropertyKey,
+    V,
+    K2 extends PropertyKey,
+    V2,
+>(
+    input: Record<K, V>,
+    mapper: (value: [K, V], index: number) => Promise<Iterable<[K2, V2]>>,
+): Promise<Record<K2, V2>>
 export function flatMap<
     K extends PropertyKey,
     V,
@@ -246,40 +396,6 @@ export function flatMap<
     mapper: (value: [K, V], index: number) => Iterable<[K2, V2]>,
 ): Record<K2, V2>
 export function flatMap(input: unknown, mapper: AnyFn): unknown {
-    if (isArray(input)) {
-        const out: unknown[] = []
-        let i = 0
-        for (const value of input) {
-            for (const inner of mapper(value, i++) as Iterable<unknown>) {
-                out.push(inner)
-            }
-        }
-        return out
-    }
-
-    if (isSet(input)) {
-        const out = new Set<unknown>()
-        let i = 0
-        for (const value of input) {
-            for (const inner of mapper(value, i++) as Iterable<unknown>) {
-                out.add(inner)
-            }
-        }
-        return out
-    }
-
-    if (isMap(input)) {
-        const out = new Map<unknown, unknown>()
-        let i = 0
-        for (const entry of input) {
-            const inners = mapper(entry, i++) as Iterable<[unknown, unknown]>
-            for (const inner of inners) {
-                out.set(inner[0], inner[1])
-            }
-        }
-        return out
-    }
-
     if (isAsyncIterable(input)) {
         return (async function* () {
             let i = 0
@@ -298,43 +414,74 @@ export function flatMap(input: unknown, mapper: AnyFn): unknown {
         })()
     }
 
-    if (isIterable(input)) {
-        return (function* () {
-            let i = 0
-            for (const value of input) {
-                for (const inner of mapper(value, i++) as Iterable<unknown>) {
-                    yield inner
-                }
-            }
-        })()
-    }
+    const items = toItems(input)
+    const mapped = items.map(mapper)
+    const resolved = resolveAll(mapped)
 
-    if (isPlainObject(input)) {
-        const out: AnyRecord = {}
-        let i = 0
-        for (const entry of Object.entries(input)) {
-            const inners = mapper(entry, i++) as Iterable<[PropertyKey, unknown]>
-            for (const inner of inners) {
-                out[inner[0]] = inner[1]
-            }
+    const flatten = (groups: ReadonlyArray<unknown>): unknown[] => {
+        const out: unknown[] = []
+        for (const group of groups) {
+            for (const inner of group as Iterable<unknown>) out.push(inner)
         }
         return out
     }
 
-    throw new TypeError('Provided source is not iterable')
+    if (isArray(input)) {
+        return isPromise(resolved)
+            ? resolved.then((g) => flatten(g))
+            : flatten(resolved)
+    }
+
+    if (isSet(input)) {
+        return isPromise(resolved)
+            ? resolved.then((g) => new Set(flatten(g)))
+            : new Set(flatten(resolved))
+    }
+
+    if (isMap(input)) {
+        return isPromise(resolved)
+            ? resolved.then(
+                  (g) =>
+                      new Map(flatten(g) as Iterable<[unknown, unknown]>),
+              )
+            : new Map(flatten(resolved) as Iterable<[unknown, unknown]>)
+    }
+
+    if (isIterable(input)) {
+        if (isPromise(resolved)) return resolved.then((g) => flatten(g))
+        return (function* () {
+            for (const v of flatten(resolved)) yield v
+        })()
+    }
+
+    // Plain object (Record)
+    return isPromise(resolved)
+        ? resolved.then((g) =>
+              Object.fromEntries(
+                  flatten(g) as Iterable<[PropertyKey, unknown]>,
+              ),
+          )
+        : Object.fromEntries(
+              flatten(resolved) as Iterable<[PropertyKey, unknown]>,
+          )
 }
 
 /**
  * Filters an iterable structure preserving the original container type.
  *
+ * When the predicate returns a `Promise`, the function returns a `Promise` of the resulting container.
+ *
  * @example
  * ```ts
- * filter([1, 2, 3, 4], v => v % 2 === 0) // [2, 4]
- * filter(new Map([['a', 1], ['b', 2]]), ([, v]) => v > 1) // Map { 'b' => 2 }
- * filter({ a: 1, b: 2 }, ([, v]) => v > 1) // { b: 2 }
+ * filter([1, 2, 3, 4], v => v % 2 === 0)            // [2, 4]
+ * await filter([1, 2, 3], async v => v > 1)          // [2, 3]
  * ```
  * @group Iterable
  */
+export function filter<V>(
+    input: V[],
+    predicate: (value: V, index: number) => Promise<boolean>,
+): Promise<V[]>
 export function filter<V, R extends V>(
     input: V[],
     predicate: (value: V, index: number) => value is R,
@@ -345,8 +492,16 @@ export function filter<V>(
 ): V[]
 export function filter<K, V>(
     input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<Map<K, V>>
+export function filter<K, V>(
+    input: Map<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
 ): Map<K, V>
+export function filter<T>(
+    input: Set<T>,
+    predicate: (value: T, index: number) => Promise<boolean>,
+): Promise<Set<T>>
 export function filter<T, R extends T>(
     input: Set<T>,
     predicate: (value: T, index: number) => value is R,
@@ -361,35 +516,21 @@ export function filter<T>(
 ): AsyncIterable<T>
 export function filter<T>(
     input: Iterable<T>,
+    predicate: (value: T, index: number) => Promise<boolean>,
+): Promise<Iterable<T>>
+export function filter<T>(
+    input: Iterable<T>,
     predicate: (value: T, index: number) => boolean,
 ): Iterable<T>
+export function filter<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<Record<K, V>>
 export function filter<K extends PropertyKey, V>(
     input: Record<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
 ): Record<K, V>
 export function filter(input: unknown, predicate: AnyFn): unknown {
-    if (isArray(input)) {
-        return input.filter((v, i) => Boolean(predicate(v, i)))
-    }
-
-    if (isSet(input)) {
-        const out = new Set<unknown>()
-        let i = 0
-        for (const value of input) {
-            if (predicate(value, i++)) out.add(value)
-        }
-        return out
-    }
-
-    if (isMap(input)) {
-        const out = new Map<unknown, unknown>()
-        let i = 0
-        for (const entry of input) {
-            if (predicate(entry, i++)) out.set(entry[0], entry[1])
-        }
-        return out
-    }
-
     if (isAsyncIterable(input)) {
         return (async function* () {
             let i = 0
@@ -399,42 +540,81 @@ export function filter(input: unknown, predicate: AnyFn): unknown {
         })()
     }
 
+    const items = toItems(input)
+    const decisions = items.map(predicate)
+    const resolved = resolveAll(decisions)
+
+    const select = (kept: ReadonlyArray<unknown>): unknown[] =>
+        items.filter((_, i) => Boolean(kept[i]))
+
+    if (isArray(input)) {
+        return isPromise(resolved)
+            ? resolved.then((d) => select(d))
+            : select(resolved)
+    }
+
+    if (isSet(input)) {
+        return isPromise(resolved)
+            ? resolved.then((d) => new Set(select(d)))
+            : new Set(select(resolved))
+    }
+
+    if (isMap(input)) {
+        return isPromise(resolved)
+            ? resolved.then(
+                  (d) =>
+                      new Map(select(d) as Iterable<[unknown, unknown]>),
+              )
+            : new Map(select(resolved) as Iterable<[unknown, unknown]>)
+    }
+
     if (isIterable(input)) {
+        if (isPromise(resolved)) return resolved.then((d) => select(d))
         return (function* () {
-            let i = 0
-            for (const value of input) {
-                if (predicate(value, i++)) yield value
-            }
+            for (const v of select(resolved)) yield v
         })()
     }
 
-    if (isPlainObject(input)) {
-        const out: AnyRecord = {}
-        let i = 0
-        for (const entry of Object.entries(input)) {
-            if (predicate(entry, i++)) out[entry[0]] = entry[1]
-        }
-        return out
-    }
-
-    throw new TypeError('Provided source is not iterable')
+    // Plain object (Record)
+    return isPromise(resolved)
+        ? resolved.then((d) =>
+              Object.fromEntries(
+                  select(d) as Iterable<[PropertyKey, unknown]>,
+              ),
+          )
+        : Object.fromEntries(
+              select(resolved) as Iterable<[PropertyKey, unknown]>,
+          )
 }
 
 /**
  * Iterates each element of an iterable structure, calling `fn` for side effects.
  *
- * Returns `Promise<void>` for `AsyncIterable` inputs, `void` otherwise.
+ * Returns `Promise<void>` for `AsyncIterable` inputs and when `fn` returns a `Promise`,
+ * `void` otherwise. Sequential ordering is preserved with async callbacks.
  *
  * @group Iterable
  */
+export function forEach<V>(
+    input: V[],
+    fn: (value: V, index: number) => Promise<void>,
+): Promise<void>
 export function forEach<V>(
     input: V[],
     fn: (value: V, index: number) => void,
 ): void
 export function forEach<K, V>(
     input: Map<K, V>,
+    fn: (value: [K, V], index: number) => Promise<void>,
+): Promise<void>
+export function forEach<K, V>(
+    input: Map<K, V>,
     fn: (value: [K, V], index: number) => void,
 ): void
+export function forEach<T>(
+    input: Set<T>,
+    fn: (value: T, index: number) => Promise<void>,
+): Promise<void>
 export function forEach<T>(
     input: Set<T>,
     fn: (value: T, index: number) => void,
@@ -445,8 +625,16 @@ export function forEach<T>(
 ): Promise<void>
 export function forEach<T>(
     input: Iterable<T>,
+    fn: (value: T, index: number) => Promise<void>,
+): Promise<void>
+export function forEach<T>(
+    input: Iterable<T>,
     fn: (value: T, index: number) => void,
 ): void
+export function forEach<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    fn: (value: [K, V], index: number) => Promise<void>,
+): Promise<void>
 export function forEach<K extends PropertyKey, V>(
     input: Record<K, V>,
     fn: (value: [K, V], index: number) => void,
@@ -455,38 +643,40 @@ export function forEach(input: unknown, fn: AnyFn): unknown {
     if (isAsyncIterable(input)) {
         return (async () => {
             let i = 0
-            for await (const value of input) {
-                await fn(value, i++)
-            }
+            for await (const value of input) await fn(value, i++)
         })()
     }
 
-    if (isIterable(input)) {
-        let i = 0
-        for (const value of input) {
-            fn(value, i++)
-        }
-        return
+    const items = toItems(input)
+    for (let i = 0; i < items.length; i++) {
+        const r = fn(items[i], i)
+        if (isPromise(r)) return continueAsync(r, i + 1)
     }
+    return undefined
 
-    if (isPlainObject(input)) {
-        let i = 0
-        for (const entry of Object.entries(input)) {
-            fn(entry, i++)
+    async function continueAsync(
+        currentResult: Promise<unknown>,
+        nextIdx: number,
+    ): Promise<void> {
+        await currentResult
+        for (let i = nextIdx; i < items.length; i++) {
+            await fn(items[i], i)
         }
-        return
     }
-
-    throw new TypeError('Provided source is not iterable')
 }
 
 /**
  * Returns the first element matching the predicate, or `undefined` if none match.
  *
- * Returns `Promise` for `AsyncIterable` inputs.
+ * Returns `Promise` when input is an `AsyncIterable` or the predicate returns a `Promise`.
+ * Sequential evaluation with short-circuit when the predicate is async.
  *
  * @group Iterable
  */
+export function find<V>(
+    input: V[],
+    predicate: (value: V, index: number) => Promise<boolean>,
+): Promise<V | undefined>
 export function find<V, R extends V>(
     input: V[],
     predicate: (value: V, index: number) => value is R,
@@ -497,8 +687,16 @@ export function find<V>(
 ): V | undefined
 export function find<K, V>(
     input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<[K, V] | undefined>
+export function find<K, V>(
+    input: Map<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
 ): [K, V] | undefined
+export function find<T>(
+    input: Set<T>,
+    predicate: (value: T, index: number) => Promise<boolean>,
+): Promise<T | undefined>
 export function find<T, R extends T>(
     input: Set<T>,
     predicate: (value: T, index: number) => value is R,
@@ -513,8 +711,16 @@ export function find<T>(
 ): Promise<T | undefined>
 export function find<T>(
     input: Iterable<T>,
+    predicate: (value: T, index: number) => Promise<boolean>,
+): Promise<T | undefined>
+export function find<T>(
+    input: Iterable<T>,
     predicate: (value: T, index: number) => boolean,
 ): T | undefined
+export function find<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<[K, V] | undefined>
 export function find<K extends PropertyKey, V>(
     input: Record<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
@@ -530,31 +736,25 @@ export function find(input: unknown, predicate: AnyFn): unknown {
         })()
     }
 
-    if (isIterable(input)) {
-        let i = 0
-        for (const value of input) {
-            if (predicate(value, i++)) return value
-        }
-        return undefined
+    const items = toItems(input)
+    const idx = findIndexMaybeAsync(items, predicate)
+    if (isPromise(idx)) {
+        return idx.then((i) => (i === -1 ? undefined : items[i]))
     }
-
-    if (isPlainObject(input)) {
-        let i = 0
-        for (const entry of Object.entries(input)) {
-            if (predicate(entry, i++)) return entry
-        }
-        return undefined
-    }
-
-    throw new TypeError('Provided source is not iterable')
+    return idx === -1 ? undefined : items[idx]
 }
 
 /**
  * Returns `true` if at least one element matches the predicate.
- * Returns a `Promise` for `AsyncIterable` inputs.
+ *
+ * Returns a `Promise` when input is an `AsyncIterable` or the predicate returns a `Promise`.
  *
  * @group Iterable
  */
+export function some<K, V>(
+    input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<boolean>
 export function some<K, V>(
     input: Map<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
@@ -565,8 +765,16 @@ export function some<T>(
 ): Promise<boolean>
 export function some<V>(
     input: V[] | Set<V> | Iterable<V>,
+    predicate: (value: V, index: number) => Promise<boolean>,
+): Promise<boolean>
+export function some<V>(
+    input: V[] | Set<V> | Iterable<V>,
     predicate: (value: V, index: number) => boolean,
 ): boolean
+export function some<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<boolean>
 export function some<K extends PropertyKey, V>(
     input: Record<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
@@ -582,31 +790,23 @@ export function some(input: unknown, predicate: AnyFn): unknown {
         })()
     }
 
-    if (isIterable(input)) {
-        let i = 0
-        for (const value of input) {
-            if (predicate(value, i++)) return true
-        }
-        return false
-    }
-
-    if (isPlainObject(input)) {
-        let i = 0
-        for (const entry of Object.entries(input)) {
-            if (predicate(entry, i++)) return true
-        }
-        return false
-    }
-
-    throw new TypeError('Provided source is not iterable')
+    const items = toItems(input)
+    const idx = findIndexMaybeAsync(items, predicate)
+    if (isPromise(idx)) return idx.then((i) => i !== -1)
+    return idx !== -1
 }
 
 /**
  * Returns `true` if every element matches the predicate (vacuously true for empty inputs).
- * Returns a `Promise` for `AsyncIterable` inputs.
+ *
+ * Returns a `Promise` when input is an `AsyncIterable` or the predicate returns a `Promise`.
  *
  * @group Iterable
  */
+export function every<K, V>(
+    input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<boolean>
 export function every<K, V>(
     input: Map<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
@@ -617,8 +817,16 @@ export function every<T>(
 ): Promise<boolean>
 export function every<V>(
     input: V[] | Set<V> | Iterable<V>,
+    predicate: (value: V, index: number) => Promise<boolean>,
+): Promise<boolean>
+export function every<V>(
+    input: V[] | Set<V> | Iterable<V>,
     predicate: (value: V, index: number) => boolean,
 ): boolean
+export function every<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<boolean>
 export function every<K extends PropertyKey, V>(
     input: Record<K, V>,
     predicate: (value: [K, V], index: number) => boolean,
@@ -634,23 +842,14 @@ export function every(input: unknown, predicate: AnyFn): unknown {
         })()
     }
 
-    if (isIterable(input)) {
-        let i = 0
-        for (const value of input) {
-            if (!predicate(value, i++)) return false
-        }
-        return true
+    const items = toItems(input)
+    const negated = (v: unknown, i: number) => {
+        const r = predicate(v, i)
+        return isPromise(r) ? r.then((b) => !b) : !r
     }
-
-    if (isPlainObject(input)) {
-        let i = 0
-        for (const entry of Object.entries(input)) {
-            if (!predicate(entry, i++)) return false
-        }
-        return true
-    }
-
-    throw new TypeError('Provided source is not iterable')
+    const idx = findIndexMaybeAsync(items, negated)
+    if (isPromise(idx)) return idx.then((i) => i === -1)
+    return idx === -1
 }
 
 /**

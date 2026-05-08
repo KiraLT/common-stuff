@@ -43,6 +43,23 @@ test('base64Decode', async (t) => {
             'rtėęrfgt58įė9įėš+ė*-は个',
         )
     })
+    await t.test('round-trip: ASCII', () => {
+        const s = 'hello world'
+        assert.equal(base64Decode(base64Encode(s)), s)
+    })
+    await t.test('round-trip: empty', () => {
+        assert.equal(base64Encode(''), '')
+        assert.equal(base64Decode(''), '')
+    })
+    await t.test('round-trip: unicode', () => {
+        const s = '日本語 🎉 emoji'
+        assert.equal(base64Decode(base64Encode(s)), s)
+    })
+    await t.test('round-trip: every length mod 3', () => {
+        for (const s of ['a', 'ab', 'abc', 'abcd']) {
+            assert.equal(base64Decode(base64Encode(s)), s)
+        }
+    })
 })
 
 test('generateUUID', async (t) => {

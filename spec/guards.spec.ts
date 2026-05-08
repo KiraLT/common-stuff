@@ -219,6 +219,14 @@ test('isPromise', async (t) => {
         assert.equal(isPromise(5 as unknown as Promise<number>), false)
         assert.equal(isPromise({} as unknown as Promise<unknown>), false)
     })
+    await t.test('rejects thenable that is not a real Promise', () => {
+        // biome-ignore lint/suspicious/noThenProperty: deliberate thenable for guard test
+        const thenable = { then() {} }
+        assert.equal(
+            isPromise(thenable as unknown as Promise<unknown>),
+            false,
+        )
+    })
 })
 
 test('isIterable', async (t) => {

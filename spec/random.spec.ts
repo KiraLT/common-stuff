@@ -41,6 +41,24 @@ test('shuffle', async (t) => {
         assert.notDeepEqual(shuffled, value)
         assert.deepEqual([...shuffle(value)].sort(), value.slice().sort())
     })
+    await t.test('does not modify original', () => {
+        const value = [1, 2, 3, 4, 5]
+        const snapshot = value.slice()
+        shuffle(value)
+        assert.deepEqual(value, snapshot)
+    })
+    await t.test('empty array returns empty', () => {
+        assert.deepEqual(shuffle([]), [])
+    })
+})
+
+test('randomChoice edge cases', async (t) => {
+    await t.test('returns undefined for empty array', () => {
+        assert.equal(randomChoice([]), undefined)
+    })
+    await t.test('single-element array always returns that element', () => {
+        assert.equal(randomChoice([42]), 42)
+    })
 })
 
 test('randomString', async (t) => {

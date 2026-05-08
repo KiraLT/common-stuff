@@ -16,6 +16,12 @@ test('truncate', async (t) => {
         assert.equal(truncate('Hello world', 8), 'Hello...')
         assert.equal(truncate('Hello', 8), 'Hello')
     })
+    await t.test('supports custom ending', () => {
+        assert.equal(truncate('Hello world', 8, '…'), 'Hello w…')
+    })
+    await t.test('exact-length input is unchanged', () => {
+        assert.equal(truncate('Hello', 5), 'Hello')
+    })
 })
 
 test('extractWords', async (t) => {

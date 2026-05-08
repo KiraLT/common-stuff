@@ -1,4 +1,16 @@
 /**
+ * A function decorated with a `.cancel()` method that aborts pending invocations.
+ *
+ * @group Async
+ */
+export type Cancellable<F extends (...args: never[]) => unknown> = F & {
+    /**
+     * Cancels any pending invocation. Calls already in flight are unaffected.
+     */
+    cancel(): void
+}
+
+/**
  * Returns a promise that resolves after the specified number of milliseconds.
  *
  * @group Async
@@ -24,11 +36,14 @@ export function delay(
  * Creates and returns a new debounced version of the passed function that will postpone its execution
  * until after wait milliseconds have elapsed since the last time it was invoked.
  *
+ * The returned function exposes `.cancel()` to discard a pending trailing call.
+ *
  * @group Async
  * @example
  * ```
  * const debounced = debounce(() => console.log('debounced'), 100)
  * debounced() // will be called after 100ms
+ * debounced.cancel() // discard the pending call
  * ```
  */
 export function debounce<A extends unknown[]>(
@@ -40,19 +55,31 @@ export function debounce<A extends unknown[]>(
      * The number of milliseconds to delay.
      */
     timeInMs: number,
-): (this: unknown, ...args: A) => void {
-    let timer: ReturnType<typeof setTimeout>
-    return function () {
-        const args = arguments as unknown as A
-        clearTimeout(timer)
+): Cancellable<(this: unknown, ...args: A) => void> {
+    let timer: ReturnType<typeof setTimeout> | undefined
+
+    function debounced(this: unknown, ...args: A): void {
+        if (timer !== undefined) clearTimeout(timer)
         timer = setTimeout(() => {
+            timer = undefined
             func.apply(this, args)
         }, timeInMs)
     }
+
+    debounced.cancel = (): void => {
+        if (timer !== undefined) {
+            clearTimeout(timer)
+            timer = undefined
+        }
+    }
+
+    return debounced
 }
 
 /**
  * Creates a throttled function that will execute `func` at most once per `timeInMs` interval.
+ *
+ * The returned function exposes `.cancel()` to discard the pending trailing call.
  *
  * @group Async
  * @example
@@ -88,7 +115,7 @@ export function throttle<A extends unknown[]>(
          */
         trailing?: boolean
     },
-): (this: unknown, ...args: A) => void {
+): Cancellable<(this: unknown, ...args: A) => void> {
     let lastCallTime: number | undefined
     let timer: ReturnType<typeof setTimeout> | undefined
     let lastArgs: A
@@ -96,9 +123,8 @@ export function throttle<A extends unknown[]>(
 
     const { leading = true, trailing = true } = options ?? {}
 
-    return function () {
+    function throttled(this: unknown, ...args: A): void {
         const now = Date.now()
-        const args = arguments as unknown as A
         lastArgs = args
         lastThis = this
 
@@ -109,10 +135,10 @@ export function throttle<A extends unknown[]>(
             lastCallTime !== undefined &&
             now - lastCallTime >= timeInMs
         ) {
-            clearTimeout(timer)
+            if (timer !== undefined) clearTimeout(timer)
             lastCallTime = now
             func.apply(lastThis, lastArgs)
-        } else if (trailing && !timer) {
+        } else if (trailing && timer === undefined) {
             timer = setTimeout(
                 () => {
                     lastCallTime = now
@@ -125,4 +151,14 @@ export function throttle<A extends unknown[]>(
             )
         }
     }
+
+    throttled.cancel = (): void => {
+        if (timer !== undefined) {
+            clearTimeout(timer)
+            timer = undefined
+        }
+        lastCallTime = undefined
+    }
+
+    return throttled
 }

@@ -105,25 +105,25 @@ test('flatten', async (t) => {
 })
 
 test('groupBy', async (t) => {
-    await t.test('groups by number', () => {
+    await t.test('groups by number (insertion order)', () => {
         assert.deepEqual(groupBy([6.1, 4.2, 6.3], Math.floor), [
-            [4, [4.2]],
             [6, [6.1, 6.3]],
+            [4, [4.2]],
         ])
     })
 
-    await t.test('groups by multiple conditions', () => {
+    await t.test('groups by multiple conditions (insertion order)', () => {
         assert.deepEqual(
             groupBy(['one', 'two', 'three'], (v) => [
                 v.length,
                 v.includes('a'),
             ]),
             [
-                [[5, false], ['three']],
                 [
                     [3, false],
                     ['one', 'two'],
                 ],
+                [[5, false], ['three']],
             ],
         )
     })
@@ -216,6 +216,12 @@ test('chunk', async (t) => {
         ])
         assert.deepEqual(chunk([1, 2, 3], 2), [[1, 2], [3]])
         assert.deepEqual(chunk([], 2), [])
+    })
+    await t.test('size 1 yields singleton chunks', () => {
+        assert.deepEqual(chunk([1, 2, 3], 1), [[1], [2], [3]])
+    })
+    await t.test('size larger than length yields one chunk', () => {
+        assert.deepEqual(chunk([1, 2], 10), [[1, 2]])
     })
 })
 

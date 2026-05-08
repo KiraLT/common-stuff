@@ -651,6 +651,109 @@ test('async no-match return paths', async (t) => {
     })
 })
 
+test('promise support on sync iterables', async (t) => {
+    await t.test('map array with async mapper returns Promise<R[]>', async () => {
+        const result = map([1, 2, 3], async (v) => v * 2)
+        assert.ok(result instanceof Promise)
+        assert.deepEqual(await result, [2, 4, 6])
+    })
+
+    await t.test('map set with async mapper returns Promise<Set<R>>', async () => {
+        const result = map(new Set([1, 2, 3]), async (v) => v * 2)
+        assert.ok(result instanceof Promise)
+        const out = await result
+        assert.ok(out instanceof Set)
+        assert.deepEqual([...out], [2, 4, 6])
+    })
+
+    await t.test('map map with async mapper returns Promise<Map>', async () => {
+        const result = map(
+            new Map([['a', 1]]),
+            async ([k, v]) => [k.toUpperCase(), v * 2] as [string, number],
+        )
+        assert.ok(result instanceof Promise)
+        const out = await result
+        assert.ok(out instanceof Map)
+        assert.deepEqual([...out.entries()], [['A', 2]])
+    })
+
+    await t.test('map record with async mapper returns Promise<Record>', async () => {
+        const result = map({ a: 1 }, async ([k, v]) => [k, v * 2] as [string, number])
+        assert.ok(result instanceof Promise)
+        assert.deepEqual(await result, { a: 2 })
+    })
+
+    await t.test('flatMap with async mapper', async () => {
+        const result = flatMap([1, 2], async (v) => [v, v + 10])
+        assert.ok(result instanceof Promise)
+        assert.deepEqual(await result, [1, 11, 2, 12])
+    })
+
+    await t.test('filter array with async predicate', async () => {
+        const result = filter([1, 2, 3, 4], async (v) => v % 2 === 0)
+        assert.ok(result instanceof Promise)
+        assert.deepEqual(await result, [2, 4])
+    })
+
+    await t.test('filter set with async predicate', async () => {
+        const result = filter(new Set([1, 2, 3]), async (v) => v > 1)
+        const out = await result
+        assert.ok(out instanceof Set)
+        assert.deepEqual([...out], [2, 3])
+    })
+
+    await t.test('forEach array with async fn returns Promise<void>', async () => {
+        const seen: number[] = []
+        const result = forEach([1, 2, 3], async (v) => {
+            seen.push(v)
+        })
+        assert.ok(result instanceof Promise)
+        await result
+        assert.deepEqual(seen, [1, 2, 3])
+    })
+
+    await t.test('forEach is sequential with async fn', async () => {
+        const seen: number[] = []
+        await forEach([1, 2, 3], async (v) => {
+            await Promise.resolve()
+            seen.push(v)
+        })
+        assert.deepEqual(seen, [1, 2, 3])
+    })
+
+    await t.test('find with async predicate', async () => {
+        const result = find([1, 2, 3, 4], async (v) => v > 2)
+        assert.ok(result instanceof Promise)
+        assert.equal(await result, 3)
+    })
+
+    await t.test('find async returns undefined when no match', async () => {
+        const result = find([1, 2, 3], async (v) => v > 99)
+        assert.equal(await result, undefined)
+    })
+
+    await t.test('some with async predicate short-circuits', async () => {
+        let count = 0
+        const result = await some([1, 2, 3, 4], async (v) => {
+            count++
+            return v === 2
+        })
+        assert.equal(result, true)
+        assert.equal(count, 2)
+    })
+
+    await t.test('every with async predicate', async () => {
+        assert.equal(
+            await every([2, 4, 6], async (v) => v % 2 === 0),
+            true,
+        )
+        assert.equal(
+            await every([2, 3, 4], async (v) => v % 2 === 0),
+            false,
+        )
+    })
+})
+
 test('plain object branches for find/some/every', async (t) => {
     await t.test('find returns undefined when nothing matches record', () => {
         assert.equal(

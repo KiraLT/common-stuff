@@ -1,38 +1,61 @@
 import { isPlainObject } from './guards.ts'
 
 /**
- * Compares two values.
+ * Compares two values structurally.
  *
- * Supported types: all primitives, `null`, `undefined`, `array`, `object`, `Date`
+ * Supported types: all primitives (including `NaN === NaN`), `null`, `undefined`,
+ * `Array`, plain `object`, `Date`, `RegExp`, `Set`, `Map`.
  *
  * @group Object
  * @param a any value to compare
  * @param b any value to compare
- * @returns `true` if values are equal
+ * @returns `true` if values are structurally equal
  */
 export function isEqual(a: unknown, b: unknown): boolean {
     if (a === b) {
         return true
     }
 
+    if (typeof a === 'number' && typeof b === 'number') {
+        return Number.isNaN(a) && Number.isNaN(b)
+    }
+
     if (a instanceof Date && b instanceof Date) {
         return a.getTime() === b.getTime()
     }
 
-    if (Array.isArray(a) && Array.isArray(b)) {
-        if (a.length !== b.length) {
-            return false
-        }
+    if (a instanceof RegExp && b instanceof RegExp) {
+        return a.source === b.source && a.flags === b.flags
+    }
 
+    if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length) return false
         return a.every((v, i) => isEqual(v, b[i]))
+    }
+
+    if (a instanceof Set && b instanceof Set) {
+        if (a.size !== b.size) return false
+        const bArr = Array.from(b)
+        return Array.from(a).every(
+            (v) => b.has(v) || bArr.some((candidate) => isEqual(v, candidate)),
+        )
+    }
+
+    if (a instanceof Map && b instanceof Map) {
+        if (a.size !== b.size) return false
+        const bEntries = Array.from(b)
+        return Array.from(a).every(([k, v]) =>
+            b.has(k)
+                ? isEqual(v, b.get(k))
+                : bEntries.some(
+                      ([k2, v2]) => isEqual(k, k2) && isEqual(v, v2),
+                  ),
+        )
     }
 
     if (isPlainObject(a) && isPlainObject(b)) {
         const entriesA = Object.entries(a)
-
-        if (entriesA.length !== Object.keys(b).length) {
-            return false
-        }
+        if (entriesA.length !== Object.keys(b).length) return false
         return entriesA.every(([k, v]) => isEqual(v, b[k]))
     }
 

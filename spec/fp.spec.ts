@@ -35,6 +35,14 @@ test('compose', async (t) => {
         )
         assert.deepEqual(func('1'), { value: 1 })
     })
+    await t.test('composes right-to-left with multiple functions', () => {
+        const f = compose(
+            (n: number) => n + 1,
+            (n: number) => n * 2,
+            (n: number) => n - 3,
+        )
+        assert.equal(f(10), (10 - 3) * 2 + 1)
+    })
 })
 
 test('curry', async (t) => {
@@ -93,5 +101,30 @@ test('tryCatch', async (t) => {
             return 'abc'
         }, 'bc')
         assert.equal(await value, 'bc')
+    })
+    await t.test('catches rejected Promise (not thrown)', async () => {
+        const value = tryCatch(() => Promise.reject(new Error('rejected')))
+        assert.ok((await value) instanceof Error)
+    })
+    await t.test('default value can differ in type', () => {
+        const value = tryCatch(
+            () => {
+                throw new Error('x')
+            },
+            null as null,
+        )
+        assert.equal(value, null)
+    })
+    await t.test('wraps non-Error throw values', () => {
+        const value = tryCatch(() => {
+            throw 'not-an-error'
+        })
+        assert.ok(value instanceof Error)
+        assert.equal((value as Error).message, 'not-an-error')
+    })
+    await t.test('returns Promise-of-result for async callback', async () => {
+        const result = tryCatch(async () => 42)
+        assert.ok(result instanceof Promise)
+        assert.equal(await result, 42)
     })
 })

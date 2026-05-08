@@ -1,4 +1,3 @@
-import { hashCode } from './encoding.ts'
 import { ensureArray } from './guards.ts'
 
 /**
@@ -295,23 +294,18 @@ export function groupBy<T, G>(
     array: ReadonlyArray<T>,
     keyCallback: (value: T) => G,
 ): [G, T[]][] {
-    return Object.values(
-        array.reduce(
-            (prev, cur) => {
-                const key = keyCallback(cur)
-                const keyHash = hashCode(keyCallback(cur))
-
-                if (keyHash in prev) {
-                    prev[keyHash]?.[1].push(cur)
-                } else {
-                    prev[keyHash] = [key, [cur]]
-                }
-
-                return prev
-            },
-            {} as Record<number, [G, T[]]>,
-        ),
-    )
+    const groups = array.reduce((acc, cur) => {
+        const key = keyCallback(cur)
+        const keyId = JSON.stringify(key)
+        const existing = acc.get(keyId)
+        if (existing) {
+            existing[1].push(cur)
+        } else {
+            acc.set(keyId, [key, [cur]])
+        }
+        return acc
+    }, new Map<string, [G, T[]]>())
+    return Array.from(groups.values())
 }
 
 /**

@@ -58,6 +58,89 @@ test('isEqual', async (t) => {
             false,
         )
     })
+
+    await t.test('compares NaN as equal', () => {
+        assert.equal(isEqual(Number.NaN, Number.NaN), true)
+        assert.equal(isEqual({ a: Number.NaN }, { a: Number.NaN }), true)
+        assert.equal(isEqual([Number.NaN, 1], [Number.NaN, 1]), true)
+    })
+
+    await t.test('NaN unequal to other numbers', () => {
+        assert.equal(isEqual(Number.NaN, 1), false)
+        assert.equal(isEqual(1, Number.NaN), false)
+    })
+
+    await t.test('compares RegExp by source and flags', () => {
+        assert.equal(isEqual(/abc/g, /abc/g), true)
+        assert.equal(isEqual(/abc/g, /abc/i), false)
+        assert.equal(isEqual(/abc/, /abd/), false)
+    })
+
+    await t.test('compares Sets', () => {
+        assert.equal(isEqual(new Set([1, 2, 3]), new Set([3, 2, 1])), true)
+        assert.equal(isEqual(new Set([1, 2]), new Set([1, 2, 3])), false)
+        assert.equal(isEqual(new Set([1, 2]), new Set([1, 3])), false)
+    })
+
+    await t.test('compares Sets with object members structurally', () => {
+        assert.equal(
+            isEqual(new Set([{ a: 1 }]), new Set([{ a: 1 }])),
+            true,
+        )
+        assert.equal(
+            isEqual(new Set([{ a: 1 }]), new Set([{ a: 2 }])),
+            false,
+        )
+    })
+
+    await t.test('compares Maps', () => {
+        const a = new Map<string, number>([
+            ['a', 1],
+            ['b', 2],
+        ])
+        const b = new Map<string, number>([
+            ['b', 2],
+            ['a', 1],
+        ])
+        assert.equal(isEqual(a, b), true)
+        assert.equal(
+            isEqual(a, new Map<string, number>([['a', 1]])),
+            false,
+        )
+        assert.equal(
+            isEqual(
+                a,
+                new Map<string, number>([
+                    ['a', 1],
+                    ['b', 9],
+                ]),
+            ),
+            false,
+        )
+    })
+
+    await t.test('compares Maps with object keys structurally', () => {
+        assert.equal(
+            isEqual(
+                new Map([[{ id: 1 }, 'x']]),
+                new Map([[{ id: 1 }, 'x']]),
+            ),
+            true,
+        )
+        assert.equal(
+            isEqual(
+                new Map([[{ id: 1 }, 'x']]),
+                new Map([[{ id: 1 }, 'y']]),
+            ),
+            false,
+        )
+    })
+
+    await t.test('different types are not equal', () => {
+        assert.equal(isEqual([], {}), false)
+        assert.equal(isEqual(new Set([1]), [1]), false)
+        assert.equal(isEqual(new Map(), {}), false)
+    })
 })
 
 test('mapRecord', async (t) => {
@@ -133,6 +216,22 @@ test('merge', async (t) => {
         assert.deepEqual(merge({ a: 1 }, { a: null }, { skipNulls: true }), {
             a: 1,
         })
+    })
+    await t.test('skipNulls also skips undefined source values', () => {
+        assert.deepEqual(
+            merge(
+                { a: 1, b: 2 },
+                { a: undefined, b: 3 },
+                { skipNulls: true },
+            ),
+            { a: 1, b: 3 },
+        )
+    })
+    await t.test('without skipNulls, null overwrites', () => {
+        assert.deepEqual(merge({ a: 1 }, { a: null }), { a: null })
+    })
+    await t.test('non-objects: source wins', () => {
+        assert.equal(merge(1 as unknown, 2 as unknown), 2)
     })
 })
 
@@ -287,5 +386,15 @@ test('getByKey', async (t) => {
     })
     await t.test('returns undefined when getting list property', () => {
         assert.equal(getByKey([1, 2, 3], 'length'), undefined)
+    })
+    await t.test('empty key path returns target as-is', () => {
+        const t = { a: 1 }
+        assert.equal(getByKey(t, []), t)
+    })
+    await t.test('non-numeric index on array returns undefined', () => {
+        assert.equal(getByKey([1, 2, 3], 'foo'), undefined)
+    })
+    await t.test('missing key returns undefined', () => {
+        assert.equal(getByKey({ a: { b: 1 } }, 'a.c'), undefined)
     })
 })

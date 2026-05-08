@@ -118,30 +118,27 @@ export function parseQueryString(
 ): Record<string, string[]> {
     const { separator = '&' } = options ?? {}
 
-    return (query[0] === '?' ? query.slice(1) : query)
-        .split(separator)
-        .filter((part) => part.indexOf('=') !== -1)
-        .flatMap((part) => {
-            const [key = '', value = ''] = part.split('=', 2)
-
-            if (key) {
-                return [
-                    [
-                        decodeURIComponent(key),
-                        [decodeURIComponent(value.replace(/\+/g, ' '))],
-                    ],
-                ] as const
+    const body = query[0] === '?' ? query.slice(1) : query
+    return body.split(separator).reduce<Record<string, string[]>>(
+        (acc, part) => {
+            const eqIdx = part.indexOf('=')
+            if (eqIdx === -1) return acc
+            const rawKey = part.slice(0, eqIdx)
+            if (!rawKey) return acc
+            const key = decodeURIComponent(rawKey)
+            const value = decodeURIComponent(
+                part.slice(eqIdx + 1).replace(/\+/g, ' '),
+            )
+            const existing = acc[key]
+            if (existing) {
+                existing.push(value)
+            } else {
+                acc[key] = [value]
             }
-
-            return []
-        })
-        .reduce<Record<string, string[]>>(
-            (prev, [key, value]) => ({
-                ...prev,
-                [key]: [...(prev[key] || []), ...value],
-            }),
-            {},
-        )
+            return acc
+        },
+        {},
+    )
 }
 
 /**

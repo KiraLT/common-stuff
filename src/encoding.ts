@@ -1,10 +1,12 @@
+// biome-ignore lint/suspicious/noExplicitAny: feature detection on globalThis
+const _global = globalThis as any
+
 /**
  * Generates hash of given value
  */
 export function hashCode(value: unknown): number {
     const jsonString = JSON.stringify(value || '')
     let hash = 0
-    if (jsonString.length === 0) hash
     for (let i = 0; i < jsonString.length; i++) {
         const chr = jsonString.charCodeAt(i)
         hash = (hash << 5) - hash + chr
@@ -14,11 +16,11 @@ export function hashCode(value: unknown): number {
 }
 
 /**
- * Generates v4 like [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier) (Universally unique identifier).
+ * Generates v4 [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier).
  *
- * > Be aware that UUID uniqueness relies heavily on the underlying random number generator (RNG).
- * > The solution above uses Math.random() for brevity, however Math.random() is not guaranteed to be a high-quality RNG.
- * > For a more robust solution, consider using the [uuid](https://github.com/uuidjs/uuid) module, which uses higher quality RNG APIs.
+ * Uses `crypto.randomUUID()` when available (modern Node, browsers, workers) for
+ * cryptographically strong randomness. Falls back to a `Math.random()`-based
+ * implementation in environments without it.
  *
  * @example
  * ```
@@ -27,9 +29,12 @@ export function hashCode(value: unknown): number {
  * ```
  **/
 export function generateUUID(): string {
+    if (typeof _global.crypto?.randomUUID === 'function') {
+        return _global.crypto.randomUUID()
+    }
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-        var r = (Math.random() * 16) | 0,
-            v = c === 'x' ? r : (r & 0x3) | 0x8
+        const r = (Math.random() * 16) | 0
+        const v = c === 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
     })
 }
@@ -39,49 +44,51 @@ const keyStr =
 
 /**
  * Decodes [Base64](https://en.wikipedia.org/wiki/Base64) encoded value.
+ *
+ * Uses `Buffer` (Node) or `atob` (browsers) when available, falling back to a
+ * portable JS implementation.
  */
 export function base64Decode(input: string): string {
-    let output = ''
-    let i = 0
-
-    input = input.replace(/[^A-Za-z0-9+/=]/g, '')
-
-    while (i < input.length) {
-        const enc1 = keyStr.indexOf(input.charAt(i++))
-        const enc2 = keyStr.indexOf(input.charAt(i++))
-        const enc3 = keyStr.indexOf(input.charAt(i++))
-        const enc4 = keyStr.indexOf(input.charAt(i++))
-
-        const chr1 = (enc1 << 2) | (enc2 >> 4)
-        const chr2 = ((enc2 & 15) << 4) | (enc3 >> 2)
-        const chr3 = ((enc3 & 3) << 6) | enc4
-
-        output = output + String.fromCharCode(chr1)
-
-        if (enc3 !== 64) {
-            output = output + String.fromCharCode(chr2)
-        }
-        if (enc4 !== 64) {
-            output = output + String.fromCharCode(chr3)
-        }
+    if (typeof _global.Buffer !== 'undefined') {
+        return _global.Buffer.from(input, 'base64').toString('utf-8')
     }
-
-    output = decodeUTF8(output)
-
-    return output
+    if (typeof _global.atob === 'function') {
+        const binary = _global.atob(input.replace(/[^A-Za-z0-9+/=]/g, ''))
+        const bytes = new Uint8Array(binary.length)
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i)
+        return new TextDecoder('utf-8').decode(bytes)
+    }
+    return base64DecodeFallback(input)
 }
 
 /**
  * Encodes given value with [Base64](https://en.wikipedia.org/wiki/Base64) algorithm.
+ *
+ * Uses `Buffer` (Node) or `btoa` (browsers) when available, falling back to a
+ * portable JS implementation.
  */
 export function base64Encode(input: string): string {
+    if (typeof _global.Buffer !== 'undefined') {
+        return _global.Buffer.from(input, 'utf-8').toString('base64')
+    }
+    if (typeof _global.btoa === 'function') {
+        const bytes = new TextEncoder().encode(input)
+        let binary = ''
+        for (let i = 0; i < bytes.length; i++)
+            binary += String.fromCharCode(bytes[i] as number)
+        return _global.btoa(binary)
+    }
+    return base64EncodeFallback(input)
+}
+
+function base64EncodeFallback(input: string): string {
     let output = ''
     let i = 0
-    input = encodeUTF8(input)
-    while (i < input.length) {
-        const chr1 = input.charCodeAt(i++)
-        const chr2 = input.charCodeAt(i++)
-        const chr3 = input.charCodeAt(i++)
+    const utf8 = encodeUTF8(input)
+    while (i < utf8.length) {
+        const chr1 = utf8.charCodeAt(i++)
+        const chr2 = utf8.charCodeAt(i++)
+        const chr3 = utf8.charCodeAt(i++)
         const enc1 = chr1 >> 2
         const enc2 = ((chr1 & 3) << 4) | (chr2 >> 4)
         let enc3 = ((chr2 & 15) << 2) | (chr3 >> 6)
@@ -91,8 +98,7 @@ export function base64Encode(input: string): string {
         } else if (Number.isNaN(chr3)) {
             enc4 = 64
         }
-        output =
-            output +
+        output +=
             keyStr.charAt(enc1) +
             keyStr.charAt(enc2) +
             keyStr.charAt(enc3) +
@@ -101,13 +107,33 @@ export function base64Encode(input: string): string {
     return output
 }
 
+function base64DecodeFallback(input: string): string {
+    let output = ''
+    let i = 0
+    const cleaned = input.replace(/[^A-Za-z0-9+/=]/g, '')
+
+    while (i < cleaned.length) {
+        const enc1 = keyStr.indexOf(cleaned.charAt(i++))
+        const enc2 = keyStr.indexOf(cleaned.charAt(i++))
+        const enc3 = keyStr.indexOf(cleaned.charAt(i++))
+        const enc4 = keyStr.indexOf(cleaned.charAt(i++))
+
+        const chr1 = (enc1 << 2) | (enc2 >> 4)
+        const chr2 = ((enc2 & 15) << 4) | (enc3 >> 2)
+        const chr3 = ((enc3 & 3) << 6) | enc4
+
+        output += String.fromCharCode(chr1)
+        if (enc3 !== 64) output += String.fromCharCode(chr2)
+        if (enc4 !== 64) output += String.fromCharCode(chr3)
+    }
+    return decodeUTF8(output)
+}
+
 function encodeUTF8(input: string): string {
-    input = input.replace(/\r\n/g, '\n')
+    const normalized = input.replace(/\r\n/g, '\n')
     let utf8Text = ''
-
-    for (let n = 0; n < input.length; n++) {
-        const c = input.charCodeAt(n)
-
+    for (let n = 0; n < normalized.length; n++) {
+        const c = normalized.charCodeAt(n)
         if (c < 128) {
             utf8Text += String.fromCharCode(c)
         } else if (c > 127 && c < 2048) {
@@ -119,29 +145,24 @@ function encodeUTF8(input: string): string {
             utf8Text += String.fromCharCode((c & 63) | 128)
         }
     }
-
     return utf8Text
 }
 
 function decodeUTF8(utf8Text: string): string {
     let str = ''
     let i = 0
-    let c1 = 0
-    let c2 = 0
-    let c3 = 0
     while (i < utf8Text.length) {
-        c1 = utf8Text.charCodeAt(i)
-
+        const c1 = utf8Text.charCodeAt(i)
         if (c1 < 128) {
             str += String.fromCharCode(c1)
             i++
         } else if (c1 > 191 && c1 < 224) {
-            c2 = utf8Text.charCodeAt(i + 1)
+            const c2 = utf8Text.charCodeAt(i + 1)
             str += String.fromCharCode(((c1 & 31) << 6) | (c2 & 63))
             i += 2
         } else {
-            c2 = utf8Text.charCodeAt(i + 1)
-            c3 = utf8Text.charCodeAt(i + 2)
+            const c2 = utf8Text.charCodeAt(i + 1)
+            const c3 = utf8Text.charCodeAt(i + 2)
             str += String.fromCharCode(
                 ((c1 & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63),
             )

@@ -10,10 +10,31 @@ import {
 } from '../src/index.ts'
 
 test('randomInt', async (t) => {
-    await t.test('generates random int', () => {
-        const value = randomInt(5, 10)
-        assert.ok(value >= 5)
-        assert.ok(value <= 10)
+    await t.test('generates random int in range', () => {
+        for (let i = 0; i < 100; i++) {
+            const value = randomInt(5, 10)
+            assert.ok(value >= 5 && value <= 10)
+        }
+    })
+    await t.test('produces multiple distinct values', () => {
+        const seen = new Set<number>()
+        for (let i = 0; i < 200; i++) seen.add(randomInt(1, 10))
+        // With 200 samples over 10 buckets, near-certain to see >5 distinct values
+        assert.ok(seen.size > 5, `expected variety, saw ${seen.size}`)
+    })
+    await t.test('hits both min and max boundaries', () => {
+        const seen = new Set<number>()
+        for (let i = 0; i < 500 && seen.size < 2; i++) {
+            const v = randomInt(0, 1)
+            seen.add(v)
+        }
+        assert.deepEqual([...seen].sort(), [0, 1])
+    })
+    await t.test('rejects min > max', () => {
+        assert.throws(() => randomInt(10, 5), RangeError)
+    })
+    await t.test('min === max returns that value', () => {
+        assert.equal(randomInt(7, 7), 7)
     })
 })
 

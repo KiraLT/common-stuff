@@ -272,6 +272,37 @@ test('clone', async (t) => {
         objClone.a.b = 10
         assert.deepEqual(obj, { a: { b: 10 } })
     })
+    await t.test('clones Date independently', () => {
+        const original = new Date('2024-01-01T00:00:00Z')
+        const copy = clone(original)
+        assert.notEqual(copy, original)
+        assert.equal(copy.getTime(), original.getTime())
+    })
+    await t.test('clones RegExp independently', () => {
+        const original = /abc/gi
+        const copy = clone(original)
+        assert.notEqual(copy, original)
+        assert.equal(copy.source, 'abc')
+        assert.equal(copy.flags, 'gi')
+    })
+    await t.test('clones Set independently with deep values', () => {
+        const inner = { a: 1 }
+        const original = new Set([inner])
+        const copy = clone(original)
+        assert.notEqual(copy, original)
+        const copiedInner = [...copy][0] as { a: number }
+        assert.notEqual(copiedInner, inner)
+        assert.deepEqual(copiedInner, { a: 1 })
+    })
+    await t.test('clones Map independently with deep values', () => {
+        const original = new Map<string, { v: number }>([['k', { v: 1 }]])
+        const copy = clone(original)
+        assert.notEqual(copy, original)
+        const innerOrig = original.get('k')
+        const innerCopy = copy.get('k')
+        assert.notEqual(innerCopy, innerOrig)
+        assert.deepEqual(innerCopy, { v: 1 })
+    })
 })
 
 test('convertToNested', async (t) => {

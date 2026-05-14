@@ -1,4 +1,5 @@
 import { isPlainObject } from './guards.ts'
+import { filter, flatMap, map } from './iterable.ts'
 
 /**
  * Compares two values structurally.
@@ -47,9 +48,7 @@ export function isEqual(a: unknown, b: unknown): boolean {
         return Array.from(a).every(([k, v]) =>
             b.has(k)
                 ? isEqual(v, b.get(k))
-                : bEntries.some(
-                      ([k2, v2]) => isEqual(k, k2) && isEqual(v, v2),
-                  ),
+                : bEntries.some(([k2, v2]) => isEqual(k, k2) && isEqual(v, v2)),
         )
     }
 
@@ -63,7 +62,7 @@ export function isEqual(a: unknown, b: unknown): boolean {
 }
 
 /**
- * Converts object to entries, map's it with provided callback and flattens entry list.
+ * Converts object to entries, maps it with provided callback and flattens entry list.
  *
  * @example
  * ```
@@ -72,35 +71,26 @@ export function isEqual(a: unknown, b: unknown): boolean {
  * flatMapRecord({'a': 2, 'b': 3}, ([k, v]) => v === 2 ? [[k, v]] : [])
  * >> {'a': 2}
  * ```
+ * @deprecated Use [[flatMap]] from `iterable` instead — it handles `Record` directly along with `Array`, `Set`, `Map`, and (async) iterables.
  * @group Object
  * @param obj `Record` like object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return list of entry pairs
  * @returns new mapped object
  */
 export function flatMapRecord<
-    K extends string | number | symbol,
+    K extends PropertyKey,
     V,
-    RK extends string | number | symbol,
+    RK extends PropertyKey,
     RV,
 >(
     obj: Record<K, V>,
     callback: (entry: [K, V]) => Array<[RK, RV]>,
 ): Record<RK, RV> {
-    const entries = Object.entries(obj) as Array<[K, V]>
-
-    return entries.map(callback).reduce(
-        (prev, values) => {
-            values.forEach(([key, value]) => {
-                prev[key] = value
-            })
-            return prev
-        },
-        {} as Record<RK, RV>,
-    )
+    return flatMap(obj, callback) as Record<RK, RV>
 }
 
 /**
- * Converts object to entries and map's it with provided callback.
+ * Converts object to entries and maps it with provided callback.
  *
  * @example
  * ```
@@ -109,18 +99,17 @@ export function flatMapRecord<
  * mapRecord({'a': 'b'}, ([k, v]) => [v, k])
  * >> {'b': 'a'}
  * ```
+ * @deprecated Use [[map]] from `iterable` instead — it handles `Record` directly along with `Array`, `Set`, `Map`, and (async) iterables.
  * @group Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should return entry pair
  * @returns new mapped object
  */
-export function mapRecord<
-    K extends string | number | symbol,
-    V,
-    RK extends string | number | symbol,
-    RV,
->(obj: Record<K, V>, callback: (entry: [K, V]) => [RK, RV]): Record<RK, RV> {
-    return flatMapRecord(obj, (v) => [callback(v)])
+export function mapRecord<K extends PropertyKey, V, RK extends PropertyKey, RV>(
+    obj: Record<K, V>,
+    callback: (entry: [K, V]) => [RK, RV],
+): Record<RK, RV> {
+    return map(obj, callback) as Record<RK, RV>
 }
 
 /**
@@ -131,16 +120,17 @@ export function mapRecord<
  * filterRecord({'a': 2, 'b': 3}, ([k, v]) => v === 2)
  * >> {'a': 2}
  * ```
+ * @deprecated Use [[filter]] from `iterable` instead — it handles `Record` directly along with `Array`, `Set`, `Map`, and (async) iterables.
  * @group Object
  * @param obj `Record` like plain object
  * @param callback map callback, accepts entry pair (`[key, value]`) and should boolean value
  * @returns new filtered object
  */
-export function filterRecord<K extends string | number | symbol, V>(
+export function filterRecord<K extends PropertyKey, V>(
     obj: Record<K, V>,
     callback: (entry: [K, V]) => boolean,
 ): Record<K, V> {
-    return flatMapRecord(obj, (v) => (callback(v) ? [v] : []))
+    return filter(obj, callback) as Record<K, V>
 }
 
 /**
@@ -209,13 +199,40 @@ export function merge<T>(
 }
 
 /**
- * Return a clone of given value
+ * Return a clone of given value.
+ *
+ * Handles plain objects, arrays, `Date`, `RegExp`, `Set`, `Map`. Other types
+ * (class instances, functions, primitives) are returned as-is.
  *
  * @group Object
  * @param value any value
- * @param recursive should recursive values (object and array) be cloned
+ * @param recursive should recursive values (object, array, set, map) be cloned
  */
 export function clone<T>(value: T, recursive = true): T {
+    if (value instanceof Date) {
+        return new Date(value.getTime()) as T
+    }
+
+    if (value instanceof RegExp) {
+        return new RegExp(value.source, value.flags) as T
+    }
+
+    if (value instanceof Set) {
+        return new Set(
+            recursive
+                ? Array.from(value).map((v) => clone(v))
+                : Array.from(value),
+        ) as T
+    }
+
+    if (value instanceof Map) {
+        return new Map(
+            recursive
+                ? Array.from(value).map(([k, v]) => [clone(k), clone(v)])
+                : Array.from(value),
+        ) as T
+    }
+
     if (isPlainObject(value)) {
         return Object.entries(value).reduce(
             (prev, [k, v]) => {

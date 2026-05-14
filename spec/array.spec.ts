@@ -88,6 +88,10 @@ test('generateRange', async (t) => {
         assert.deepEqual(generateRange(1, 5, -1), [])
         assert.deepEqual(generateRange(1, 5, -2), [])
     })
+    await t.test('rejects step=0', () => {
+        assert.throws(() => generateRange(5, 0, 0), RangeError)
+        assert.throws(() => generateRange(0, 5, 0), RangeError)
+    })
 })
 
 test('flatten', async (t) => {
@@ -150,6 +154,16 @@ test('indexBy', async (t) => {
                 '4': ['one', 'two'],
             },
         )
+    })
+
+    await t.test('separate keys produce independent arrays', () => {
+        const out = indexBy(['one', 'two', 'three'], (v) => [
+            v.length,
+            v.length + 1,
+        ])
+        // Pushing into one bucket must not affect the other
+        out['3']?.push('mutation')
+        assert.deepEqual(out['4'], ['one', 'two'])
     })
 })
 
@@ -222,6 +236,11 @@ test('chunk', async (t) => {
     })
     await t.test('size larger than length yields one chunk', () => {
         assert.deepEqual(chunk([1, 2], 10), [[1, 2]])
+    })
+    await t.test('rejects non-positive size', () => {
+        assert.throws(() => chunk([1, 2, 3], 0), RangeError)
+        assert.throws(() => chunk([1, 2, 3], -1), RangeError)
+        assert.throws(() => chunk([1, 2, 3], 1.5), RangeError)
     })
 })
 

@@ -84,6 +84,10 @@ test('generateCookie', async (t) => {
             /^a=b;expires=.*GMT$/,
         )
     })
+    await t.test('expires=0 deletes the cookie (epoch in the past)', () => {
+        const cookie = generateCookie('a', 'b', { expires: 0 })
+        assert.match(cookie, /^a=b;expires=.*1970.*GMT$/)
+    })
     await t.test('supports path', () => {
         assert.equal(generateCookie('a', 'b', { path: '/' }), 'a=b;path=/')
     })
@@ -123,6 +127,9 @@ test('parseCookies', async (t) => {
     await t.test('strips wrapping quotes from value', () => {
         assert.deepEqual(parseCookies('a="b"'), { a: 'b' })
     })
+    await t.test('handles separator without space', () => {
+        assert.deepEqual(parseCookies('a=1;b=2'), { a: '1', b: '2' })
+    })
 })
 
 test('encodeHtml', async (t) => {
@@ -158,6 +165,12 @@ test('urlToRelative', async (t) => {
             urlToRelative('https://my-sub.domain.com/index.html'),
             '/index.html',
         )
+    })
+    await t.test('handles URL without trailing slash', () => {
+        assert.equal(urlToRelative('https://domain.com'), '/')
+    })
+    await t.test('preserves already-relative paths', () => {
+        assert.equal(urlToRelative('/path'), '/path')
     })
 })
 

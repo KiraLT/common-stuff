@@ -25,20 +25,36 @@ test('formatBytes', async (t) => {
     await t.test('just works', () => {
         assert.equal(formatBytes(1648 * 9884), '15.53 MB')
     })
+    await t.test('handles NaN as zero', () => {
+        assert.equal(formatBytes(Number.NaN), '0 Bytes')
+    })
+    await t.test('handles Infinity as zero', () => {
+        assert.equal(formatBytes(Number.POSITIVE_INFINITY), '0 Bytes')
+    })
+    await t.test('clamps very large values to YB', () => {
+        const huge = 1024 ** 10
+        assert.match(formatBytes(huge), /YB$/)
+    })
 })
 
 test('parseSize', async (t) => {
     await t.test('parses bytes', () => {
         assert.equal(parseSize('10 Bytes'), 10)
     })
-    await t.test('returns -1 on error', () => {
-        assert.equal(parseSize('zero bytes'), 0)
+    await t.test('returns -1 when input does not match <number> <unit>', () => {
+        assert.equal(parseSize('zero bytes'), -1)
+    })
+    await t.test('returns -1 for unknown unit', () => {
+        assert.equal(parseSize('10 zorps'), -1)
     })
     await t.test('support decimals', () => {
         assert.equal(parseSize('1.6 KB'), 1638.4)
     })
     await t.test('just works', () => {
         assert.equal(parseSize('15.53 MB'), 16284385.28)
+    })
+    await t.test('returns -1 on empty string', () => {
+        assert.equal(parseSize(''), -1)
     })
 })
 

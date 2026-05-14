@@ -76,14 +76,14 @@ export function sortBy<T>(
     arr: readonly T[],
     key?: (item: T) => unknown,
 ): readonly T[]
-export function sortBy<T, A extends ReadonlyArray<T>>(
-    arr: A,
+export function sortBy<T>(
+    arr: ReadonlyArray<T>,
     key: (item: T) => unknown = (v) => v,
-): A {
+): T[] {
     return arr
         .map((v, i) => [v, i] as const)
         .sort(sortByCb(([v, i]) => [key(v), i]))
-        .map((v) => v[0]) as unknown as A
+        .map((v) => v[0])
 }
 
 /**
@@ -146,6 +146,10 @@ export function generateRange(
 
     if (step === undefined) {
         step = 1
+    }
+
+    if (step === 0) {
+        throw new RangeError('generateRange step must not be 0')
     }
 
     if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
@@ -261,6 +265,9 @@ export function chunk<T>(
     size: number,
 ): ReadonlyArray<ReadonlyArray<T>>
 export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
+    if (size < 1 || !Number.isInteger(size)) {
+        throw new RangeError('chunk size must be a positive integer')
+    }
     return array.reduce((acc, _, i) => {
         if (i % size === 0) {
             acc.push(array.slice(i, i + size))
@@ -336,17 +343,16 @@ export function indexBy<T>(
     keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
 ): Record<string, T[]> {
     return array.reduce(
-        (prev, cur) => {
-            return ensureArray(keyCallback(cur)).reduce((prev2, key) => {
-                if (key in prev) {
-                    prev2[key]?.push(cur)
+        (acc, cur) =>
+            ensureArray(keyCallback(cur)).reduce((acc2, key) => {
+                const existing = acc2[key]
+                if (existing) {
+                    existing.push(cur)
                 } else {
-                    prev2[key] = [cur]
+                    acc2[key] = [cur]
                 }
-
-                return prev
-            }, prev)
-        },
+                return acc2
+            }, acc),
         {} as Record<string, T[]>,
     )
 }
@@ -403,14 +409,13 @@ export function deduplicateBy<T>(
         const item = key(rawItem) as string | number | symbol
         const type = typeof item
         if (type in prims) {
-            if (item in prims[type as Prim]) {
-                return false
-            } else {
-                return (prims[type as Prim][item] = true)
-            }
-        } else {
-            return objs.indexOf(item) !== -1 ? false : objs.push(item)
+            if (item in prims[type as Prim]) return false
+            prims[type as Prim][item] = true
+            return true
         }
+        if (objs.indexOf(item) !== -1) return false
+        objs.push(item)
+        return true
     })
 }
 

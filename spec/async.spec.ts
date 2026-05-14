@@ -1,7 +1,16 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { debounce, delay, throttle } from '../src/index.ts'
+import {
+    TimeoutError,
+    debounce,
+    delay,
+    pLimit,
+    pSeries,
+    retry,
+    throttle,
+    timeout,
+} from '../src/index.ts'
 
 type MockFn<Args extends unknown[] = unknown[], R = void> = ((
     ...args: Args
@@ -182,5 +191,215 @@ test('throttle', async (t) => {
         cb.cancel()
         await delay(120)
         assert.equal(mock.mock.calls.length, 1)
+    })
+})
+
+test('timeout', async (t) => {
+    await t.test('resolves before deadline', async () => {
+        const result = await timeout(
+            new Promise<string>((resolve) =>
+                setTimeout(() => resolve('done'), 20),
+            ),
+            100,
+        )
+        assert.equal(result, 'done')
+    })
+
+    await t.test('rejects with TimeoutError past deadline', async () => {
+        await assert.rejects(
+            () =>
+                timeout(
+                    new Promise<string>((resolve) =>
+                        setTimeout(() => resolve('done'), 100),
+                    ),
+                    20,
+                ),
+            (err: Error) => err instanceof TimeoutError,
+        )
+    })
+
+    await t.test('original rejection propagates', async () => {
+        await assert.rejects(
+            () => timeout(Promise.reject(new Error('boom')), 100),
+            /boom/,
+        )
+    })
+})
+
+test('retry', async (t) => {
+    await t.test('returns value on first success', async () => {
+        let calls = 0
+        const result = await retry(async () => {
+            calls++
+            return 42
+        })
+        assert.equal(result, 42)
+        assert.equal(calls, 1)
+    })
+
+    await t.test('retries until success', async () => {
+        let calls = 0
+        const result = await retry(
+            async () => {
+                calls++
+                if (calls < 3) throw new Error('fail')
+                return 'ok'
+            },
+            { attempts: 5 },
+        )
+        assert.equal(result, 'ok')
+        assert.equal(calls, 3)
+    })
+
+    await t.test('rethrows after all attempts exhausted', async () => {
+        let calls = 0
+        await assert.rejects(
+            () =>
+                retry(
+                    async () => {
+                        calls++
+                        throw new Error(`attempt-${calls}`)
+                    },
+                    { attempts: 3 },
+                ),
+            /attempt-3/,
+        )
+        assert.equal(calls, 3)
+    })
+
+    await t.test('honors fixed backoff delay', async () => {
+        let calls = 0
+        const start = Date.now()
+        await assert.rejects(() =>
+            retry(
+                async () => {
+                    calls++
+                    throw new Error('fail')
+                },
+                { attempts: 3, backoff: 30 },
+            ),
+        )
+        const elapsed = Date.now() - start
+        // 2 inter-attempt delays of ~30ms each
+        assert.ok(elapsed >= 55, `expected ≥55ms, got ${elapsed}`)
+        assert.equal(calls, 3)
+    })
+
+    await t.test('honors backoff function (1-indexed)', async () => {
+        const seen: number[] = []
+        await assert.rejects(() =>
+            retry(
+                async () => {
+                    throw new Error('fail')
+                },
+                {
+                    attempts: 3,
+                    backoff: (n) => {
+                        seen.push(n)
+                        return 0
+                    },
+                },
+            ),
+        )
+        assert.deepEqual(seen, [1, 2])
+    })
+})
+
+test('pLimit', async (t) => {
+    await t.test('caps concurrency', async () => {
+        const limit = pLimit(2)
+        let active = 0
+        let peak = 0
+        const task = async () => {
+            active++
+            peak = Math.max(peak, active)
+            await delay(20)
+            active--
+        }
+        await Promise.all([
+            limit(task),
+            limit(task),
+            limit(task),
+            limit(task),
+            limit(task),
+        ])
+        assert.equal(peak, 2)
+    })
+
+    await t.test('returns task results', async () => {
+        const limit = pLimit(2)
+        const out = await Promise.all([
+            limit(async () => 1),
+            limit(async () => 2),
+            limit(async () => 3),
+        ])
+        assert.deepEqual(out, [1, 2, 3])
+    })
+
+    await t.test('propagates rejections', async () => {
+        const limit = pLimit(2)
+        await assert.rejects(
+            () => limit(async () => Promise.reject(new Error('boom'))),
+            /boom/,
+        )
+        // Subsequent tasks still work
+        assert.equal(await limit(async () => 'ok'), 'ok')
+    })
+
+    await t.test('throws on invalid concurrency', () => {
+        assert.throws(() => pLimit(0), RangeError)
+    })
+})
+
+test('pSeries', async (t) => {
+    await t.test('runs sequentially', async () => {
+        const order: number[] = []
+        const out = await pSeries([
+            async () => {
+                order.push(1)
+                await delay(20)
+                order.push(2)
+                return 'a'
+            },
+            async () => {
+                order.push(3)
+                await delay(10)
+                order.push(4)
+                return 'b'
+            },
+            async () => {
+                order.push(5)
+                return 'c'
+            },
+        ])
+        assert.deepEqual(order, [1, 2, 3, 4, 5])
+        assert.deepEqual(out, ['a', 'b', 'c'])
+    })
+
+    await t.test('stops at first rejection', async () => {
+        const order: number[] = []
+        await assert.rejects(
+            () =>
+                pSeries([
+                    async () => {
+                        order.push(1)
+                        return 'a'
+                    },
+                    async () => {
+                        order.push(2)
+                        throw new Error('boom')
+                    },
+                    async () => {
+                        order.push(3)
+                        return 'c'
+                    },
+                ]),
+            /boom/,
+        )
+        assert.deepEqual(order, [1, 2])
+    })
+
+    await t.test('empty input resolves to empty array', async () => {
+        assert.deepEqual(await pSeries([]), [])
     })
 })

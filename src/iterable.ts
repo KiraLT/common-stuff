@@ -12,6 +12,24 @@ import {
 type AnyFn = (...args: any[]) => any
 
 /**
+ * Element type of any sync or async iterable.
+ */
+type IterableItem<I> = I extends AsyncIterable<infer T>
+    ? T
+    : I extends Iterable<infer T>
+      ? T
+      : never
+
+/**
+ * Reduce return type:
+ *  - For an `AsyncIterable` input, always `Promise<resolved R>`.
+ *  - For a sync `Iterable`, `R` directly (which is itself a `Promise` when the reducer is async).
+ */
+type ReduceResult<I, R> = I extends AsyncIterable<unknown>
+    ? Promise<Awaited<R>>
+    : R
+
+/**
  * Awaits all promises in the array if any is found, otherwise returns the array as-is.
  * Lets a single code path handle both sync and async callback returns.
  */
@@ -80,33 +98,25 @@ function findIndexMaybeAsync(
  * ```
  * @group Iterable
  */
-export function reduce<T>(
-    iterable: Iterable<T>,
-    reducer: (acc: T, value: T, index: number) => T,
-): T
-export function reduce<T, R>(
-    iterable: Iterable<T>,
-    reducer: (acc: R, value: T, index: number) => R,
-    initial: R,
-): R
-export function reduce<T>(
-    iterable: Iterable<T>,
-    reducer: (acc: T, value: T, index: number) => Promise<T>,
-): Promise<T>
-export function reduce<T, R>(
-    iterable: Iterable<T>,
-    reducer: (acc: R, value: T, index: number) => Promise<R>,
-    initial: R,
-): Promise<R>
-export function reduce<T>(
-    iterable: AsyncIterable<T>,
-    reducer: (acc: T, value: T, index: number) => T | Promise<T>,
-): Promise<T>
-export function reduce<T, R>(
-    iterable: AsyncIterable<T>,
-    reducer: (acc: R, value: T, index: number) => R | Promise<R>,
-    initial: R,
-): Promise<R>
+export function reduce<
+    I extends Iterable<unknown> | AsyncIterable<unknown>,
+    R,
+>(
+    iterable: I,
+    reducer: (
+        acc: IterableItem<I>,
+        value: IterableItem<I>,
+        index: number,
+    ) => R,
+): ReduceResult<I, R>
+export function reduce<
+    I extends Iterable<unknown> | AsyncIterable<unknown>,
+    R,
+>(
+    iterable: I,
+    reducer: (acc: Awaited<R>, value: IterableItem<I>, index: number) => R,
+    initial: Awaited<R>,
+): ReduceResult<I, R>
 export function reduce(
     iterable: Iterable<unknown> | AsyncIterable<unknown>,
     reducer: AnyFn,
@@ -920,4 +930,316 @@ export function toArray(input: unknown): unknown {
     if (isPlainObject(input)) return Object.entries(input)
 
     throw new TypeError('Provided source is not iterable')
+}
+
+/**
+ * Returns a new container with the first `n` elements of the input,
+ * preserving the original container type.
+ *
+ * For `AsyncIterable`/`Iterable` the result is lazy and stops the source iterator
+ * after `n` elements. Negative `n` is treated as `0`.
+ *
+ * @example
+ * ```ts
+ * take([1, 2, 3, 4], 2)            // [1, 2]
+ * take(new Set([1, 2, 3]), 2)      // Set { 1, 2 }
+ * take({ a: 1, b: 2, c: 3 }, 2)    // { a: 1, b: 2 }
+ * ```
+ * @group Iterable
+ */
+export function take<V>(input: V[], n: number): V[]
+export function take<K, V>(input: Map<K, V>, n: number): Map<K, V>
+export function take<T>(input: Set<T>, n: number): Set<T>
+export function take<T>(input: AsyncIterable<T>, n: number): AsyncIterable<T>
+export function take<T>(input: Iterable<T>, n: number): Iterable<T>
+export function take<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    n: number,
+): Record<K, V>
+export function take(input: unknown, n: number): unknown {
+    const limit = Math.max(0, n)
+
+    if (isAsyncIterable(input)) {
+        return (async function* () {
+            if (limit === 0) return
+            let i = 0
+            for await (const v of input) {
+                yield v
+                if (++i >= limit) return
+            }
+        })()
+    }
+
+    if (isArray(input)) return input.slice(0, limit)
+    if (isSet(input)) return new Set(Array.from(input).slice(0, limit))
+    if (isMap(input)) return new Map(Array.from(input).slice(0, limit))
+
+    if (isIterable(input)) {
+        return (function* () {
+            if (limit === 0) return
+            let i = 0
+            for (const v of input) {
+                yield v
+                if (++i >= limit) return
+            }
+        })()
+    }
+
+    if (isPlainObject(input)) {
+        return Object.fromEntries(Object.entries(input).slice(0, limit))
+    }
+
+    throw new TypeError('Provided source is not iterable')
+}
+
+/**
+ * Returns a new container skipping the first `n` elements of the input,
+ * preserving the original container type.
+ *
+ * Negative `n` is treated as `0`.
+ *
+ * @example
+ * ```ts
+ * drop([1, 2, 3, 4], 2)            // [3, 4]
+ * drop(new Set([1, 2, 3]), 1)      // Set { 2, 3 }
+ * ```
+ * @group Iterable
+ */
+export function drop<V>(input: V[], n: number): V[]
+export function drop<K, V>(input: Map<K, V>, n: number): Map<K, V>
+export function drop<T>(input: Set<T>, n: number): Set<T>
+export function drop<T>(input: AsyncIterable<T>, n: number): AsyncIterable<T>
+export function drop<T>(input: Iterable<T>, n: number): Iterable<T>
+export function drop<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    n: number,
+): Record<K, V>
+export function drop(input: unknown, n: number): unknown {
+    const skip = Math.max(0, n)
+
+    if (isAsyncIterable(input)) {
+        return (async function* () {
+            let i = 0
+            for await (const v of input) {
+                if (i++ < skip) continue
+                yield v
+            }
+        })()
+    }
+
+    if (isArray(input)) return input.slice(skip)
+    if (isSet(input)) return new Set(Array.from(input).slice(skip))
+    if (isMap(input)) return new Map(Array.from(input).slice(skip))
+
+    if (isIterable(input)) {
+        return (function* () {
+            let i = 0
+            for (const v of input) {
+                if (i++ < skip) continue
+                yield v
+            }
+        })()
+    }
+
+    if (isPlainObject(input)) {
+        return Object.fromEntries(Object.entries(input).slice(skip))
+    }
+
+    throw new TypeError('Provided source is not iterable')
+}
+
+/**
+ * Splits an iterable structure into two — `[matching, rest]` — by a predicate.
+ *
+ * Both halves preserve the input container type. With an async predicate the
+ * result is wrapped in a `Promise`.
+ *
+ * @example
+ * ```ts
+ * partition([1, 2, 3, 4], v => v % 2 === 0)
+ * // [[2, 4], [1, 3]]
+ *
+ * partition({ a: 1, b: 2 }, ([, v]) => v > 1)
+ * // [{ b: 2 }, { a: 1 }]
+ * ```
+ * @group Iterable
+ */
+export function partition<V>(
+    input: V[],
+    predicate: (value: V, index: number) => Promise<boolean>,
+): Promise<[V[], V[]]>
+export function partition<V>(
+    input: V[],
+    predicate: (value: V, index: number) => boolean,
+): [V[], V[]]
+export function partition<K, V>(
+    input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<[Map<K, V>, Map<K, V>]>
+export function partition<K, V>(
+    input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => boolean,
+): [Map<K, V>, Map<K, V>]
+export function partition<T>(
+    input: Set<T>,
+    predicate: (value: T, index: number) => Promise<boolean>,
+): Promise<[Set<T>, Set<T>]>
+export function partition<T>(
+    input: Set<T>,
+    predicate: (value: T, index: number) => boolean,
+): [Set<T>, Set<T>]
+export function partition<T>(
+    input: AsyncIterable<T>,
+    predicate: (value: T, index: number) => boolean | Promise<boolean>,
+): Promise<[T[], T[]]>
+export function partition<T>(
+    input: Iterable<T>,
+    predicate: (value: T, index: number) => Promise<boolean>,
+): Promise<[T[], T[]]>
+export function partition<T>(
+    input: Iterable<T>,
+    predicate: (value: T, index: number) => boolean,
+): [T[], T[]]
+export function partition<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => Promise<boolean>,
+): Promise<[Record<K, V>, Record<K, V>]>
+export function partition<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => boolean,
+): [Record<K, V>, Record<K, V>]
+export function partition(input: unknown, predicate: AnyFn): unknown {
+    if (isAsyncIterable(input)) {
+        return (async () => {
+            const yes: unknown[] = []
+            const no: unknown[] = []
+            let i = 0
+            for await (const v of input) {
+                if (await predicate(v, i++)) yes.push(v)
+                else no.push(v)
+            }
+            return [yes, no]
+        })()
+    }
+
+    const items = toItems(input)
+    const decisions = items.map(predicate)
+    const resolved = resolveAll(decisions)
+
+    const split = (
+        kept: ReadonlyArray<unknown>,
+    ): [unknown[], unknown[]] => {
+        const yes: unknown[] = []
+        const no: unknown[] = []
+        items.forEach((v, i) => {
+            if (kept[i]) yes.push(v)
+            else no.push(v)
+        })
+        return [yes, no]
+    }
+
+    if (isArray(input)) {
+        return isPromise(resolved)
+            ? resolved.then((d) => split(d))
+            : split(resolved)
+    }
+
+    if (isSet(input)) {
+        const wrap = ([y, n]: [unknown[], unknown[]]): [Set<unknown>, Set<unknown>] => [
+            new Set(y),
+            new Set(n),
+        ]
+        return isPromise(resolved)
+            ? resolved.then((d) => wrap(split(d)))
+            : wrap(split(resolved))
+    }
+
+    if (isMap(input)) {
+        const wrap = ([y, n]: [unknown[], unknown[]]): [
+            Map<unknown, unknown>,
+            Map<unknown, unknown>,
+        ] => [
+            new Map(y as Iterable<[unknown, unknown]>),
+            new Map(n as Iterable<[unknown, unknown]>),
+        ]
+        return isPromise(resolved)
+            ? resolved.then((d) => wrap(split(d)))
+            : wrap(split(resolved))
+    }
+
+    if (isIterable(input)) {
+        return isPromise(resolved)
+            ? resolved.then((d) => split(d))
+            : split(resolved)
+    }
+
+    // Plain object
+    const wrap = ([y, n]: [unknown[], unknown[]]): [
+        Record<PropertyKey, unknown>,
+        Record<PropertyKey, unknown>,
+    ] => [
+        Object.fromEntries(y as Iterable<[PropertyKey, unknown]>),
+        Object.fromEntries(n as Iterable<[PropertyKey, unknown]>),
+    ]
+    return isPromise(resolved)
+        ? resolved.then((d) => wrap(split(d)))
+        : wrap(split(resolved))
+}
+
+/**
+ * Combines multiple iterables element-wise into tuples, stopping at the shortest.
+ *
+ * If any input is an `AsyncIterable`, the result is a `Promise<Array<…>>`.
+ *
+ * @example
+ * ```ts
+ * zip([1, 2, 3], ['a', 'b', 'c'])
+ * // [[1, 'a'], [2, 'b'], [3, 'c']]
+ *
+ * zip([1, 2, 3], ['a', 'b'], [true, false, true])
+ * // [[1, 'a', true], [2, 'b', false]]   // shortest wins
+ * ```
+ * @group Iterable
+ */
+export function zip<
+    T extends ReadonlyArray<Iterable<unknown> | AsyncIterable<unknown>>,
+>(
+    ...inputs: T
+): T[number] extends Iterable<unknown>
+    ? Array<{ [K in keyof T]: IterableItem<T[K]> }>
+    : Promise<Array<{ [K in keyof T]: IterableItem<T[K]> }>>
+export function zip(
+    ...inputs: ReadonlyArray<Iterable<unknown> | AsyncIterable<unknown>>
+): unknown {
+    if (inputs.some(isAsyncIterable)) {
+        return (async () => {
+            const iters = inputs.map((it) =>
+                isAsyncIterable(it)
+                    ? it[Symbol.asyncIterator]()
+                    : (it as Iterable<unknown>)[Symbol.iterator](),
+            )
+            const out: unknown[][] = []
+            while (true) {
+                const results = await Promise.all(
+                    iters.map((it) =>
+                        Promise.resolve(it.next()) as Promise<
+                            IteratorResult<unknown>
+                        >,
+                    ),
+                )
+                if (results.some((r) => r.done)) return out
+                out.push(results.map((r) => r.value))
+            }
+        })()
+    }
+
+    const iters = (inputs as ReadonlyArray<Iterable<unknown>>).map((it) =>
+        it[Symbol.iterator](),
+    )
+    const out: unknown[][] = []
+    while (true) {
+        const results = iters.map((it) => it.next())
+        if (results.some((r) => r.done)) return out
+        out.push(results.map((r) => r.value))
+    }
 }

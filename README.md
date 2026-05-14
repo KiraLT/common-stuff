@@ -3,9 +3,11 @@
 [![codecov](https://codecov.io/gh/KiraLT/common-stuff/branch/main/graph/badge.svg?token=E599EPAOPM)](https://codecov.io/gh/KiraLT/common-stuff)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiralt/common-stuff/badge)](https://www.codefactor.io/repository/github/kiralt/common-stuff)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![code style: Biome](https://img.shields.io/badge/code_style-biome-60a5fa.svg)](https://biomejs.dev/)
 
 JavaScript and NodeJS are missing a lot of core functionalities. The goal of this library is to bring a variety of useful helpers on both NodeJS & Browser with strong **TypeScript** typing and **zero dependencies**.
+
+The package is **isomorphic** — every helper runs in browsers, Node, Deno, Bun, and workers. Runtime-specific APIs (e.g. `Buffer`) are feature-detected with portable fallbacks. The build is ESM with `"sideEffects": false`, so unused exports are tree-shaken.
 
 Missing something? Create [feature request](https://github.com/KiraLT/common-stuff/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)!
 
@@ -37,63 +39,32 @@ if (isEqual({ a: 1 }, { a: 1 })) {
 
 > Always import only what is necessary to take full advantage of [tree shaking](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking).
 
-## Load directly in the browser
-
-### Include UMD bundle
-
-Include script from CDN and use `commonStuff` global variable:
-
-```html
-<script src="https://unpkg.com/common-stuff"></script>
-<script>
-    if (commonStuff.isEqual({ a: 1 }, { a: 1 })) {
-        console.log("Hello");
-    }
-</script>
-```
-
-### Dynamic import
-
-Use [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) directly in the browser that returns loaded library wrapped in the promise:
-
-```html
-<script>
-    import("https://unpkg.com/common-stuff?module").then(({ isEqual }) => {
-        if (isEqual({ a: 1 }, { a: 1 })) {
-            console.log("Hello");
-        }
-    });
-</script>
-```
-
 ## Examples
 
-### Universal flatMap
+### Universal iterable helpers
 
-`flatMap` now works across arrays, sets, generic iterables, async iterables, maps (entries or values), and plain records, with optional async mapper support.
+The `iterable` module provides one set of helpers that work across `Array`, `Set`, `Map`, `Record`, generic `Iterable`, and `AsyncIterable` — preserving the input container type and switching to `Promise` automatically when the callback is async.
+
+Available: `map`, `flatMap`, `filter`, `reduce`, `forEach`, `find`, `some`, `every`, `size`, `toArray`, `take`, `drop`, `partition`, `zip`.
 
 ```typescript
-import { flatMap } from "common-stuff";
+import { map, flatMap, filter, reduce, partition, zip } from "common-stuff";
 
-// Array
-flatMap([1, 2, 3], (v) => [v, v * 2]);
-// [1,2,2,4,3,6]
+// Array → Array
+map([1, 2, 3], (v) => v * 2);
+// [2, 4, 6]
 
-// Set (iterable)
-flatMap(new Set([1, 2]), (v) => [v, v]);
-// [1,1,2,2]
+// Set → Set (preserves container)
+filter(new Set([1, 2, 3, 4]), (v) => v % 2 === 0);
+// Set { 2, 4 }
 
-// Map (entries default)
-flatMap(new Map([[1, "a"]]), ([k, v]) => [[k, v.toUpperCase()]]);
-// [[1,'A']]
+// Map → Map (callback receives [k, v])
+map(new Map([["a", 1]]), ([k, v]) => [k.toUpperCase(), v * 10]);
+// Map { 'A' => 10 }
 
-// Map values mode
-flatMap(new Map([[1, "a"]]), (v) => [v.toUpperCase()], { mode: "value" });
-// ['A']
-
-// Record (object) iterated as entries
+// Record → Record (iterated as [k, v] entries)
 flatMap({ a: 1, b: 2 }, ([k, v]) => (v % 2 ? [[k, v]] : []));
-// [['a',1]]
+// { a: 1 }
 
 // Async iterable + async mapper
 async function* gen() {
@@ -101,8 +72,16 @@ async function* gen() {
     yield 2;
     yield 3;
 }
-await flatMap(gen(), async (v) => [v * 2]);
-// [2,4,6]
+await reduce(gen(), (a, b) => a + b);
+// 6
+
+// Partition into matching / non-matching halves
+partition([1, 2, 3, 4], (v) => v % 2 === 0);
+// [[2, 4], [1, 3]]
+
+// Zip element-wise, stopping at the shortest
+zip([1, 2, 3], ["a", "b"]);
+// [[1, 'a'], [2, 'b']]
 ```
 
 ### Using FP patterns

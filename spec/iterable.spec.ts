@@ -2,16 +2,20 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import {
+    drop,
     every,
     filter,
     find,
     flatMap,
     forEach,
     map,
+    partition,
     reduce,
     size,
     some,
+    take,
     toArray,
+    zip,
 } from '../src/index.ts'
 
 async function* makeAsync<T>(values: Iterable<T>): AsyncGenerator<T> {
@@ -585,6 +589,205 @@ test('toArray', async (t) => {
             },
         }
         assert.deepEqual(toArray(customIter), [1, 2])
+    })
+})
+
+test('take', async (t) => {
+    await t.test('array', () => {
+        assert.deepEqual(take([1, 2, 3, 4], 2), [1, 2])
+        assert.deepEqual(take([1, 2], 5), [1, 2])
+        assert.deepEqual(take([1, 2, 3], 0), [])
+        assert.deepEqual(take([1, 2, 3], -1), [])
+    })
+    await t.test('set', () => {
+        const out = take(new Set([1, 2, 3, 4]), 2)
+        assert.ok(out instanceof Set)
+        assert.deepEqual([...out], [1, 2])
+    })
+    await t.test('map', () => {
+        const out = take(
+            new Map([
+                ['a', 1],
+                ['b', 2],
+                ['c', 3],
+            ]),
+            2,
+        )
+        assert.ok(out instanceof Map)
+        assert.deepEqual([...out.entries()], [
+            ['a', 1],
+            ['b', 2],
+        ])
+    })
+    await t.test('record', () => {
+        assert.deepEqual(take({ a: 1, b: 2, c: 3 }, 2), { a: 1, b: 2 })
+    })
+    await t.test('async iterable stops source after n', async () => {
+        let pulled = 0
+        async function* gen() {
+            for (let i = 1; i <= 100; i++) {
+                pulled++
+                yield i
+            }
+        }
+        const collected: number[] = []
+        for await (const v of take(gen(), 3)) collected.push(v)
+        assert.deepEqual(collected, [1, 2, 3])
+        assert.equal(pulled, 3)
+    })
+    await t.test('generic iterable lazy', () => {
+        const customIter: Iterable<number> = {
+            [Symbol.iterator]: function* () {
+                yield 1
+                yield 2
+                yield 3
+            },
+        }
+        assert.deepEqual([...take(customIter, 2)], [1, 2])
+    })
+})
+
+test('drop', async (t) => {
+    await t.test('array', () => {
+        assert.deepEqual(drop([1, 2, 3, 4], 2), [3, 4])
+        assert.deepEqual(drop([1, 2], 5), [])
+        assert.deepEqual(drop([1, 2, 3], 0), [1, 2, 3])
+        assert.deepEqual(drop([1, 2, 3], -1), [1, 2, 3])
+    })
+    await t.test('set', () => {
+        const out = drop(new Set([1, 2, 3, 4]), 2)
+        assert.ok(out instanceof Set)
+        assert.deepEqual([...out], [3, 4])
+    })
+    await t.test('map', () => {
+        const out = drop(
+            new Map([
+                ['a', 1],
+                ['b', 2],
+                ['c', 3],
+            ]),
+            1,
+        )
+        assert.deepEqual([...out.entries()], [
+            ['b', 2],
+            ['c', 3],
+        ])
+    })
+    await t.test('record', () => {
+        assert.deepEqual(drop({ a: 1, b: 2, c: 3 }, 1), { b: 2, c: 3 })
+    })
+    await t.test('async iterable', async () => {
+        async function* gen() {
+            yield 1
+            yield 2
+            yield 3
+            yield 4
+        }
+        const collected: number[] = []
+        for await (const v of drop(gen(), 2)) collected.push(v)
+        assert.deepEqual(collected, [3, 4])
+    })
+})
+
+test('partition', async (t) => {
+    await t.test('array → [matching, rest]', () => {
+        assert.deepEqual(
+            partition([1, 2, 3, 4], (v) => v % 2 === 0),
+            [
+                [2, 4],
+                [1, 3],
+            ],
+        )
+    })
+    await t.test('set → two sets', () => {
+        const [yes, no] = partition(new Set([1, 2, 3, 4]), (v) => v > 2)
+        assert.ok(yes instanceof Set)
+        assert.ok(no instanceof Set)
+        assert.deepEqual([...yes], [3, 4])
+        assert.deepEqual([...no], [1, 2])
+    })
+    await t.test('map → two maps', () => {
+        const [yes, no] = partition(
+            new Map([
+                ['a', 1],
+                ['b', 2],
+            ]),
+            ([, v]) => v > 1,
+        )
+        assert.ok(yes instanceof Map)
+        assert.deepEqual([...yes.entries()], [['b', 2]])
+        assert.deepEqual([...no.entries()], [['a', 1]])
+    })
+    await t.test('record → two records', () => {
+        const [yes, no] = partition({ a: 1, b: 2, c: 3 }, ([, v]) => v > 1)
+        assert.deepEqual(yes, { b: 2, c: 3 })
+        assert.deepEqual(no, { a: 1 })
+    })
+    await t.test('async iterable returns Promise', async () => {
+        async function* gen() {
+            yield 1
+            yield 2
+            yield 3
+        }
+        const [yes, no] = await partition(gen(), (v) => v > 1)
+        assert.deepEqual(yes, [2, 3])
+        assert.deepEqual(no, [1])
+    })
+    await t.test('async predicate on array returns Promise', async () => {
+        const result = partition([1, 2, 3], async (v) => v > 1)
+        assert.ok(result instanceof Promise)
+        const [yes, no] = await result
+        assert.deepEqual(yes, [2, 3])
+        assert.deepEqual(no, [1])
+    })
+})
+
+test('zip', async (t) => {
+    await t.test('two arrays', () => {
+        assert.deepEqual(zip([1, 2, 3], ['a', 'b', 'c']), [
+            [1, 'a'],
+            [2, 'b'],
+            [3, 'c'],
+        ])
+    })
+    await t.test('three iterables', () => {
+        assert.deepEqual(zip([1, 2], ['a', 'b'], [true, false]), [
+            [1, 'a', true],
+            [2, 'b', false],
+        ])
+    })
+    await t.test('stops at shortest', () => {
+        assert.deepEqual(zip([1, 2, 3], ['a', 'b']), [
+            [1, 'a'],
+            [2, 'b'],
+        ])
+    })
+    await t.test('empty input yields empty', () => {
+        assert.deepEqual(zip([], [1, 2]), [])
+    })
+    await t.test('mixes Set/Iterable', () => {
+        const customIter: Iterable<number> = {
+            [Symbol.iterator]: function* () {
+                yield 10
+                yield 20
+            },
+        }
+        assert.deepEqual(zip(new Set([1, 2]), customIter), [
+            [1, 10],
+            [2, 20],
+        ])
+    })
+    await t.test('async iterable returns Promise', async () => {
+        async function* gen() {
+            yield 'a'
+            yield 'b'
+        }
+        const result = zip([1, 2, 3], gen())
+        assert.ok(result instanceof Promise)
+        assert.deepEqual(await result, [
+            [1, 'a'],
+            [2, 'b'],
+        ])
     })
 })
 

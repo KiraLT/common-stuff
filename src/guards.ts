@@ -127,20 +127,23 @@ export function isNullOrUndefined<T>(
 }
 
 /**
- * Checks if the value is an empty.
+ * Checks if the value is empty.
  *
- * Supports following types:
- * * Object - `false` if object is empty
- * * Array - `false` if array is empty
- * * Boolean - `false` if boolean is `false`
- * * Number - `false` if string is `''`
- * * Number - `false` if number is `0`
+ * Supported types and what counts as empty:
+ * * `null` / `undefined` — empty
+ * * `boolean` — `false` is empty
+ * * `string` — `''` is empty
+ * * `number` — `0` is empty (`NaN` is not)
+ * * `Array` — empty array
+ * * `Set` / `Map` — `.size === 0`
+ * * Plain object — no own enumerable keys
+ * * Anything else — not empty
  *
  * @group Guard
  */
 export function isEmpty<T>(value: T): boolean {
     if (value == null) {
-        return false
+        return true
     }
 
     if (typeof value === 'boolean') {
@@ -157,6 +160,10 @@ export function isEmpty<T>(value: T): boolean {
 
     if (Array.isArray(value)) {
         return value.length === 0
+    }
+
+    if (value instanceof Set || value instanceof Map) {
+        return value.size === 0
     }
 
     if (isPlainObject(value)) {
@@ -199,23 +206,10 @@ export function isNot<T, S extends T>(
 export function isPlainObject<T = Record<string | number | symbol, unknown>>(
     value: unknown,
 ): value is T {
-    const isObject = (v: unknown): v is object =>
-        String(v) === '[object Object]'
+    if (value === null || typeof value !== 'object') return false
 
-    if (!isObject(value)) return false
-
-    const construct = value.constructor
-    if (construct === undefined) return true
-
-    const prototype = construct.prototype
-    if (!isObject(prototype)) return false
-
-    // Checks if it is not a class
-    if (!Object.hasOwn(prototype, 'isPrototypeOf')) {
-        return false
-    }
-
-    return true
+    const proto = Object.getPrototypeOf(value)
+    return proto === null || proto === Object.prototype
 }
 
 /**
@@ -368,4 +362,62 @@ export function isSet<T = unknown>(v: unknown): v is Set<T> {
 
 export function isMap<K = unknown, V = unknown>(v: unknown): v is Map<K, V> {
     return v instanceof Map
+}
+
+/**
+ * Checks if value is a function, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isFunction(() => 1)  // true
+ * isFunction('abc')    // false
+ * ```
+ */
+// biome-ignore lint/suspicious/noExplicitAny: function guard accepts any function shape
+export function isFunction(v: unknown): v is (...args: any[]) => any {
+    return typeof v === 'function'
+}
+
+/**
+ * Checks if value is a `Date` instance, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isDate(new Date())  // true
+ * isDate('2024')      // false
+ * ```
+ */
+export function isDate(v: unknown): v is Date {
+    return v instanceof Date
+}
+
+/**
+ * Checks if value is a `RegExp`, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isRegExp(/abc/)   // true
+ * isRegExp('/abc/') // false
+ * ```
+ */
+export function isRegExp(v: unknown): v is RegExp {
+    return v instanceof RegExp
+}
+
+/**
+ * Checks if value is an integer (whole, finite number).
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isInteger(42)    // true
+ * isInteger(1.5)   // false
+ * isInteger('42')  // false
+ * ```
+ */
+export function isInteger(v: unknown): v is number {
+    return Number.isInteger(v)
 }

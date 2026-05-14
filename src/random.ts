@@ -14,7 +14,12 @@ import { asciiLetters, digits, punctuation } from './string.ts'
 export function randomInt(min: number, max: number): number {
     const roundedMin = Math.ceil(min)
     const roundedMax = Math.floor(max)
-    return Math.floor(Math.random() * (max - roundedMax + 1)) + roundedMin
+    if (roundedMin > roundedMax) {
+        throw new RangeError('randomInt min must be <= max')
+    }
+    return (
+        Math.floor(Math.random() * (roundedMax - roundedMin + 1)) + roundedMin
+    )
 }
 
 /**

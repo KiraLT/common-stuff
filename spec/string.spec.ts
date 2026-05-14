@@ -3,10 +3,15 @@ import test from 'node:test'
 
 import {
     camelCase,
+    escapeRegex,
     extractWords,
     isLetter,
+    kebabCase,
     outdent,
     pascalCase,
+    slugify,
+    snakeCase,
+    stripAccents,
     titleCase,
     truncate,
 } from '../src/index.ts'
@@ -74,6 +79,79 @@ test('titleCase', async (t) => {
             titleCase('hello-world FTW,abc999t t'),
             'Hello-World Ftw,Abc999T T',
         )
+    })
+})
+
+test('kebabCase', async (t) => {
+    await t.test('camelCase input', () => {
+        assert.equal(kebabCase('fooBar'), 'foo-bar')
+    })
+    await t.test('mixed separators', () => {
+        assert.equal(kebabCase('Foo Bar_baz-qux'), 'foo-bar-baz-qux')
+    })
+    await t.test('preserves consecutive uppercase before lowercase', () => {
+        assert.equal(kebabCase('XMLHttpRequest'), 'xml-http-request')
+    })
+    await t.test('numbers stay attached', () => {
+        assert.equal(kebabCase('foo123Bar'), 'foo123-bar')
+    })
+    await t.test('empty string', () => {
+        assert.equal(kebabCase(''), '')
+    })
+})
+
+test('snakeCase', async (t) => {
+    await t.test('camelCase input', () => {
+        assert.equal(snakeCase('fooBar'), 'foo_bar')
+    })
+    await t.test('mixed separators', () => {
+        assert.equal(snakeCase('Foo Bar-baz'), 'foo_bar_baz')
+    })
+    await t.test('preserves consecutive uppercase', () => {
+        assert.equal(snakeCase('XMLHttpRequest'), 'xml_http_request')
+    })
+})
+
+test('stripAccents', async (t) => {
+    await t.test('removes diacritics', () => {
+        assert.equal(stripAccents('árvíztűrő'), 'arvizturo')
+        assert.equal(stripAccents('café naïve'), 'cafe naive')
+        assert.equal(stripAccents('Žibutė'), 'Zibute')
+    })
+    await t.test('passes ASCII through unchanged', () => {
+        assert.equal(stripAccents('hello world'), 'hello world')
+    })
+})
+
+test('slugify', async (t) => {
+    await t.test('strips accents and punctuation', () => {
+        assert.equal(slugify('Hello, World!'), 'hello-world')
+        assert.equal(slugify('Árvíztűrő tükörfúrógép'), 'arvizturo-tukorfurogep')
+    })
+    await t.test('camelCase becomes dashed', () => {
+        assert.equal(slugify('fooBar'), 'foo-bar')
+    })
+    await t.test('trims leading/trailing dashes', () => {
+        assert.equal(slugify('  -- Hello -- '), 'hello')
+    })
+    await t.test('collapses repeated separators', () => {
+        assert.equal(slugify('hello   world!!!'), 'hello-world')
+    })
+})
+
+test('escapeRegex', async (t) => {
+    await t.test('escapes special characters', () => {
+        assert.equal(escapeRegex('a.b+c'), 'a\\.b\\+c')
+        assert.equal(escapeRegex('(hi)'), '\\(hi\\)')
+    })
+    await t.test('escaped value matches literally', () => {
+        const input = 'a.b+c?'
+        const re = new RegExp(escapeRegex(input))
+        assert.ok(re.test(input))
+        assert.ok(!re.test('aXb+c?'))
+    })
+    await t.test('plain text unchanged', () => {
+        assert.equal(escapeRegex('hello'), 'hello')
     })
 })
 

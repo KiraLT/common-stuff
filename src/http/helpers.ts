@@ -58,7 +58,9 @@ export function generateCookie(
 
     return [
         `${encodeURIComponent(name)}=${encodeURIComponent(value)}`,
-        expires ? `expires=${new Date(expires * 864e5).toUTCString()}` : '',
+        expires !== undefined
+            ? `expires=${new Date(expires * 864e5).toUTCString()}`
+            : '',
         options?.path ? `path=${options.path}` : '',
         options?.domain ? `domain=${options.domain}` : '',
         options?.secure ? 'secure' : '',
@@ -80,7 +82,7 @@ export function generateCookie(
  * @param cookieString `document.cookie` value
  */
 export function parseCookies(cookieString: string): Record<string, string> {
-    return cookieString.split(/; /).reduce(
+    return cookieString.split(/;\s*/).reduce(
         (prev, cur) => {
             const [name, value] = cur.split('=', 2)
             if (name != null && value != null) {
@@ -188,7 +190,7 @@ export function generateQueryString(
  * ```
  */
 export function urlToRelative(url: string): string {
-    return `/${url.replace(/^(?:\/\/|[^/]+)*\//, '')}`
+    return `/${url.replace(/^(?:\/\/|[^/]+)*\/?/, '')}`
 }
 
 // /**

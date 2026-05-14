@@ -1,5 +1,19 @@
-// biome-ignore lint/suspicious/noExplicitAny: feature detection on globalThis
-const _global = globalThis as any
+/**
+ * Minimal shape of the global APIs we feature-detect.
+ * Both Node (`Buffer`) and browser (`btoa`/`atob`/`crypto.randomUUID`) variants are listed.
+ */
+type RuntimeGlobals = {
+    Buffer?: {
+        from(input: string, encoding: string): {
+            toString(encoding: string): string
+        }
+    }
+    btoa?: (input: string) => string
+    atob?: (input: string) => string
+    crypto?: { randomUUID?: () => string }
+}
+
+const _global = globalThis as unknown as RuntimeGlobals
 
 /**
  * Generates hash of given value

@@ -5,13 +5,19 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write # to be able to publish a GitHub release
+  issues: write # to be able to comment on released issues
+  pull-requests: write # to be able to comment on released pull requests
+  id-token: write # to enable use of OIDC for trusted publishing and npm provenance
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: "npm"
@@ -22,10 +28,9 @@ jobs:
 
       - run: npm run test
 
-      - uses: cycjimmy/semantic-release-action@v4
+      - uses: cycjimmy/semantic-release-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           extra_plugins: |
             @semantic-release/changelog

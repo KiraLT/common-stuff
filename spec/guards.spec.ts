@@ -9,8 +9,11 @@ import {
     isArray,
     isAsyncIterable,
     isBoolean,
+    isDate,
     isEmpty,
     isError,
+    isFunction,
+    isInteger,
     isIterable,
     isMap,
     isNot,
@@ -19,6 +22,7 @@ import {
     isNumber,
     isPlainObject,
     isPromise,
+    isRegExp,
     isSet,
     isString,
     isUndefined,
@@ -38,6 +42,13 @@ test('isPlainObject', async (t) => {
         assert.equal(isPlainObject(null as unknown), false)
         assert.equal(isPlainObject(undefined as unknown), false)
         assert.equal(isPlainObject(new (class A {})() as unknown), false)
+    })
+    await t.test('handles Object.create(null) without throwing', () => {
+        assert.equal(isPlainObject(Object.create(null) as unknown), true)
+    })
+    await t.test('rejects Map and Set', () => {
+        assert.equal(isPlainObject(new Map() as unknown), false)
+        assert.equal(isPlainObject(new Set() as unknown), false)
     })
 })
 
@@ -111,9 +122,15 @@ test('isNullOrUndefined', async (t) => {
 })
 
 test('isEmpty', async (t) => {
-    await t.test('supports null and undefined', () => {
-        assert.equal(isEmpty(null), false)
-        assert.equal(isEmpty(undefined), false)
+    await t.test('null and undefined are empty', () => {
+        assert.equal(isEmpty(null), true)
+        assert.equal(isEmpty(undefined), true)
+    })
+    await t.test('Set and Map use .size', () => {
+        assert.equal(isEmpty(new Set()), true)
+        assert.equal(isEmpty(new Set([1])), false)
+        assert.equal(isEmpty(new Map()), true)
+        assert.equal(isEmpty(new Map([['a', 1]])), false)
     })
     await t.test('supports boolean', () => {
         assert.equal(isEmpty(false), true)
@@ -260,3 +277,42 @@ test('toAsyncIterable', async (t) => {
         assert.deepEqual(out, [1, 2, 3])
     })
 })
+
+test('isFunction', async (t) => {
+    await t.test('checks if is function', () => {
+        assert.equal(isFunction(() => 1), true)
+        // biome-ignore lint/complexity/useArrowFunction: testing recognition of `function` expressions
+        assert.equal(isFunction(function () {}), true)
+        assert.equal(isFunction(class {}), true)
+        assert.equal(isFunction('fn' as unknown), false)
+        assert.equal(isFunction(null as unknown), false)
+    })
+})
+
+test('isDate', async (t) => {
+    await t.test('checks if is Date', () => {
+        assert.equal(isDate(new Date()), true)
+        assert.equal(isDate(new Date('invalid')), true) // still a Date instance
+        assert.equal(isDate(Date.now() as unknown), false)
+        assert.equal(isDate('2024' as unknown), false)
+    })
+})
+
+test('isRegExp', async (t) => {
+    await t.test('checks if is RegExp', () => {
+        assert.equal(isRegExp(/abc/), true)
+        assert.equal(isRegExp('/abc/' as unknown), false)
+    })
+})
+
+test('isInteger', async (t) => {
+    await t.test('checks if is integer', () => {
+        assert.equal(isInteger(0), true)
+        assert.equal(isInteger(-7), true)
+        assert.equal(isInteger(1.5), false)
+        assert.equal(isInteger(Number.NaN), false)
+        assert.equal(isInteger(Number.POSITIVE_INFINITY), false)
+        assert.equal(isInteger('1' as unknown), false)
+    })
+})
+

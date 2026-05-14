@@ -61,7 +61,7 @@ export const punctuation = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~'
  * @group String
  */
 export function isLetter(value: string): boolean {
-    return value.toLowerCase() != value.toUpperCase()
+    return value.toLowerCase() !== value.toUpperCase()
 }
 
 /**
@@ -156,6 +156,105 @@ export function titleCase(value: string): string {
             return char.toUpperCase()
         })
         .join('')
+}
+
+/**
+ * Splits a string into words at case boundaries, punctuation, and whitespace.
+ * Internal helper used by case-conversion functions.
+ *
+ * `'fooBarBaz'`, `'foo_bar-baz'`, `'XMLHttpRequest'` all become `['foo','Bar','Baz']`-style splits.
+ */
+function splitWords(value: string): string[] {
+    return value
+        .replace(/([a-z\d])([A-Z])/g, '$1 $2')
+        .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+        .split(/[^a-zA-Z0-9]+/)
+        .filter((w) => w.length > 0)
+}
+
+/**
+ * Convert a string to `kebab-case`.
+ *
+ * @example
+ * ```
+ * kebabCase('fooBar')          // 'foo-bar'
+ * kebabCase('Foo Bar baz')     // 'foo-bar-baz'
+ * kebabCase('XMLHttpRequest')  // 'xml-http-request'
+ * ```
+ * @group String
+ */
+export function kebabCase(value: string): string {
+    return splitWords(value)
+        .map((w) => w.toLowerCase())
+        .join('-')
+}
+
+/**
+ * Convert a string to `snake_case`.
+ *
+ * @example
+ * ```
+ * snakeCase('fooBar')          // 'foo_bar'
+ * snakeCase('Foo Bar baz')     // 'foo_bar_baz'
+ * snakeCase('XMLHttpRequest')  // 'xml_http_request'
+ * ```
+ * @group String
+ */
+export function snakeCase(value: string): string {
+    return splitWords(value)
+        .map((w) => w.toLowerCase())
+        .join('_')
+}
+
+/**
+ * Remove diacritical marks from characters (e.g. `á → a`, `ñ → n`).
+ *
+ * Uses Unicode NFD normalization, so it handles arbitrary scripts.
+ *
+ * @example
+ * ```
+ * stripAccents('árvíztűrő tükörfúrógép')
+ * // 'arvizturo tukorfurogep'
+ * ```
+ * @group String
+ */
+export function stripAccents(value: string): string {
+    return value.normalize('NFD').replace(/\p{Diacritic}/gu, '')
+}
+
+/**
+ * Convert a string to a URL-safe slug.
+ *
+ * Strips diacritics, lowercases, and replaces non-alphanumeric runs with `-`.
+ * Trailing/leading dashes are removed.
+ *
+ * @example
+ * ```
+ * slugify('Hello, World!')        // 'hello-world'
+ * slugify('Árvíztűrő tükörfúrógép') // 'arvizturo-tukorfurogep'
+ * ```
+ * @group String
+ */
+export function slugify(value: string): string {
+    return stripAccents(value)
+        .replace(/([a-z\d])([A-Z])/g, '$1-$2')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+}
+
+/**
+ * Escape a string for safe use inside a `RegExp` literal.
+ *
+ * @example
+ * ```
+ * new RegExp(escapeRegex('a.b+c'))
+ * // /a\.b\+c/
+ * ```
+ * @group String
+ */
+export function escapeRegex(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 /**

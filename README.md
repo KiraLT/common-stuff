@@ -179,3 +179,18 @@ document.cookie = generateCookie("name", "John", { expires: 7 });
 parseQueryString(location.search);
 // { page: ['1'], limit: ['20']}
 ```
+
+## Migrating from v1 to v2
+
+Breaking changes only:
+
+- **ESM-only.** CJS/UMD entry points removed; `require("common-stuff")` no longer works.
+- **`httpErrorHandler` removed** — inline the middleware (it was a thin `instanceof HttpError` wrapper).
+- **`HttpStatusCodes` / `HttpStatusReasons` are `const` objects, not `enum`s** (required by `erasableSyntaxOnly`). Value reads are unchanged; the *type* `HttpStatusCodes` is gone — use `(typeof HttpStatusCodes)[keyof typeof HttpStatusCodes]` if needed.
+- **Array-only `flatMap` removed.** The universal `flatMap` (iterable module) requires callbacks to return an *iterable* and only passes `(item, index)`.
+- **`parseSize`** returns `number | undefined` instead of `-1`.
+- **`merge<A, B>(target, source): A & B`** — return type is inferred. Explicit `merge<MyShape>(a, b)` calls need to pass both generics or cast.
+- **`hashCode`** integers changed (prefixed with `typeof` to avoid falsy collisions). Invalidate any persisted hashes.
+- **`difference` / `intersection` / `union` / `shuffle`** now correctly return `T[]` for mutable inputs (v1 always returned `ReadonlyArray<T>` due to overload order).
+- **`isArray`** narrows readonly inputs to `ReadonlyArray<T>` (v1 narrowed them to mutable `Array<T>`); runtime switched to `Array.isArray` (fixes cross-realm).
+- **`getByKey`** infers the return type from literal paths. Pass `T` explicitly for dynamic paths.

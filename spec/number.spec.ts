@@ -2,8 +2,14 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import { toFloat, toInt } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('toFloat', async (t) => {
+    await t.test('types', () => {
+        assertType<number | undefined>()(toFloat('1.5'))
+        assertType<number | undefined>()(toFloat(5))
+    })
+
     await t.test('parses numeric strings', () => {
         assert.equal(toFloat('1.5'), 1.5)
         assert.equal(toFloat('-3.2'), -3.2)
@@ -40,6 +46,11 @@ test('toFloat', async (t) => {
 })
 
 test('toInt', async (t) => {
+    await t.test('types', () => {
+        assertType<number | undefined>()(toInt('42'))
+        assertType<number | undefined>()(toInt(1.9))
+    })
+
     await t.test('parses integer strings', () => {
         assert.equal(toInt('42'), 42)
         assert.equal(toInt('-7'), -7)

@@ -134,18 +134,24 @@ export function filterRecord<K extends PropertyKey, V>(
 }
 
 /**
- * Merges `source` to `target` recursively
+ * Merges `source` to `target` recursively.
+ *
+ * The return type is inferred as `A & B`. For nested objects TS intersects each
+ * branch (so `merge({ a: { x: 1 } }, { a: { y: 2 } })` is typed as
+ * `{ a: { x: number; y: number } }`). Array merging may produce an intersection
+ * of element types that doesn't match the runtime — supply an explicit return
+ * type via cast if you need precise array typing.
  *
  * @example
  * ```
- * merge({ a: 1 }, { b: 2 }))
- * // { a: 1, b: 2 }
+ * merge({ a: 1 }, { b: 2 })
+ * // { a: 1, b: 2 } typed as { a: number; b: number }
  * ```
  * @group Object
  */
-export function merge<T>(
-    target: unknown,
-    source: unknown,
+export function merge<A, B>(
+    target: A,
+    source: B,
     options?: {
         /**
          * When `source` has `null` or `undefined` value, do not overwrite `target`
@@ -168,34 +174,32 @@ export function merge<T>(
             | 'merge'
             | ((target: unknown[], source: unknown[]) => unknown)
     },
-): T {
+): A & B {
     const { skipNulls = false, arrayPolicy = 'overwrite' } = options ?? {}
 
     if (isPlainObject(target) && isPlainObject(source)) {
-        return Object.entries(source).reduce(
-            (prev, [key, value]) => {
-                prev[key] = merge(prev[key], value, options)
-                return prev
-            },
-            { ...target },
-        ) as unknown as T
+        const result = { ...target } as Record<string | number | symbol, unknown>
+        for (const [key, value] of Object.entries(source)) {
+            result[key] = merge(result[key], value, options)
+        }
+        return result as unknown as A & B
     }
 
     if (Array.isArray(target) && Array.isArray(source)) {
         if (arrayPolicy === 'merge') {
-            return target.concat(source) as unknown as T
+            return target.concat(source) as unknown as A & B
         } else if (typeof arrayPolicy === 'function') {
-            return arrayPolicy(target, source) as unknown as T
+            return arrayPolicy(target, source) as unknown as A & B
         } else {
-            return source as unknown as T
+            return source as unknown as A & B
         }
     }
 
     if (skipNulls && source == null) {
-        return target as T
+        return target as unknown as A & B
     }
 
-    return source as T
+    return source as unknown as A & B
 }
 
 /**
@@ -331,35 +335,121 @@ export function convertToNested<T = Record<string, unknown>>(
 }
 
 /**
- * Get object value by nested keys
+ * Splits a dotted path literal into a tuple of segments at the type level.
+ * `'a.b.c'` → `['a', 'b', 'c']`. Non-literal strings collapse to `string[]`.
+ */
+type SplitPath<S extends string> = string extends S
+    ? string[]
+    : S extends `${infer Head}.${infer Tail}`
+      ? [Head, ...SplitPath<Tail>]
+      : [S]
+
+/**
+ * Indexes `T` by a single path segment `K`. Handles tuples (numeric-string
+ * keys), homogeneous arrays (`T[number]`), records, and unknown shapes.
+ */
+type IndexBySegment<T, K> = T extends readonly unknown[]
+    ? K extends keyof T
+        ? T[K]
+        : K extends `${number}` | number
+          ? T[number] | undefined
+          : undefined
+    : T extends object
+      ? K extends keyof T
+          ? T[K]
+          : K extends `${number}`
+            ? `${number}` extends keyof T
+                ? T[`${number}` & keyof T]
+                : undefined
+            : K extends number
+              ? `${K}` extends keyof T
+                  ? T[`${K}` & keyof T]
+                  : undefined
+              : undefined
+      : undefined
+
+/**
+ * Walks a tuple of path segments through `T`. At each step, an inaccessible
+ * segment yields `undefined` and short-circuits.
+ */
+type WalkPath<T, Path extends readonly unknown[]> = Path extends readonly []
+    ? T
+    : Path extends readonly [infer Head, ...infer Rest]
+      ? Rest extends readonly unknown[]
+          ? WalkPath<IndexBySegment<T, Head>, Rest>
+          : undefined
+      : undefined
+
+/**
+ * Compute the return type of `getByKey(T, P)`.
+ *
+ * - For a string literal path `'a.b.c'` the path is split on `.`.
+ * - For a tuple path the segments are walked directly.
+ * - For a `string` (non-literal) or `(string | number)[]` (non-tuple) input,
+ *   the result falls back to `unknown` — the caller can pass `T` explicitly
+ *   when the path isn't statically known.
+ */
+type GetByPath<
+    T,
+    P extends string | readonly (string | number)[],
+> = P extends string
+    ? string extends P
+        ? unknown
+        : WalkPath<T, SplitPath<P>>
+    : P extends readonly (string | number)[]
+      ? number extends P['length']
+          ? unknown
+          : WalkPath<T, P>
+      : unknown
+
+/**
+ * Get object value by nested keys.
+ *
+ * When the path is a string literal (`'a.b.c'`) or a tuple of literals
+ * (`['a', 'b'] as const`), the return type is inferred from `T` by walking
+ * the path. For dynamic paths (variable strings or non-tuple arrays) the
+ * return type is `unknown`; pass `T` explicitly via the first generic if
+ * you know what to expect.
  *
  * @example
  * ```
- * getByKey({ key1: [1, 2, { key2: 'value' }]}, 'key1.2.key2')
- * // 'value'
+ * getByKey({ a: [1, 2, { b: 'value' }] }, 'a.2.b')
+ * // 'value' — inferred as string
  *
- * getByKey({ key1: [1, 2, { key2: 'value' }]}, ['key1', 2, 'key2'])
- * // 'value'
+ * getByKey({ a: [1, 2, { b: 'value' }] }, ['a', 2, 'b'] as const)
+ * // 'value' — inferred as string
+ *
+ * getByKey<number>(data, somePathVariable)
+ * // explicit fallback for dynamic paths
  * ```
  * @group Object
  */
-export function getByKey<T>(
+export function getByKey<
+    T,
+    const P extends string | readonly (string | number)[],
+>(target: T, keys: P): GetByPath<T, P>
+export function getByKey<R = unknown>(
     target: unknown,
     keys: (string | number)[] | string,
-): T {
+): R
+export function getByKey(
+    target: unknown,
+    keys: (string | number)[] | string,
+): unknown {
     const keysList = Array.isArray(keys) ? keys : keys.split('.')
     const key = keysList[0]
     const restKeys = keysList.slice(1)
 
-    if (!key) {
-        return target as T
+    if (key === undefined || key === '') {
+        return target
     }
 
     if (Array.isArray(target)) {
-        const numKey = parseInt(key.toString(), 10)
+        const numKey =
+            typeof key === 'number' ? key : parseInt(key.toString(), 10)
 
         return Number.isNaN(numKey)
-            ? (undefined as T)
+            ? undefined
             : getByKey(target[numKey], restKeys)
     }
 
@@ -367,5 +457,5 @@ export function getByKey<T>(
         return getByKey(target[key], restKeys)
     }
 
-    return undefined as T
+    return undefined
 }

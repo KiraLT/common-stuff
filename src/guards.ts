@@ -43,6 +43,8 @@ export function isString<T>(value: T | string): value is string {
 /**
  * Checks if value is `array`, acts as a typescript safeguard.
  *
+ * Preserves the readonly/mutable distinction of the narrowed type.
+ *
  * @example
  * ```
  * [[1], ['b'], false].filter(isArray)
@@ -50,9 +52,11 @@ export function isString<T>(value: T | string): value is string {
  * ```
  * @group Guard
  */
+export function isArray<T>(value: T | Array<T>): value is Array<T>
 export function isArray<T>(
-    value: T | Array<T> | ReadonlyArray<T>,
-): value is Array<T> {
+    value: T | ReadonlyArray<T>,
+): value is ReadonlyArray<T>
+export function isArray(value: unknown): boolean {
     return Array.isArray(value)
 }
 
@@ -343,13 +347,23 @@ export function isIterable<T = unknown>(v: unknown): v is Iterable<T> {
 /**
  * Checks if value is `Promise`, acts as a typescript safeguard.
  *
- * * @group Guard
+ * Narrows `T | Promise<T>` to `Promise<T>` cleanly in normal usage; works
+ * with `Array.prototype.filter` to extract promises from a mixed array.
+ *
+ * @group Guard
  * @example
  * ```
- * isPromise(Promise.resolve(5))
- * // true
- * isPromise(5)
- * // false
+ * isPromise(Promise.resolve(5))   // true
+ * isPromise(5)                    // false
+ *
+ * function check(v: Promise<number> | number) {
+ *     if (isPromise(v)) {
+ *         // v: Promise<number>
+ *     }
+ * }
+ *
+ * const arr: (Promise<number> | number)[] = [...]
+ * arr.filter(isPromise) // Promise<number>[]
  * ```
  */
 export function isPromise<T>(v: T | Promise<T>): v is Promise<T> {

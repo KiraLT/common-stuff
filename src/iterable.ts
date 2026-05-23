@@ -266,8 +266,8 @@ export function map<
     V2,
 >(
     input: Record<K, V>,
-    mapper: (value: [K, V], index: number) => Promise<[K2, V2]>,
-): Promise<Record<K2, V2>>
+    mapper: (value: [K, V], index: number) => [K2, V2],
+): Record<K2, V2>
 export function map<
     K extends PropertyKey,
     V,
@@ -275,8 +275,8 @@ export function map<
     V2,
 >(
     input: Record<K, V>,
-    mapper: (value: [K, V], index: number) => [K2, V2],
-): Record<K2, V2>
+    mapper: (value: [K, V], index: number) => Promise<[K2, V2]>,
+): Promise<Record<K2, V2>>
 export function map(input: unknown, mapper: AnyFn): unknown {
     if (isAsyncIterable(input)) {
         return (async function* () {
@@ -394,8 +394,8 @@ export function flatMap<
     V2,
 >(
     input: Record<K, V>,
-    mapper: (value: [K, V], index: number) => Promise<Iterable<[K2, V2]>>,
-): Promise<Record<K2, V2>>
+    mapper: (value: [K, V], index: number) => Iterable<[K2, V2]>,
+): Record<K2, V2>
 export function flatMap<
     K extends PropertyKey,
     V,
@@ -403,8 +403,8 @@ export function flatMap<
     V2,
 >(
     input: Record<K, V>,
-    mapper: (value: [K, V], index: number) => Iterable<[K2, V2]>,
-): Record<K2, V2>
+    mapper: (value: [K, V], index: number) => Promise<Iterable<[K2, V2]>>,
+): Promise<Record<K2, V2>>
 export function flatMap(input: unknown, mapper: AnyFn): unknown {
     if (isAsyncIterable(input)) {
         return (async function* () {
@@ -1013,7 +1013,7 @@ export function drop<T>(input: Iterable<T>, n: number): Iterable<T>
 export function drop<K extends PropertyKey, V>(
     input: Record<K, V>,
     n: number,
-): Record<K, V>
+): Partial<Record<K, V>>
 export function drop(input: unknown, n: number): unknown {
     const skip = Math.max(0, n)
 
@@ -1046,6 +1046,198 @@ export function drop(input: unknown, n: number): unknown {
     }
 
     throw new TypeError('Provided source is not iterable')
+}
+
+/**
+ * Takes leading elements as long as `predicate` returns truthy, stopping at the
+ * first falsy result. Preserves the input container type.
+ *
+ * Async predicate or `AsyncIterable` input wraps the result in a `Promise`
+ * (or `AsyncIterable` for `AsyncIterable` input).
+ *
+ * @example
+ * ```
+ * takeWhile([1, 2, 3, 1], v => v < 3)      // [1, 2]
+ * takeWhile(new Set([1, 2, 3]), v => v < 3) // Set { 1, 2 }
+ * ```
+ * @group Iterable
+ */
+export function takeWhile<V>(
+    input: V[],
+    predicate: (value: V, index: number) => Promise<boolean>,
+): Promise<V[]>
+export function takeWhile<V>(
+    input: V[],
+    predicate: (value: V, index: number) => boolean,
+): V[]
+export function takeWhile<K, V>(
+    input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => boolean,
+): Map<K, V>
+export function takeWhile<T>(
+    input: Set<T>,
+    predicate: (value: T, index: number) => boolean,
+): Set<T>
+export function takeWhile<T>(
+    input: AsyncIterable<T>,
+    predicate: (value: T, index: number) => boolean | Promise<boolean>,
+): AsyncIterable<T>
+export function takeWhile<T>(
+    input: Iterable<T>,
+    predicate: (value: T, index: number) => boolean,
+): Iterable<T>
+export function takeWhile<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => boolean,
+): Partial<Record<K, V>>
+export function takeWhile(input: unknown, predicate: AnyFn): unknown {
+    if (isAsyncIterable(input)) {
+        return (async function* () {
+            let i = 0
+            for await (const v of input) {
+                if (!(await predicate(v, i++))) return
+                yield v
+            }
+        })()
+    }
+
+    const items = toItems(input)
+
+    const collectSync = (): unknown[] | Promise<unknown[]> => {
+        const out: unknown[] = []
+        for (let i = 0; i < items.length; i++) {
+            const r = predicate(items[i], i)
+            if (isPromise(r)) return continueAsync(out, i, r)
+            if (!r) return out
+            out.push(items[i])
+        }
+        return out
+    }
+
+    async function continueAsync(
+        out: unknown[],
+        startIdx: number,
+        firstResult: Promise<unknown>,
+    ): Promise<unknown[]> {
+        if (!(await firstResult)) return out
+        out.push(items[startIdx])
+        for (let i = startIdx + 1; i < items.length; i++) {
+            if (!(await predicate(items[i], i))) return out
+            out.push(items[i])
+        }
+        return out
+    }
+
+    const taken = collectSync()
+    const finalize = (kept: unknown[]): unknown => {
+        if (isArray(input)) return kept
+        if (isSet(input)) return new Set(kept)
+        if (isMap(input)) return new Map(kept as Iterable<[unknown, unknown]>)
+        if (isIterable(input)) {
+            return (function* () {
+                for (const v of kept) yield v
+            })()
+        }
+        // Plain object
+        return Object.fromEntries(kept as Iterable<[PropertyKey, unknown]>)
+    }
+
+    return isPromise(taken) ? taken.then(finalize) : finalize(taken)
+}
+
+/**
+ * Drops leading elements as long as `predicate` returns truthy, then yields
+ * the rest. Preserves the input container type.
+ *
+ * Async predicate or `AsyncIterable` input wraps the result in a `Promise`
+ * (or `AsyncIterable` for `AsyncIterable` input).
+ *
+ * @example
+ * ```
+ * dropWhile([1, 2, 3, 1], v => v < 3)      // [3, 1]
+ * dropWhile({ a: 1, b: 2, c: 3 }, ([, v]) => v < 2)
+ * // { b: 2, c: 3 }
+ * ```
+ * @group Iterable
+ */
+export function dropWhile<V>(
+    input: V[],
+    predicate: (value: V, index: number) => Promise<boolean>,
+): Promise<V[]>
+export function dropWhile<V>(
+    input: V[],
+    predicate: (value: V, index: number) => boolean,
+): V[]
+export function dropWhile<K, V>(
+    input: Map<K, V>,
+    predicate: (value: [K, V], index: number) => boolean,
+): Map<K, V>
+export function dropWhile<T>(
+    input: Set<T>,
+    predicate: (value: T, index: number) => boolean,
+): Set<T>
+export function dropWhile<T>(
+    input: AsyncIterable<T>,
+    predicate: (value: T, index: number) => boolean | Promise<boolean>,
+): AsyncIterable<T>
+export function dropWhile<T>(
+    input: Iterable<T>,
+    predicate: (value: T, index: number) => boolean,
+): Iterable<T>
+export function dropWhile<K extends PropertyKey, V>(
+    input: Record<K, V>,
+    predicate: (value: [K, V], index: number) => boolean,
+): Partial<Record<K, V>>
+export function dropWhile(input: unknown, predicate: AnyFn): unknown {
+    if (isAsyncIterable(input)) {
+        return (async function* () {
+            let dropping = true
+            let i = 0
+            for await (const v of input) {
+                if (dropping && (await predicate(v, i++))) continue
+                dropping = false
+                yield v
+            }
+        })()
+    }
+
+    const items = toItems(input)
+
+    const collectSync = (): unknown[] | Promise<unknown[]> => {
+        for (let i = 0; i < items.length; i++) {
+            const r = predicate(items[i], i)
+            if (isPromise(r)) return continueAsync(i, r)
+            if (!r) return items.slice(i)
+        }
+        return []
+    }
+
+    async function continueAsync(
+        startIdx: number,
+        firstResult: Promise<unknown>,
+    ): Promise<unknown[]> {
+        if (!(await firstResult)) return items.slice(startIdx)
+        for (let i = startIdx + 1; i < items.length; i++) {
+            if (!(await predicate(items[i], i))) return items.slice(i)
+        }
+        return []
+    }
+
+    const dropped = collectSync()
+    const finalize = (kept: unknown[]): unknown => {
+        if (isArray(input)) return kept
+        if (isSet(input)) return new Set(kept)
+        if (isMap(input)) return new Map(kept as Iterable<[unknown, unknown]>)
+        if (isIterable(input)) {
+            return (function* () {
+                for (const v of kept) yield v
+            })()
+        }
+        // Plain object
+        return Object.fromEntries(kept as Iterable<[PropertyKey, unknown]>)
+    }
+
+    return isPromise(dropped) ? dropped.then(finalize) : finalize(dropped)
 }
 
 /**

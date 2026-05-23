@@ -12,8 +12,15 @@ import {
     mapRecord,
     merge,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('isEqual', async (t) => {
+    await t.test('types', () => {
+        // Inputs are `unknown` so accept anything; result is boolean
+        assertType<boolean>()(isEqual(1, 1))
+        assertType<boolean>()(isEqual({ a: 1 }, { a: 1 }))
+    })
+
     await t.test('compares strings', () => {
         assert.equal(isEqual('aa', 'aa'), true)
         assert.equal(isEqual('aa', 'a'), false)
@@ -144,6 +151,19 @@ test('isEqual', async (t) => {
 })
 
 test('mapRecord', async (t) => {
+    await t.test('types', () => {
+        // Deprecated wrapper; key/value remapping inferred from callback
+        assertType<Record<string, 'a'>>()(
+            mapRecord({ a: 'b' }, ([k, v]) => [v, k]),
+        )
+        // Entry param is inferred ([key, value])
+        mapRecord({ a: 1 }, ([k, v]) => {
+            assertType<'a'>()(k)
+            assertType<number>()(v)
+            return [k, v] as ['a', number]
+        })
+    })
+
     await t.test('swaps entries', () => {
         assert.deepEqual(
             mapRecord({ a: 'b' }, ([k, v]) => [v, k]),
@@ -153,6 +173,13 @@ test('mapRecord', async (t) => {
 })
 
 test('flatMapRecord', async (t) => {
+    await t.test('types', () => {
+        // Keys/values inferred from callback's return tuples
+        assertType<Record<'a', string>>()(
+            flatMapRecord({ a: 'b' }, ([k, v]) => [[k, v]]),
+        )
+    })
+
     await t.test('create multiple items', () => {
         assert.deepEqual(
             flatMapRecord({ a: 'b' }, ([k, v]) => [
@@ -173,6 +200,13 @@ test('flatMapRecord', async (t) => {
 })
 
 test('filterRecord', async (t) => {
+    await t.test('types', () => {
+        // Preserves key & value types
+        assertType<Record<'a' | 'b', string>>()(
+            filterRecord({ a: 'b', b: 'c' }, ([k]) => k === 'b'),
+        )
+    })
+
     await t.test('filters entries', () => {
         assert.deepEqual(
             filterRecord(
@@ -185,6 +219,19 @@ test('filterRecord', async (t) => {
 })
 
 test('merge', async (t) => {
+    await t.test('types', () => {
+        // Return type is inferred as `A & B` from the inputs
+        assertType<{ a: number } & { b: number }>()(
+            merge({ a: 1 }, { b: 2 }),
+        )
+        // Nested intersection
+        assertType<{ a: { x: number } } & { a: { y: number } }>()(
+            merge({ a: { x: 1 } }, { a: { y: 2 } }),
+        )
+        // Falls back to unknown when both inputs are unknown
+        assertType<unknown>()(merge(1 as unknown, 2 as unknown))
+    })
+
     await t.test('merges objects', () => {
         assert.deepEqual(merge({ a: 1 }, { b: 2 }), { a: 1, b: 2 })
     })
@@ -236,6 +283,17 @@ test('merge', async (t) => {
 })
 
 test('clone', async (t) => {
+    await t.test('types', () => {
+        // Preserves the source type
+        assertType<{ a: number }>()(clone({ a: 1 }))
+        assertType<number[]>()(clone([1, 2, 3]))
+        assertType<Date>()(clone(new Date()))
+        assertType<Set<number>>()(clone(new Set([1, 2])))
+        assertType<Map<string, number>>()(
+            clone(new Map<string, number>([['a', 1]])),
+        )
+    })
+
     await t.test('clones object', () => {
         const obj = { a: 1 }
         const objClone = clone(obj)
@@ -306,6 +364,16 @@ test('clone', async (t) => {
 })
 
 test('convertToNested', async (t) => {
+    await t.test('types', () => {
+        // UX QUIRK: result type defaults to Record<string, unknown> because the
+        // function can't statically infer the nested shape from runtime keys.
+        // Caller must specify T to get a typed result.
+        assertType<Record<string, unknown>>()(convertToNested({ 'a.b': 1 }))
+        assertType<{ a: { b: number } }>()(
+            convertToNested<{ a: { b: number } }>({ 'a.b': 1 }),
+        )
+    })
+
     await t.test('converts nested', () => {
         assert.deepEqual(
             convertToNested({
@@ -403,6 +471,34 @@ test('convertToNested', async (t) => {
 })
 
 test('getByKey', async (t) => {
+    await t.test('types', () => {
+        // String literal paths are walked at the type level
+        assertType<number>()(getByKey({ a: 1 }, 'a'))
+        assertType<string>()(getByKey({ a: { b: 'x' } }, 'a.b'))
+        // Tuple paths (via `as const`) work the same way
+        assertType<string>()(
+            getByKey({ a: { b: 'x' } }, ['a', 'b'] as const),
+        )
+        // Numeric path segments index arrays/tuples
+        const data = { a: [1, 2, { b: 'x' as string }] as const }
+        assertType<string>()(getByKey(data, 'a.2.b'))
+        // Unknown segments yield `undefined`
+        assertType<undefined>()(getByKey({ a: 1 }, 'missing'))
+        // Dynamic string path → unknown (caller may pass explicit T)
+        const dynamicPath: string = 'a'
+        assertType<unknown>()(getByKey({ a: 1 }, dynamicPath))
+        assertType<number>()(getByKey<number>({ a: 1 }, dynamicPath))
+        // Non-tuple array path also falls back to unknown
+        const dynamicArr: string[] = ['a']
+        assertType<unknown>()(getByKey({ a: 1 }, dynamicArr))
+
+        // Negative assertions
+        // @ts-expect-error — wrong leaf type
+        assertType<string>()(getByKey({ a: 1 }, 'a'))
+        // @ts-expect-error — missing key narrows to undefined, not number
+        assertType<number>()(getByKey({ a: 1 }, 'missing'))
+    })
+
     await t.test('gets value by string key', () => {
         assert.equal(getByKey({ a: { b: [1, { a: 10 }] } }, 'a.b.1.a'), 10)
     })

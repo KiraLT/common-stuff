@@ -261,9 +261,9 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
  */
 export function chunk<T>(array: T[], size: number): T[][]
 export function chunk<T>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     size: number,
-): ReadonlyArray<ReadonlyArray<T>>
+): readonly (readonly T[])[]
 export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
     if (size < 1 || !Number.isInteger(size)) {
         throw new RangeError('chunk size must be a positive integer')
@@ -294,9 +294,9 @@ export function groupBy<T, G>(
     keyCallback: (value: T) => G,
 ): [G, T[]][]
 export function groupBy<T, G>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     keyCallback: (value: T) => G,
-): ReadonlyArray<[G, T[]]>
+): readonly [G, readonly T[]][]
 export function groupBy<T, G>(
     array: ReadonlyArray<T>,
     keyCallback: (value: T) => G,
@@ -335,9 +335,9 @@ export function indexBy<T>(
     keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
 ): Record<string, T[]>
 export function indexBy<T>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
-): Record<string, ReadonlyArray<T>>
+): Record<string, readonly T[]>
 export function indexBy<T>(
     array: ReadonlyArray<T>,
     keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
@@ -368,9 +368,9 @@ export function indexBy<T>(
  * @group Array
  */
 export function deduplicate<T>(array: T[]): T[]
-export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T>
-export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
-    return deduplicateBy(array, (v) => v)
+export function deduplicate<T>(array: readonly T[]): readonly T[]
+export function deduplicate<T>(array: ReadonlyArray<T>): T[] {
+    return deduplicateBy(array as T[], (v) => v)
 }
 
 /**
@@ -385,17 +385,13 @@ export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
  */
 export function deduplicateBy<T>(array: T[], key: (value: T) => unknown): T[]
 export function deduplicateBy<T>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     key: (value: T) => unknown,
-): ReadonlyArray<T>
+): readonly T[]
 export function deduplicateBy<T>(
     array: ReadonlyArray<T>,
     key: (value: T) => unknown,
-): ReadonlyArray<T>
-export function deduplicateBy<T>(
-    array: ReadonlyArray<T>,
-    key: (value: T) => unknown,
-): ReadonlyArray<T> {
+): T[] {
     const prims = {
         boolean: {} as Record<string | number | symbol, boolean>,
         number: {} as Record<string | number | symbol, boolean>,
@@ -433,15 +429,15 @@ export function deduplicateBy<T>(
  * @group Array
  */
 export function difference<T, T2>(
-    array: ReadonlyArray<T>,
+    array: T[],
     values: ReadonlyArray<T2>,
     key?: (value: T | T2) => unknown,
-): ReadonlyArray<T>
-export function difference<T, T2>(
-    array: T[],
-    values: T2[],
-    key?: (value: T) => unknown,
 ): T[]
+export function difference<T, T2>(
+    array: readonly T[],
+    values: ReadonlyArray<T2>,
+    key?: (value: T | T2) => unknown,
+): readonly T[]
 export function difference<T, T2>(
     array: ReadonlyArray<T>,
     values: ReadonlyArray<T2>,
@@ -460,11 +456,11 @@ export function difference<T, T2>(
  * ```
  * @group Array
  */
+export function intersection<T>(values: T[][], key?: (value: T) => unknown): T[]
 export function intersection<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key?: (value: T) => unknown,
-): ReadonlyArray<T>
-export function intersection<T>(values: T[][], key?: (value: T) => unknown): T[]
+): readonly T[]
 export function intersection<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key: (value: T) => unknown = (v) => v,
@@ -487,11 +483,11 @@ export function intersection<T>(
  * ```
  * @group Array
  */
+export function union<T>(values: T[][], key?: (value: T) => unknown): T[]
 export function union<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key?: (value: T) => unknown,
-): ReadonlyArray<T>
-export function union<T>(values: T[][], key?: (value: T) => unknown): T[]
+): readonly T[]
 export function union<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key: (value: T) => unknown = (v) => v,

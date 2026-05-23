@@ -2,8 +2,14 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import { createDummyLogger, type Logger } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('createDummyLogger', async (t) => {
+    await t.test('types', () => {
+        const logger = createDummyLogger()
+        assertType<Logger>()(logger)
+    })
+
     await t.test('does nothing', () => {
         const logger = createDummyLogger()
         assert.equal(logger.debug('Hello'), undefined)

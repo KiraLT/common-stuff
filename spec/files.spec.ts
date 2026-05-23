@@ -8,8 +8,14 @@ import {
     getMimeType,
     parseSize,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('formatBytes', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(formatBytes(1024))
+        assertType<string>()(formatBytes(1024, 2))
+    })
+
     await t.test('handles zero', () => {
         assert.equal(formatBytes(0), '0 Bytes')
     })
@@ -38,14 +44,18 @@ test('formatBytes', async (t) => {
 })
 
 test('parseSize', async (t) => {
+    await t.test('types', () => {
+        assertType<number | undefined>()(parseSize('10 KB'))
+    })
+
     await t.test('parses bytes', () => {
         assert.equal(parseSize('10 Bytes'), 10)
     })
-    await t.test('returns -1 when input does not match <number> <unit>', () => {
-        assert.equal(parseSize('zero bytes'), -1)
+    await t.test('returns undefined when input does not match <number> <unit>', () => {
+        assert.equal(parseSize('zero bytes'), undefined)
     })
-    await t.test('returns -1 for unknown unit', () => {
-        assert.equal(parseSize('10 zorps'), -1)
+    await t.test('returns undefined for unknown unit', () => {
+        assert.equal(parseSize('10 zorps'), undefined)
     })
     await t.test('support decimals', () => {
         assert.equal(parseSize('1.6 KB'), 1638.4)
@@ -53,12 +63,16 @@ test('parseSize', async (t) => {
     await t.test('just works', () => {
         assert.equal(parseSize('15.53 MB'), 16284385.28)
     })
-    await t.test('returns -1 on empty string', () => {
-        assert.equal(parseSize(''), -1)
+    await t.test('returns undefined on empty string', () => {
+        assert.equal(parseSize(''), undefined)
     })
 })
 
 test('getFileParts', async (t) => {
+    await t.test('types', () => {
+        assertType<[string, string]>()(getFileParts('a.txt'))
+    })
+
     await t.test('parses file name', () => {
         assert.deepEqual(getFileParts('myfile.txt'), ['myfile', '.txt'])
     })
@@ -86,6 +100,10 @@ test('getFileParts', async (t) => {
 })
 
 test('getMimeType', async (t) => {
+    await t.test('types', () => {
+        assertType<string | undefined>()(getMimeType('a.txt'))
+    })
+
     await t.test('returns undefined for unknown extension', () => {
         assert.equal(getMimeType('myfile.unknown'), undefined)
     })
@@ -113,6 +131,10 @@ test('getMimeType', async (t) => {
 })
 
 test('getExtension', async (t) => {
+    await t.test('types', () => {
+        assertType<string | undefined>()(getExtension('text/plain'))
+    })
+
     await t.test('returns undefined for unknown mime type', () => {
         assert.equal(getExtension('application/unknown'), undefined)
     })

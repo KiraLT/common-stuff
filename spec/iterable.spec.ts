@@ -3,20 +3,24 @@ import test from 'node:test'
 
 import {
     drop,
+    dropWhile,
     every,
     filter,
     find,
     flatMap,
     forEach,
+    isNumber,
     map,
     partition,
     reduce,
     size,
     some,
     take,
+    takeWhile,
     toArray,
     zip,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 async function* makeAsync<T>(values: Iterable<T>): AsyncGenerator<T> {
     for (const v of values) {
@@ -32,6 +36,30 @@ async function collect<T>(it: AsyncIterable<T>): Promise<T[]> {
 }
 
 test('reduce', async (t) => {
+    await t.test('types', () => {
+        // Sync iterable, no initial → R
+        assertType<number>()(reduce([1, 2, 3], (a, b) => a + b))
+        // Initial value with different return type
+        assertType<string>()(
+            reduce([1, 2, 3], (acc: string, v) => acc + v, ''),
+        )
+        // Async iterable → Promise<R>
+        assertType<Promise<number>>()(
+            reduce(makeAsync([1, 2]), (a, b) => a + b),
+        )
+        // Async reducer + sync iterable → Promise<R>
+        assertType<Promise<number>>()(
+            reduce([1, 2], async (a, b) => a + b, 0),
+        )
+        // Callback param types are inferred
+        reduce([1, 2, 3], (acc, v, i) => {
+            assertType<number>()(acc)
+            assertType<number>()(v)
+            assertType<number>()(i)
+            return acc + v
+        })
+    })
+
     await t.test('reduces array with initial', () => {
         assert.equal(
             reduce([1, 2, 3], (a, b) => a + b, 0),
@@ -145,6 +173,46 @@ test('reduce', async (t) => {
 })
 
 test('map', async (t) => {
+    await t.test('types', () => {
+        // Array → Array
+        assertType<number[]>()(map([1, 2, 3], (v) => v * 2))
+        // Async mapper on array → Promise<Array>
+        assertType<Promise<number[]>>()(map([1, 2, 3], async (v) => v * 2))
+        // Negative: async mapper does NOT return a plain array
+        // @ts-expect-error — result is Promise<number[]>, not number[]
+        assertType<number[]>()(map([1, 2, 3], async (v) => v * 2))
+        // Negative: mapper result type is enforced
+        // @ts-expect-error — result is string[], not number[]
+        assertType<number[]>()(map([1, 2, 3], (v) => v.toString()))
+        // Set → Set
+        assertType<Set<string>>()(map(new Set([1, 2, 3]), (v) => v.toString()))
+        assertType<Promise<Set<number>>>()(
+            map(new Set([1, 2]), async (v) => v + 1),
+        )
+        // Map → Map
+        assertType<Map<string, number>>()(
+            map(
+                new Map<string, number>([['a', 1]]),
+                ([k, v]) => [k.toUpperCase(), v * 2] as [string, number],
+            ),
+        )
+        // Record → Record
+        assertType<Record<string, number>>()(
+            map(
+                { a: 1, b: 2 } as Record<string, number>,
+                ([k, v]) => [k, v * 2] as [string, number],
+            ),
+        )
+        // AsyncIterable → AsyncIterable
+        assertType<AsyncIterable<string>>()(map(makeAsync([1, 2]), (v) => `${v}`))
+        // Callback params are inferred (value, index)
+        map([1, 2], (v, i) => {
+            assertType<number>()(v)
+            assertType<number>()(i)
+            return v + i
+        })
+    })
+
     await t.test('maps array → array', () => {
         const out = map([1, 2, 3], (v) => v * 2)
         assert.ok(Array.isArray(out))
@@ -215,6 +283,26 @@ test('map', async (t) => {
 })
 
 test('flatMap', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(flatMap([1, 2], (v) => [v, v * 10]))
+        assertType<Promise<number[]>>()(
+            flatMap([1, 2], async (v) => [v, v * 10]),
+        )
+        assertType<AsyncIterable<number>>()(
+            flatMap(makeAsync([1, 2]), (v) => [v, v + 1]),
+        )
+        assertType<Set<number>>()(
+            flatMap(new Set([1, 2]), (v) => [v, v + 10]),
+        )
+        // Map → Map
+        assertType<Map<string, number>>()(
+            flatMap(
+                new Map<string, number>([['a', 1]]),
+                ([k, v]) => [[k, v]] as [string, number][],
+            ),
+        )
+    })
+
     await t.test('flatMaps array → array', () => {
         const out = flatMap([1, 2, 3], (v) => [v, v * 10])
         assert.deepEqual(out, [1, 10, 2, 20, 3, 30])
@@ -279,6 +367,37 @@ test('flatMap', async (t) => {
 })
 
 test('filter', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(filter([1, 2, 3, 4], (v) => v % 2 === 0))
+        assertType<Promise<number[]>>()(
+            filter([1, 2, 3], async (v) => v > 1),
+        )
+        // Negative: async predicate must be awaited
+        // @ts-expect-error — result is Promise<number[]>, not number[]
+        assertType<number[]>()(filter([1, 2, 3], async (v) => v > 1))
+        // Type-predicate narrows array contents
+        const mixedArr: (number | string)[] = [1, 'a', 2]
+        assertType<number[]>()(filter(mixedArr, isNumber))
+        // Type-predicate narrows Set contents
+        const mixedSet = new Set<number | string>([1, 'a', 2])
+        assertType<Set<number>>()(filter(mixedSet, isNumber))
+        // Map → Map
+        assertType<Map<string, number>>()(
+            filter(new Map<string, number>([['a', 1]]), ([, v]) => v > 0),
+        )
+        // Record → Record
+        assertType<Record<string, number>>()(
+            filter(
+                { a: 1, b: 2 } as Record<string, number>,
+                ([, v]) => v > 0,
+            ),
+        )
+        // AsyncIterable → AsyncIterable
+        assertType<AsyncIterable<number>>()(
+            filter(makeAsync([1, 2]), (v) => v > 0),
+        )
+    })
+
     await t.test('filters array → array', () => {
         const out = filter([1, 2, 3, 4], (v) => v % 2 === 0)
         assert.deepEqual(out, [2, 4])
@@ -331,6 +450,20 @@ test('filter', async (t) => {
 })
 
 test('forEach', async (t) => {
+    await t.test('types', () => {
+        // Sync iterable → void
+        assertType<void>()(forEach([1, 2, 3], () => {}))
+        // Async iterable → Promise<void>
+        assertType<Promise<void>>()(forEach(makeAsync([1, 2]), () => {}))
+        // Async callback on sync iterable → Promise<void>
+        assertType<Promise<void>>()(forEach([1, 2], async () => {}))
+        // Callback params inferred
+        forEach(new Map<string, number>([['a', 1]]), (entry, i) => {
+            assertType<[string, number]>()(entry)
+            assertType<number>()(i)
+        })
+    })
+
     await t.test('iterates array', () => {
         const seen: number[] = []
         forEach([1, 2, 3], (v) => seen.push(v))
@@ -383,6 +516,28 @@ test('forEach', async (t) => {
 })
 
 test('find', async (t) => {
+    await t.test('types', () => {
+        assertType<number | undefined>()(find([1, 2, 3, 4], (v) => v > 2))
+        // Negative: `find` always includes `| undefined`
+        // @ts-expect-error — must include `| undefined`
+        assertType<number>()(find([1, 2, 3, 4], (v) => v > 2))
+        // Type-predicate narrows
+        const mixedArr: (number | string)[] = [1, 'a', 2]
+        assertType<number | undefined>()(find(mixedArr, isNumber))
+        // Map → entry-tuple
+        assertType<[string, number] | undefined>()(
+            find(new Map<string, number>([['a', 1]]), ([, v]) => v > 0),
+        )
+        // Async iterable → Promise
+        assertType<Promise<number | undefined>>()(
+            find(makeAsync([1, 2]), (v) => v > 0),
+        )
+        // Async predicate on sync iterable → Promise
+        assertType<Promise<number | undefined>>()(
+            find([1, 2, 3], async (v) => v > 1),
+        )
+    })
+
     await t.test('finds in array', () => {
         assert.equal(
             find([1, 2, 3, 4], (v) => v > 2),
@@ -427,6 +582,15 @@ test('find', async (t) => {
 })
 
 test('some', async (t) => {
+    await t.test('types', () => {
+        assertType<boolean>()(some([1, 2], (v) => v > 1))
+        assertType<Promise<boolean>>()(some([1, 2], async (v) => v > 1))
+        assertType<Promise<boolean>>()(some(makeAsync([1, 2]), (v) => v > 0))
+        assertType<boolean>()(
+            some(new Map<string, number>([['a', 1]]), ([, v]) => v > 0),
+        )
+    })
+
     await t.test('returns true when any match (array)', () => {
         assert.equal(
             some([1, 2, 3], (v) => v === 2),
@@ -473,6 +637,12 @@ test('some', async (t) => {
 })
 
 test('every', async (t) => {
+    await t.test('types', () => {
+        assertType<boolean>()(every([1, 2], (v) => v > 0))
+        assertType<Promise<boolean>>()(every([1, 2], async (v) => v > 0))
+        assertType<Promise<boolean>>()(every(makeAsync([1, 2]), (v) => v > 0))
+    })
+
     await t.test('returns true when all match', () => {
         assert.equal(
             every([2, 4, 6], (v) => v % 2 === 0),
@@ -512,6 +682,14 @@ test('every', async (t) => {
 })
 
 test('size', async (t) => {
+    await t.test('types', () => {
+        assertType<number>()(size([1, 2]))
+        assertType<number>()(size(new Set([1])))
+        assertType<number>()(size(new Map([['a', 1]])))
+        assertType<number>()(size({ a: 1, b: 2 }))
+        assertType<Promise<number>>()(size(makeAsync([1, 2])))
+    })
+
     await t.test('counts array', () => {
         assert.equal(size([1, 2, 3]), 3)
     })
@@ -544,6 +722,15 @@ test('size', async (t) => {
 })
 
 test('toArray', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(toArray([1, 2, 3]))
+        assertType<number[]>()(toArray(new Set([1, 2, 3])))
+        assertType<[string, number][]>()(
+            toArray(new Map<string, number>([['a', 1]])),
+        )
+        assertType<Promise<string[]>>()(toArray(makeAsync(['a', 'b'])))
+    })
+
     await t.test('copies array', () => {
         const src = [1, 2, 3]
         const out = toArray(src)
@@ -593,6 +780,18 @@ test('toArray', async (t) => {
 })
 
 test('take', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(take([1, 2, 3], 2))
+        assertType<Set<number>>()(take(new Set([1, 2, 3]), 2))
+        assertType<Map<string, number>>()(
+            take(new Map<string, number>([['a', 1]]), 1),
+        )
+        assertType<AsyncIterable<number>>()(take(makeAsync([1, 2, 3]), 2))
+        // Iterable preserved (generic)
+        function* gen(): Generator<number> { yield 1 }
+        assertType<Iterable<number>>()(take(gen(), 1))
+    })
+
     await t.test('array', () => {
         assert.deepEqual(take([1, 2, 3, 4], 2), [1, 2])
         assert.deepEqual(take([1, 2], 5), [1, 2])
@@ -648,6 +847,16 @@ test('take', async (t) => {
 })
 
 test('drop', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(drop([1, 2, 3], 1))
+        assertType<Set<number>>()(drop(new Set([1, 2, 3]), 1))
+        // Record return is `Partial<Record<K, V>>` since drop removes keys
+        assertType<Partial<Record<'a' | 'b' | 'c', number>>>()(
+            drop({ a: 1, b: 2, c: 3 }, 1),
+        )
+        assertType<AsyncIterable<number>>()(drop(makeAsync([1, 2, 3]), 1))
+    })
+
     await t.test('array', () => {
         assert.deepEqual(drop([1, 2, 3, 4], 2), [3, 4])
         assert.deepEqual(drop([1, 2], 5), [])
@@ -689,7 +898,216 @@ test('drop', async (t) => {
     })
 })
 
+test('takeWhile', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(takeWhile([1, 2, 3], (v) => v < 3))
+        assertType<Promise<number[]>>()(
+            takeWhile([1, 2, 3], async (v) => v < 3),
+        )
+        assertType<Set<number>>()(
+            takeWhile(new Set([1, 2, 3]), (v) => v < 3),
+        )
+        assertType<Map<string, number>>()(
+            takeWhile(
+                new Map<string, number>([['a', 1]]),
+                ([, v]) => v > 0,
+            ),
+        )
+        assertType<Partial<Record<'a' | 'b' | 'c', number>>>()(
+            takeWhile({ a: 1, b: 2, c: 3 }, ([, v]) => v < 3),
+        )
+        assertType<AsyncIterable<number>>()(
+            takeWhile(makeAsync([1, 2, 3]), (v) => v < 3),
+        )
+    })
+
+    await t.test('takes leading elements (array)', () => {
+        assert.deepEqual(
+            takeWhile([1, 2, 3, 1, 0], (v) => v < 3),
+            [1, 2],
+        )
+    })
+
+    await t.test('all match returns full container', () => {
+        assert.deepEqual(
+            takeWhile([1, 2, 3], () => true),
+            [1, 2, 3],
+        )
+    })
+
+    await t.test('none match returns empty', () => {
+        assert.deepEqual(
+            takeWhile([1, 2, 3], () => false),
+            [],
+        )
+    })
+
+    await t.test('preserves Set container', () => {
+        const out = takeWhile(new Set([1, 2, 3, 1]), (v) => v < 3)
+        assert.ok(out instanceof Set)
+        assert.deepEqual([...out], [1, 2])
+    })
+
+    await t.test('preserves Map container', () => {
+        const out = takeWhile(
+            new Map([
+                ['a', 1],
+                ['b', 2],
+                ['c', 3],
+            ]),
+            ([, v]) => v < 3,
+        )
+        assert.ok(out instanceof Map)
+        assert.deepEqual(
+            [...out.entries()],
+            [
+                ['a', 1],
+                ['b', 2],
+            ],
+        )
+    })
+
+    await t.test('preserves Record container', () => {
+        assert.deepEqual(
+            takeWhile({ a: 1, b: 2, c: 3 }, ([, v]) => v < 3),
+            { a: 1, b: 2 },
+        )
+    })
+
+    await t.test('passes index', () => {
+        assert.deepEqual(
+            takeWhile([10, 20, 30, 40], (_v, i) => i < 2),
+            [10, 20],
+        )
+    })
+
+    await t.test('async predicate on sync iterable returns Promise', async () => {
+        const result = takeWhile([1, 2, 3, 1], async (v) => v < 3)
+        assert.ok(result instanceof Promise)
+        assert.deepEqual(await result, [1, 2])
+    })
+
+    await t.test('async iterable', async () => {
+        const out: number[] = []
+        for await (const v of takeWhile(makeAsync([1, 2, 3, 1]), (v) => v < 3)) {
+            out.push(v)
+        }
+        assert.deepEqual(out, [1, 2])
+    })
+
+    await t.test('async iterable with async predicate', async () => {
+        const out: number[] = []
+        for await (const v of takeWhile(
+            makeAsync([1, 2, 3, 1]),
+            async (v) => v < 3,
+        )) {
+            out.push(v)
+        }
+        assert.deepEqual(out, [1, 2])
+    })
+})
+
+test('dropWhile', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(dropWhile([1, 2, 3], (v) => v < 3))
+        assertType<Promise<number[]>>()(
+            dropWhile([1, 2, 3], async (v) => v < 3),
+        )
+        assertType<Set<number>>()(
+            dropWhile(new Set([1, 2, 3]), (v) => v < 3),
+        )
+        assertType<Map<string, number>>()(
+            dropWhile(
+                new Map<string, number>([['a', 1]]),
+                ([, v]) => v < 5,
+            ),
+        )
+        assertType<Partial<Record<'a' | 'b' | 'c', number>>>()(
+            dropWhile({ a: 1, b: 2, c: 3 }, ([, v]) => v < 3),
+        )
+        assertType<AsyncIterable<number>>()(
+            dropWhile(makeAsync([1, 2, 3]), (v) => v < 3),
+        )
+    })
+
+    await t.test('drops leading elements (array)', () => {
+        assert.deepEqual(
+            dropWhile([1, 2, 3, 1, 0], (v) => v < 3),
+            [3, 1, 0],
+        )
+    })
+
+    await t.test('all match returns empty', () => {
+        assert.deepEqual(
+            dropWhile([1, 2, 3], () => true),
+            [],
+        )
+    })
+
+    await t.test('none match returns full container', () => {
+        assert.deepEqual(
+            dropWhile([1, 2, 3], () => false),
+            [1, 2, 3],
+        )
+    })
+
+    await t.test('preserves Record container', () => {
+        assert.deepEqual(
+            dropWhile({ a: 1, b: 2, c: 3 }, ([, v]) => v < 2),
+            { b: 2, c: 3 },
+        )
+    })
+
+    await t.test('preserves Map container', () => {
+        const out = dropWhile(
+            new Map([
+                ['a', 1],
+                ['b', 2],
+                ['c', 3],
+            ]),
+            ([, v]) => v < 3,
+        )
+        assert.ok(out instanceof Map)
+        assert.deepEqual([...out.entries()], [['c', 3]])
+    })
+
+    await t.test('async predicate on sync iterable returns Promise', async () => {
+        const result = dropWhile([1, 2, 3, 1], async (v) => v < 3)
+        assert.ok(result instanceof Promise)
+        assert.deepEqual(await result, [3, 1])
+    })
+
+    await t.test('async iterable', async () => {
+        const out: number[] = []
+        for await (const v of dropWhile(makeAsync([1, 2, 3, 1]), (v) => v < 3)) {
+            out.push(v)
+        }
+        assert.deepEqual(out, [3, 1])
+    })
+})
+
 test('partition', async (t) => {
+    await t.test('types', () => {
+        assertType<[number[], number[]]>()(
+            partition([1, 2, 3], (v) => v > 1),
+        )
+        assertType<Promise<[number[], number[]]>>()(
+            partition([1, 2, 3], async (v) => v > 1),
+        )
+        assertType<[Set<number>, Set<number>]>()(
+            partition(new Set([1, 2, 3]), (v) => v > 1),
+        )
+        assertType<[Map<string, number>, Map<string, number>]>()(
+            partition(
+                new Map<string, number>([['a', 1]]),
+                ([, v]) => v > 0,
+            ),
+        )
+        assertType<Promise<[number[], number[]]>>()(
+            partition(makeAsync([1, 2, 3]), (v) => v > 1),
+        )
+    })
+
     await t.test('array → [matching, rest]', () => {
         assert.deepEqual(
             partition([1, 2, 3, 4], (v) => v % 2 === 0),
@@ -743,6 +1161,20 @@ test('partition', async (t) => {
 })
 
 test('zip', async (t) => {
+    await t.test('types', () => {
+        assertType<[number, string][]>()(zip([1, 2], ['a', 'b']))
+        // Negative: tuple order matters
+        // @ts-expect-error — actual is [number, string][], not [string, number][]
+        assertType<[string, number][]>()(zip([1, 2], ['a', 'b']))
+        assertType<[number, string, boolean][]>()(
+            zip([1, 2], ['a', 'b'], [true, false]),
+        )
+        // Mixed sync/async → Promise
+        assertType<Promise<[number, string][]>>()(
+            zip([1, 2, 3], makeAsync(['a'])),
+        )
+    })
+
     await t.test('two arrays', () => {
         assert.deepEqual(zip([1, 2, 3], ['a', 'b', 'c']), [
             [1, 'a'],
@@ -986,3 +1418,4 @@ test('plain object branches for find/some/every', async (t) => {
         )
     })
 })
+

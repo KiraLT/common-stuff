@@ -26,8 +26,9 @@
     "exports": "./dist/index.js",
     "sideEffects": false,
     "scripts": {
-        "test": "node --test --experimental-test-coverage --test-reporter=spec \"spec/**/*.spec.ts\"",
+        "test": "node --test --experimental-test-coverage --test-reporter=spec \"spec/**/*.spec.ts\" && tsc --noEmit -p spec/tsconfig.json",
         "test-cov": "node --test --experimental-test-coverage --test-reporter-destination=lcov.info --test-reporter=lcov \"spec/**/*.spec.ts\"",
+        "typecheck": "tsc --noEmit -p spec/tsconfig.json",
         "build": "tsc && typedoc src/index.ts"
     },
     "files": [

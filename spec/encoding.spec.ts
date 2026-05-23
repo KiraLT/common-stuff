@@ -7,19 +7,56 @@ import {
     generateUUID,
     hashCode,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('generateHash', async (t) => {
-    await t.test('generates object hash', () => {
-        assert.equal(hashCode({ a: ['b', '1'] }), -336400960)
+    await t.test('types', () => {
+        assertType<number>()(hashCode({ a: 1 }))
+        // Accepts any value (typed as unknown)
+        assertType<number>()(hashCode('string'))
     })
-    await t.test('handles falsy input', () => {
-        assert.equal(hashCode(null), 1088)
-        assert.equal(hashCode(undefined), 1088)
-        assert.equal(hashCode(0), 1088)
+
+    await t.test('is deterministic', () => {
+        assert.equal(hashCode({ a: ['b', '1'] }), hashCode({ a: ['b', '1'] }))
+        assert.equal(hashCode(42), hashCode(42))
+        assert.equal(hashCode(null), hashCode(null))
+    })
+
+    await t.test('distinguishes falsy primitives', () => {
+        const hashes = [
+            hashCode(0),
+            hashCode(false),
+            hashCode(null),
+            hashCode(undefined),
+            hashCode(''),
+            hashCode(Number.NaN),
+        ]
+        assert.equal(
+            new Set(hashes).size,
+            hashes.length,
+            'falsy values should not collide',
+        )
+    })
+
+    await t.test('distinguishes type from string content', () => {
+        // Previously, `0` and `false` collided; now they don't.
+        assert.notEqual(hashCode(0), hashCode(false))
+        assert.notEqual(hashCode(0), hashCode('0'))
+        assert.notEqual(hashCode(null), hashCode('null'))
+    })
+
+    await t.test('returns a 32-bit integer', () => {
+        const h = hashCode({ a: 1, b: 'x' })
+        assert.ok(Number.isInteger(h))
+        assert.ok(h >= -(2 ** 31) && h < 2 ** 31)
     })
 })
 
 test('base64Encode', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(base64Encode('hi'))
+    })
+
     await t.test('encodes string', () => {
         assert.equal(
             base64Encode('rtėęrfgt58įė9įėš+ė*-は个'),
@@ -37,6 +74,10 @@ test('base64Encode', async (t) => {
 })
 
 test('base64Decode', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(base64Decode('aGk='))
+    })
+
     await t.test('decodes string', () => {
         assert.equal(
             base64Decode('cnTEl8SZcmZndDU4xK/ElznEr8SXxaErxJcqLeOBr+S4qg=='),
@@ -63,6 +104,10 @@ test('base64Decode', async (t) => {
 })
 
 test('generateUUID', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(generateUUID())
+    })
+
     await t.test('generates UUID', () => {
         assert.match(generateUUID(), /........-....-4...-....-.........../)
     })

@@ -17,8 +17,18 @@ import {
     sortBy,
     union,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('sortBy', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(sortBy([1, 2, 3]))
+        assertType<{ a: number }[]>()(
+            sortBy([{ a: 1 }, { a: 2 }], (v) => v.a),
+        )
+        // Readonly input preserves readonly result
+        assertType<readonly number[]>()(sortBy([1, 2, 3] as readonly number[]))
+    })
+
     await t.test('is stable', () => {
         assert.deepEqual(
             sortBy([1, 2, 3, 4, 5], (k) => k <= 3),
@@ -71,6 +81,11 @@ test('sortBy', async (t) => {
 })
 
 test('generateRange', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(generateRange(4))
+        assertType<number[]>()(generateRange(0, 10, 2))
+    })
+
     await t.test('generates range', () => {
         assert.deepEqual(generateRange(4), [0, 1, 2, 3])
         assert.deepEqual(generateRange(3, 6), [3, 4, 5])
@@ -95,6 +110,13 @@ test('generateRange', async (t) => {
 })
 
 test('flatten', async (t) => {
+    await t.test('types', () => {
+        // Plain array stays the same
+        assertType<number[]>()(flatten([1, 2, 3]))
+        // Mixed array — default depth = 1 flattens one level
+        assertType<(number | number[])[]>()(flatten([1, [2, 3], [[4]]]))
+    })
+
     await t.test('flattens array', () => {
         assert.deepEqual(flatten([1, 2, [3, 4]]), [1, 2, 3, 4])
     })
@@ -109,6 +131,17 @@ test('flatten', async (t) => {
 })
 
 test('groupBy', async (t) => {
+    await t.test('types', () => {
+        // Returns [key, values[]] pairs
+        assertType<[number, string[]][]>()(
+            groupBy(['a', 'bb'], (v) => v.length),
+        )
+        // Key can be any type
+        assertType<[boolean, number[]][]>()(
+            groupBy([1, 2, 3], (v) => v > 1),
+        )
+    })
+
     await t.test('groups by number (insertion order)', () => {
         assert.deepEqual(groupBy([6.1, 4.2, 6.3], Math.floor), [
             [6, [6.1, 6.3]],
@@ -134,6 +167,13 @@ test('groupBy', async (t) => {
 })
 
 test('indexBy', async (t) => {
+    await t.test('types', () => {
+        assertType<Record<string, string[]>>()(indexBy(['a', 'b'], (v) => v))
+        assertType<Record<string, number[]>>()(
+            indexBy([1, 2, 3], (v) => v.toString()),
+        )
+    })
+
     await t.test('creates index', () => {
         assert.deepEqual(
             indexBy(['one', 'two', 'three'], (v) => v.length),
@@ -168,6 +208,11 @@ test('indexBy', async (t) => {
 })
 
 test('deduplicate', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(deduplicate([1, 2, 1]))
+        assertType<string[]>()(deduplicate(['a', 'b']))
+    })
+
     await t.test('de-duplicates any type', () => {
         const obj1 = {}
         assert.deepEqual(
@@ -178,6 +223,12 @@ test('deduplicate', async (t) => {
 })
 
 test('deduplicateBy', async (t) => {
+    await t.test('types', () => {
+        assertType<{ id: number }[]>()(
+            deduplicateBy([{ id: 1 }, { id: 1 }], (v) => v.id),
+        )
+    })
+
     await t.test('de-duplicates any type by callback', () => {
         const obj1 = {}
         assert.deepEqual(
@@ -223,6 +274,14 @@ test('deduplicateBy', async (t) => {
 })
 
 test('chunk', async (t) => {
+    await t.test('types', () => {
+        assertType<number[][]>()(chunk([1, 2, 3, 4], 2))
+        // Readonly input preserves readonly result
+        assertType<readonly (readonly number[])[]>()(
+            chunk([1, 2, 3, 4] as readonly number[], 2),
+        )
+    })
+
     await t.test('chunks array', () => {
         assert.deepEqual(chunk([1, 2, 3, 4], 2), [
             [1, 2],
@@ -245,6 +304,14 @@ test('chunk', async (t) => {
 })
 
 test('difference', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(difference([1, 2], [2, 3]))
+        // Readonly input preserves readonly result
+        assertType<readonly number[]>()(
+            difference([1, 2] as readonly number[], [2, 3]),
+        )
+    })
+
     await t.test('finds difference', () => {
         assert.deepEqual(difference([2, 1], [2, 3]), [1])
     })
@@ -258,6 +325,15 @@ test('difference', async (t) => {
 })
 
 test('intersection', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(
+            intersection([
+                [2, 1],
+                [2, 3],
+            ]),
+        )
+    })
+
     await t.test('finds intersection', () => {
         assert.deepEqual(
             intersection([
@@ -303,6 +379,15 @@ test('intersection', async (t) => {
 })
 
 test('union', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(
+            union([
+                [2, 1],
+                [2, 3],
+            ]),
+        )
+    })
+
     await t.test('finds intersection', () => {
         assert.deepEqual(
             union([
@@ -328,6 +413,10 @@ test('union', async (t) => {
 })
 
 test('includesAny', async (t) => {
+    await t.test('types', () => {
+        assertType<boolean>()(includesAny([1, 2], [2, 3]))
+    })
+
     await t.test('checks if includes', () => {
         assert.ok(includesAny([2, 1], [2, 3]))
     })
@@ -344,6 +433,10 @@ test('includesAny', async (t) => {
 })
 
 test('includesAll', async (t) => {
+    await t.test('types', () => {
+        assertType<boolean>()(includesAll([1, 2, 3], [1, 2]))
+    })
+
     await t.test('checks if includes', () => {
         assert.ok(includesAll([3, 2, 1], [2, 3]))
     })
@@ -360,6 +453,10 @@ test('includesAll', async (t) => {
 })
 
 test('findIndex', async (t) => {
+    await t.test('types', () => {
+        assertType<number>()(findIndex([1, 2, 3], (v) => v > 1))
+    })
+
     await t.test('finds index', () => {
         assert.equal(
             findIndex([1, 2, 3, 4], (v) => v === 4),
@@ -374,3 +471,4 @@ test('findIndex', async (t) => {
         )
     })
 })
+

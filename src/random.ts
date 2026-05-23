@@ -84,8 +84,8 @@ export function randomString(
  * ```
  * @group Random
  */
-export function shuffle<T>(array: ReadonlyArray<T>): ReadonlyArray<T>
 export function shuffle<T>(array: T[]): T[]
+export function shuffle<T>(array: readonly T[]): readonly T[]
 export function shuffle<T>(array: ReadonlyArray<T>): T[] {
     const arrayCopy = array.slice()
     let currentIndex = arrayCopy.length

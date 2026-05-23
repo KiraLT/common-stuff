@@ -11,6 +11,7 @@ import {
     throttle,
     timeout,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 type MockFn<Args extends unknown[] = unknown[], R = void> = ((
     ...args: Args
@@ -30,6 +31,10 @@ function createMock<Args extends unknown[] = unknown[], R = void>(): MockFn<
 }
 
 test('delay', async (t) => {
+    await t.test('types', () => {
+        assertType<Promise<void>>()(delay(100))
+    })
+
     await t.test('delay action', async () => {
         const start = Date.now()
         await delay(250)
@@ -38,6 +43,16 @@ test('delay', async (t) => {
 })
 
 test('debounce', async (t) => {
+    await t.test('types', () => {
+        // Returned function shares parameter list with input function
+        const cb = debounce((_a: number, _b: string) => {}, 100)
+        assertType<[number, string]>()(
+            null as unknown as Parameters<typeof cb>,
+        )
+        // .cancel() is exposed on the returned function
+        assertType<() => void>()(cb.cancel)
+    })
+
     await t.test('debounce action', async () => {
         const mock = createMock<[number]>()
         const cb = debounce(mock, 100)
@@ -120,6 +135,14 @@ test('debounce', async (t) => {
 })
 
 test('throttle', async (t) => {
+    await t.test('types', () => {
+        const cb = throttle((_a: number) => {}, 100)
+        assertType<[number]>()(
+            null as unknown as Parameters<typeof cb>,
+        )
+        assertType<() => void>()(cb.cancel)
+    })
+
     await t.test('should throttle function invocation', async () => {
         const mock = createMock<[number]>()
         const cb = throttle(mock, 100)
@@ -195,6 +218,14 @@ test('throttle', async (t) => {
 })
 
 test('timeout', async (t) => {
+    await t.test('types', () => {
+        assertType<Promise<number>>()(timeout(Promise.resolve(5), 100))
+        // TimeoutError extends Error (subtype check)
+        const _e: Error = new TimeoutError()
+        void _e
+        assertType<TimeoutError>()(new TimeoutError())
+    })
+
     await t.test('resolves before deadline', async () => {
         const result = await timeout(
             new Promise<string>((resolve) =>
@@ -227,6 +258,18 @@ test('timeout', async (t) => {
 })
 
 test('retry', async (t) => {
+    await t.test('types', () => {
+        assertType<Promise<number>>()(retry(async () => 5))
+        assertType<Promise<string>>()(retry(async () => 'x', { attempts: 3 }))
+        // backoff function receives 1-indexed attempt number
+        retry(async () => 1, {
+            backoff: (n) => {
+                assertType<number>()(n)
+                return 0
+            },
+        })
+    })
+
     await t.test('returns value on first success', async () => {
         let calls = 0
         const result = await retry(async () => {
@@ -306,6 +349,13 @@ test('retry', async (t) => {
 })
 
 test('pLimit', async (t) => {
+    await t.test('types', () => {
+        const limit = pLimit(2)
+        // Each call infers its own T
+        assertType<Promise<number>>()(limit(async () => 5))
+        assertType<Promise<string>>()(limit(async () => 'x'))
+    })
+
     await t.test('caps concurrency', async () => {
         const limit = pLimit(2)
         let active = 0
@@ -352,6 +402,17 @@ test('pLimit', async (t) => {
 })
 
 test('pSeries', async (t) => {
+    await t.test('types', () => {
+        // Tuple shape preserved when task return types match
+        assertType<Promise<[number, number]>>()(
+            pSeries([async () => 1, async () => 2]),
+        )
+        // Heterogeneous task return types are inferred as a tuple
+        assertType<Promise<[number, string]>>()(
+            pSeries([async () => 1, async () => 'a']),
+        )
+    })
+
     await t.test('runs sequentially', async () => {
         const order: number[] = []
         const out = await pSeries([

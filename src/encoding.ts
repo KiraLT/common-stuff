@@ -16,10 +16,15 @@ type RuntimeGlobals = {
 const _global = globalThis as unknown as RuntimeGlobals
 
 /**
- * Generates hash of given value
+ * Generates a 32-bit hash of the given value.
+ *
+ * The hash includes the value's `typeof` so distinct falsy primitives don't
+ * collide (`0` ≠ `false` ≠ `null` ≠ `undefined` ≠ `''`). Values that
+ * `JSON.stringify` can't represent (functions, symbols, plain `undefined`) are
+ * still distinguished from one another via their `typeof` tag.
  */
 export function hashCode(value: unknown): number {
-    const jsonString = JSON.stringify(value || '')
+    const jsonString = `${typeof value}:${JSON.stringify(value) ?? ''}`
     let hash = 0
     for (let i = 0; i < jsonString.length; i++) {
         const chr = jsonString.charCodeAt(i)

@@ -27,16 +27,18 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
  *
  * @example
  * ```
- * parseSize('15.53 MB')
- * // 16288832
+ * parseSize('15.53 MB')      // 16288832
+ * parseSize('zero bytes')    // undefined
+ * parseSize('10 zorps')      // undefined
  * ```
- * @returns parsed bytes, or `-1` if the input doesn't match `<number> <unit>` or the unit is unknown
+ * @returns parsed bytes, or `undefined` if the input doesn't match
+ * `<number> <unit>` or the unit is unknown
  */
-export function parseSize(value: string): number {
+export function parseSize(value: string): number | undefined {
     const [_, rawSize, rawUnit] =
         value.match(/^(\d+(?:[.]\d+|))\s*([a-z]+)$/i) ?? []
 
-    if (!rawSize || !rawUnit) return -1
+    if (!rawSize || !rawUnit) return undefined
 
     const k = 1024
     const units = [
@@ -54,7 +56,7 @@ export function parseSize(value: string): number {
     const size = parseFloat(rawSize)
     const unit = rawUnit.toLowerCase()
     let index = findIndex(units, (v) => v.indexOf(unit) !== -1)
-    if (index === -1) return -1
+    if (index === -1) return undefined
 
     let bytes = size
     while (index > 0) {

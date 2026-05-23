@@ -8,8 +8,13 @@ import {
     randomString,
     shuffle,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('randomInt', async (t) => {
+    await t.test('types', () => {
+        assertType<number>()(randomInt(1, 10))
+    })
+
     await t.test('generates random int in range', () => {
         for (let i = 0; i < 100; i++) {
             const value = randomInt(5, 10)
@@ -39,6 +44,11 @@ test('randomInt', async (t) => {
 })
 
 test('randomChoice', async (t) => {
+    await t.test('types', () => {
+        assertType<number | undefined>()(randomChoice([1, 2, 3]))
+        assertType<string | undefined>()(randomChoice(['a', 'b']))
+    })
+
     await t.test('gets random element from the array', () => {
         const val = randomChoice([1, 2, 3])
         assert.notEqual(val, undefined)
@@ -47,6 +57,11 @@ test('randomChoice', async (t) => {
 })
 
 test('randomChoices', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(randomChoices([1, 2, 3], 4))
+        assertType<string[]>()(randomChoices(['a', 'b'], 2))
+    })
+
     await t.test('gets random element from the array', () => {
         assert.equal(randomChoices([1, 2, 3], 4).length, 4)
     })
@@ -56,6 +71,14 @@ test('randomChoices', async (t) => {
 })
 
 test('shuffle', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(shuffle([1, 2, 3]))
+        // Readonly input preserves readonly result
+        assertType<readonly number[]>()(
+            shuffle([1, 2, 3] as readonly number[]),
+        )
+    })
+
     await t.test('shuffles array', () => {
         const value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
         const shuffled = shuffle(value)
@@ -83,6 +106,11 @@ test('randomChoice edge cases', async (t) => {
 })
 
 test('randomString', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(randomString(8))
+        assertType<string>()(randomString(8, { chars: 'abc' }))
+    })
+
     await t.test('generates random string', () => {
         assert.equal(randomString(5).length, 5)
     })

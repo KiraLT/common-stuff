@@ -13,20 +13,42 @@ import {
     parseQueryString,
     urlToRelative,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('httpStatusCodes', async (t) => {
+    await t.test('types', () => {
+        // Status reason and code lookups
+        assertType<string>()(HttpStatusReasons.NOT_FOUND)
+    })
+
     await t.test('just works', () => {
         assert.equal(HttpStatusReasons.NOT_FOUND, 'Not Found')
     })
 })
 
 test('httpStatusMessages', async (t) => {
+    await t.test('types', () => {
+        assertType<number>()(HttpStatusCodes.NOT_FOUND)
+    })
+
     await t.test('just works', () => {
         assert.equal(HttpStatusCodes.NOT_FOUND, 404)
     })
 })
 
 test('HttpError', async (t) => {
+    await t.test('types', () => {
+        const err = new HttpError(404)
+        assertType<HttpError>()(err)
+        // HttpError extends Error (subtype check via assignment)
+        const _e: Error = err
+        void _e
+        assertType<number>()(err.status)
+        assertType<string>()(err.message)
+        assertType<boolean>()(err.expose)
+        assertType<string>()(err.publicMessage)
+    })
+
     await t.test('supports instanceof', () => {
         assert.ok(new HttpError(404) instanceof HttpError)
     })
@@ -72,6 +94,11 @@ test('HttpError', async (t) => {
 })
 
 test('generateCookie', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(generateCookie('a', 'b'))
+        assertType<string>()(generateCookie('a', 'b', { expires: 1 }))
+    })
+
     await t.test('generates cookie', () => {
         assert.equal(generateCookie('a', 'b'), 'a=b')
     })
@@ -121,6 +148,10 @@ test('generateCookie', async (t) => {
 })
 
 test('parseCookies', async (t) => {
+    await t.test('types', () => {
+        assertType<Record<string, string>>()(parseCookies('a=b'))
+    })
+
     await t.test('parses cookie string', () => {
         assert.deepEqual(parseCookies('%3D=%3D'), { '=': '=' })
     })
@@ -133,12 +164,20 @@ test('parseCookies', async (t) => {
 })
 
 test('encodeHtml', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(encodeHtml('<a>'))
+    })
+
     await t.test('encodes HTML', () => {
         assert.equal(encodeHtml('< > " \' &'), '&lt; &gt; &quot; &apos; &amp;')
     })
 })
 
 test('decodeHtml', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(decodeHtml('&lt;a&gt;'))
+    })
+
     await t.test('decodes HTML', () => {
         assert.equal(
             decodeHtml('&lt; &gt; &quot; &apos; &amp; &arm;'),
@@ -154,6 +193,10 @@ test('decodeHtml', async (t) => {
 })
 
 test('urlToRelative', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(urlToRelative('https://example.com/x'))
+    })
+
     await t.test('converts absolute URL to relative', () => {
         assert.equal(
             urlToRelative('https://domain.com/index.html'),
@@ -182,6 +225,10 @@ test('urlToRelative', async (t) => {
 // })
 
 test('parseQueryString', async (t) => {
+    await t.test('types', () => {
+        assertType<Record<string, string[]>>()(parseQueryString('?a=1'))
+    })
+
     await t.test('parses string with ?', () => {
         assert.deepEqual(parseQueryString('?page=1&limit=20'), {
             page: ['1'],
@@ -206,6 +253,12 @@ test('parseQueryString', async (t) => {
 })
 
 test('generateQueryString', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(generateQueryString({ a: 1 }))
+        // Accepts Primitive | Primitive[] values
+        assertType<string>()(generateQueryString({ a: [1, 2], b: 'x' }))
+    })
+
     await t.test('parses string', () => {
         assert.equal(
             generateQueryString({ page: [1], limit: 20 }),

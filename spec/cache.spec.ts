@@ -2,8 +2,26 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import { cache, delay } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('cache', async (t) => {
+    await t.test('types', () => {
+        const fn = (a: number, b: string): boolean => Boolean(a + b)
+        const cached = cache(fn)
+        // Preserves the function's call signature
+        assertType<[number, string]>()(
+            null as unknown as Parameters<typeof cached>,
+        )
+        assertType<boolean>()(cached(1, 'x'))
+        // .clear / .delete attached
+        assertType<() => void>()(cached.clear)
+        assertType<(a: number, b: string) => void>()(cached.delete)
+        // Async function preserves Promise return
+        const asyncFn = async (id: string) => ({ id })
+        const asyncCached = cache(asyncFn)
+        assertType<Promise<{ id: string }>>()(asyncCached('x'))
+    })
+
     await t.test('caches same arguments', () => {
         const calls: Array<[number, number]> = []
         const cached = cache((a: number, b: number) => {

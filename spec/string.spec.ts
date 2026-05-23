@@ -15,8 +15,14 @@ import {
     titleCase,
     truncate,
 } from '../src/index.ts'
+import { assertType } from './_types.ts'
 
 test('truncate', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(truncate('hello world', 5))
+        assertType<string>()(truncate('hello world', 5, '...'))
+    })
+
     await t.test('truncates string', () => {
         assert.equal(truncate('Hello world', 8), 'Hello...')
         assert.equal(truncate('Hello', 8), 'Hello')
@@ -30,6 +36,10 @@ test('truncate', async (t) => {
 })
 
 test('extractWords', async (t) => {
+    await t.test('types', () => {
+        assertType<string[]>()(extractWords('hello world'))
+    })
+
     await t.test('extract words from text', () => {
         assert.deepEqual(extractWords('Hell_o "WĄRLD", [with-unicode]!'), [
             'Hell_o',
@@ -41,6 +51,10 @@ test('extractWords', async (t) => {
 })
 
 test('camelCase', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(camelCase('foo bar'))
+    })
+
     await t.test('changes string', () => {
         assert.equal(camelCase('--foo bar'), 'fooBar')
     })
@@ -50,6 +64,10 @@ test('camelCase', async (t) => {
 })
 
 test('pascalCase', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(pascalCase('foo bar'))
+    })
+
     await t.test('changes string', () => {
         assert.equal(pascalCase('--foo bar'), 'FooBar')
     })
@@ -59,6 +77,10 @@ test('pascalCase', async (t) => {
 })
 
 test('isLetter', async (t) => {
+    await t.test('types', () => {
+        assertType<boolean>()(isLetter('a'))
+    })
+
     await t.test('checks if `a` is letter', () => {
         assert.equal(isLetter('a'), true)
     })
@@ -74,6 +96,10 @@ test('isLetter', async (t) => {
 })
 
 test('titleCase', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(titleCase('hello world'))
+    })
+
     await t.test('changes string', () => {
         assert.equal(
             titleCase('hello-world FTW,abc999t t'),
@@ -83,6 +109,10 @@ test('titleCase', async (t) => {
 })
 
 test('kebabCase', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(kebabCase('fooBar'))
+    })
+
     await t.test('camelCase input', () => {
         assert.equal(kebabCase('fooBar'), 'foo-bar')
     })
@@ -101,6 +131,10 @@ test('kebabCase', async (t) => {
 })
 
 test('snakeCase', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(snakeCase('fooBar'))
+    })
+
     await t.test('camelCase input', () => {
         assert.equal(snakeCase('fooBar'), 'foo_bar')
     })
@@ -113,6 +147,10 @@ test('snakeCase', async (t) => {
 })
 
 test('stripAccents', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(stripAccents('café'))
+    })
+
     await t.test('removes diacritics', () => {
         assert.equal(stripAccents('árvíztűrő'), 'arvizturo')
         assert.equal(stripAccents('café naïve'), 'cafe naive')
@@ -124,6 +162,10 @@ test('stripAccents', async (t) => {
 })
 
 test('slugify', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(slugify('Hello World!'))
+    })
+
     await t.test('strips accents and punctuation', () => {
         assert.equal(slugify('Hello, World!'), 'hello-world')
         assert.equal(slugify('Árvíztűrő tükörfúrógép'), 'arvizturo-tukorfurogep')
@@ -140,6 +182,10 @@ test('slugify', async (t) => {
 })
 
 test('escapeRegex', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(escapeRegex('a.b'))
+    })
+
     await t.test('escapes special characters', () => {
         assert.equal(escapeRegex('a.b+c'), 'a\\.b\\+c')
         assert.equal(escapeRegex('(hi)'), '\\(hi\\)')
@@ -156,6 +202,12 @@ test('escapeRegex', async (t) => {
 })
 
 test('outdent', async (t) => {
+    await t.test('types', () => {
+        // Template tag returns string
+        assertType<string>()(outdent`hello`)
+        assertType<string>()(outdent`hello ${42}`)
+    })
+
     await t.test('removes indentation from text', () => {
         const text = outdent`
             function test() {

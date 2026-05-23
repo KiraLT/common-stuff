@@ -306,21 +306,33 @@ export function pLimit(
  * Stops at the first rejection. If you want to keep going on errors, wrap each
  * task in a `tryCatch` (from `fp.ts`) before passing it.
  *
+ * Return type preserves the tuple shape of the input so heterogeneous return
+ * types are inferred individually instead of being unified.
+ *
  * @group Async
  * @example
  * ```
- * const results = await pSeries([
- *     () => loadUser(1),
- *     () => loadUser(2),
- *     () => loadUser(3),
+ * const [user, post] = await pSeries([
+ *     () => loadUser(1),     // () => Promise<User>
+ *     () => loadPost(2),     // () => Promise<Post>
  * ])
+ * // user: User, post: Post
  * ```
  */
-export async function pSeries<T>(
-    tasks: ReadonlyArray<() => Promise<T>>,
-): Promise<T[]> {
-    return tasks.reduce<Promise<T[]>>(
-        (prev, task) => prev.then(async (acc) => [...acc, await task()]),
-        Promise.resolve([]),
-    )
+export async function pSeries<
+    const T extends ReadonlyArray<() => Promise<unknown>>,
+>(
+    tasks: T,
+): Promise<{
+    -readonly [K in keyof T]: T[K] extends () => Promise<infer R> ? R : never
+}> {
+    const out: unknown[] = []
+    for (const task of tasks) {
+        out.push(await task())
+    }
+    return out as {
+        -readonly [K in keyof T]: T[K] extends () => Promise<infer R>
+            ? R
+            : never
+    }
 }

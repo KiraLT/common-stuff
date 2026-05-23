@@ -121,8 +121,9 @@ export function parseQueryString(
     const { separator = '&' } = options ?? {}
 
     const body = query[0] === '?' ? query.slice(1) : query
-    return body.split(separator).reduce<Record<string, string[]>>(
-        (acc, part) => {
+    return body
+        .split(separator)
+        .reduce<Record<string, string[]>>((acc, part) => {
             const eqIdx = part.indexOf('=')
             if (eqIdx === -1) return acc
             const rawKey = part.slice(0, eqIdx)
@@ -138,9 +139,7 @@ export function parseQueryString(
                 acc[key] = [value]
             }
             return acc
-        },
-        {},
-    )
+        }, {})
 }
 
 /**

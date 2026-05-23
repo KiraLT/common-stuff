@@ -11,6 +11,8 @@ import {
     isEqual,
     mapRecord,
     merge,
+    omit,
+    pick,
 } from '../src/index.ts'
 import { assertType } from './_types.ts'
 
@@ -90,14 +92,8 @@ test('isEqual', async (t) => {
     })
 
     await t.test('compares Sets with object members structurally', () => {
-        assert.equal(
-            isEqual(new Set([{ a: 1 }]), new Set([{ a: 1 }])),
-            true,
-        )
-        assert.equal(
-            isEqual(new Set([{ a: 1 }]), new Set([{ a: 2 }])),
-            false,
-        )
+        assert.equal(isEqual(new Set([{ a: 1 }]), new Set([{ a: 1 }])), true)
+        assert.equal(isEqual(new Set([{ a: 1 }]), new Set([{ a: 2 }])), false)
     })
 
     await t.test('compares Maps', () => {
@@ -110,10 +106,7 @@ test('isEqual', async (t) => {
             ['a', 1],
         ])
         assert.equal(isEqual(a, b), true)
-        assert.equal(
-            isEqual(a, new Map<string, number>([['a', 1]])),
-            false,
-        )
+        assert.equal(isEqual(a, new Map<string, number>([['a', 1]])), false)
         assert.equal(
             isEqual(
                 a,
@@ -128,17 +121,11 @@ test('isEqual', async (t) => {
 
     await t.test('compares Maps with object keys structurally', () => {
         assert.equal(
-            isEqual(
-                new Map([[{ id: 1 }, 'x']]),
-                new Map([[{ id: 1 }, 'x']]),
-            ),
+            isEqual(new Map([[{ id: 1 }, 'x']]), new Map([[{ id: 1 }, 'x']])),
             true,
         )
         assert.equal(
-            isEqual(
-                new Map([[{ id: 1 }, 'x']]),
-                new Map([[{ id: 1 }, 'y']]),
-            ),
+            isEqual(new Map([[{ id: 1 }, 'x']]), new Map([[{ id: 1 }, 'y']])),
             false,
         )
     })
@@ -220,16 +207,26 @@ test('filterRecord', async (t) => {
 
 test('merge', async (t) => {
     await t.test('types', () => {
-        // Return type is inferred as `A & B` from the inputs
-        assertType<{ a: number } & { b: number }>()(
-            merge({ a: 1 }, { b: 2 }),
-        )
-        // Nested intersection
+        // Object merge: return type is `A & B`
+        assertType<{ a: number } & { b: number }>()(merge({ a: 1 }, { b: 2 }))
+        // Nested intersection (deep merge typing)
         assertType<{ a: { x: number } } & { a: { y: number } }>()(
             merge({ a: { x: 1 } }, { a: { y: 2 } }),
         )
         // Falls back to unknown when both inputs are unknown
         assertType<unknown>()(merge(1 as unknown, 2 as unknown))
+        // Array overwrite (default) → source array (B)
+        assertType<number[]>()(merge([1, 2], [3, 4]))
+        // Array merge policy → (A[number] | B[number])[]
+        assertType<(number | string)[]>()(
+            merge([1, 2], ['a'], { arrayPolicy: 'merge' }),
+        )
+        // Custom array merge function → function's return type
+        assertType<number[]>()(
+            merge([1, 2], [3, 4], {
+                arrayPolicy: (t, s) => (t as number[]).concat(s as number[]),
+            }),
+        )
     })
 
     await t.test('merges objects', () => {
@@ -266,11 +263,7 @@ test('merge', async (t) => {
     })
     await t.test('skipNulls also skips undefined source values', () => {
         assert.deepEqual(
-            merge(
-                { a: 1, b: 2 },
-                { a: undefined, b: 3 },
-                { skipNulls: true },
-            ),
+            merge({ a: 1, b: 2 }, { a: undefined, b: 3 }, { skipNulls: true }),
             { a: 1, b: 3 },
         )
     })
@@ -476,9 +469,7 @@ test('getByKey', async (t) => {
         assertType<number>()(getByKey({ a: 1 }, 'a'))
         assertType<string>()(getByKey({ a: { b: 'x' } }, 'a.b'))
         // Tuple paths (via `as const`) work the same way
-        assertType<string>()(
-            getByKey({ a: { b: 'x' } }, ['a', 'b'] as const),
-        )
+        assertType<string>()(getByKey({ a: { b: 'x' } }, ['a', 'b'] as const))
         // Numeric path segments index arrays/tuples
         const data = { a: [1, 2, { b: 'x' as string }] as const }
         assertType<string>()(getByKey(data, 'a.2.b'))
@@ -523,5 +514,62 @@ test('getByKey', async (t) => {
     })
     await t.test('missing key returns undefined', () => {
         assert.equal(getByKey({ a: { b: 1 } }, 'a.c'), undefined)
+    })
+})
+
+test('pick', async (t) => {
+    await t.test('types', () => {
+        assertType<{ a: number; c: number }>()(
+            pick({ a: 1, b: 2, c: 3 }, ['a', 'c']),
+        )
+        // @ts-expect-error — 'd' is not a key of the source object
+        pick({ a: 1, b: 2 }, ['d'])
+    })
+
+    await t.test('returns selected keys only', () => {
+        assert.deepEqual(pick({ a: 1, b: 2, c: 3 }, ['a', 'c']), {
+            a: 1,
+            c: 3,
+        })
+    })
+
+    await t.test(
+        'skips missing keys (does not introduce undefined props)',
+        () => {
+            // Cast to allow asking for a key that's typed-but-missing
+            const obj: { a?: number; b: number } = { b: 2 }
+            const out = pick(obj, ['a', 'b'])
+            assert.deepEqual(out, { b: 2 })
+            assert.ok(!('a' in out))
+        },
+    )
+
+    await t.test('empty keys list yields empty object', () => {
+        assert.deepEqual(pick({ a: 1 }, []), {})
+    })
+})
+
+test('omit', async (t) => {
+    await t.test('types', () => {
+        assertType<{ a: number; c: number }>()(
+            omit({ a: 1, b: 2, c: 3 }, ['b']),
+        )
+        // @ts-expect-error — 'z' is not a key of the source object
+        omit({ a: 1 }, ['z'])
+    })
+
+    await t.test('removes the listed keys', () => {
+        assert.deepEqual(omit({ a: 1, b: 2, c: 3 }, ['b']), { a: 1, c: 3 })
+    })
+
+    await t.test('empty keys list returns a copy', () => {
+        const src = { a: 1, b: 2 }
+        const out = omit(src, [])
+        assert.deepEqual(out, src)
+        assert.notEqual(out, src)
+    })
+
+    await t.test('removing all keys yields empty object', () => {
+        assert.deepEqual(omit({ a: 1, b: 2 }, ['a', 'b']), {})
     })
 })

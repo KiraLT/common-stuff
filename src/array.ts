@@ -277,15 +277,20 @@ export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
 }
 
 /**
- * Groups an array based on callback return value
+ * Groups an array's items into `[key, values]` entries, keyed by the
+ * callback's return value.
+ *
+ * Internally backed by a `Map` keyed on the raw callback value, so:
+ *
+ * - Object/array keys use identity (two equal-but-different object instances
+ *   are distinct groups). For value equality, return a primitive key.
+ * - Functions, symbols, and circular references work (no `JSON.stringify`).
+ * - Entries are returned in first-seen order.
  *
  * @example
  * ```
  * groupBy([6.1, 4.2, 6.3], Math.floor)
- * // [ [4, [4.2]], [6, [6.1, 6.3]] ]
- *
- * groupBy(['one', 'two', 'three'], v => [v.length, v.includes('a')])
- * // [ [[5, false], ['three']], [[3, false], ['one', 'two']] ]
+ * // [ [6, [6.1, 6.3]], [4, [4.2]] ]
  * ```
  * @group Array
  */
@@ -301,18 +306,17 @@ export function groupBy<T, G>(
     array: ReadonlyArray<T>,
     keyCallback: (value: T) => G,
 ): [G, T[]][] {
-    const groups = array.reduce((acc, cur) => {
-        const key = keyCallback(cur)
-        const keyId = JSON.stringify(key)
-        const existing = acc.get(keyId)
+    const groups = new Map<G, T[]>()
+    for (const item of array) {
+        const key = keyCallback(item)
+        const existing = groups.get(key)
         if (existing) {
-            existing[1].push(cur)
+            existing.push(item)
         } else {
-            acc.set(keyId, [key, [cur]])
+            groups.set(key, [item])
         }
-        return acc
-    }, new Map<string, [G, T[]]>())
-    return Array.from(groups.values())
+    }
+    return [...groups]
 }
 
 /**
@@ -563,4 +567,47 @@ export function findIndex<T>(
     }
 
     return -1
+}
+
+/**
+ * Returns a new array with `null` and `undefined` values removed.
+ *
+ * The element type is narrowed via `NonNullable<T>`. Other falsy values
+ * (`0`, `''`, `false`, `NaN`) are preserved — use `array.filter(Boolean)`
+ * or a custom predicate if you want full falsy removal.
+ *
+ * @example
+ * ```
+ * compact([1, null, 2, undefined, 3])
+ * // [1, 2, 3]
+ * ```
+ * @group Array
+ */
+export function compact<T>(array: ReadonlyArray<T>): NonNullable<T>[] {
+    return array.filter((v): v is NonNullable<T> => v != null)
+}
+
+/**
+ * Counts the number of items grouped by the callback's return value.
+ *
+ * Internally backed by a `Map` keyed on the raw callback value — same
+ * identity semantics as [[groupBy]].
+ *
+ * @example
+ * ```
+ * countBy(['apple', 'banana', 'avocado'], v => v[0])
+ * // [ ['a', 2], ['b', 1] ]
+ * ```
+ * @group Array
+ */
+export function countBy<T, G>(
+    array: ReadonlyArray<T>,
+    keyCallback: (value: T) => G,
+): [G, number][] {
+    const counts = new Map<G, number>()
+    for (const item of array) {
+        const key = keyCallback(item)
+        counts.set(key, (counts.get(key) ?? 0) + 1)
+    }
+    return [...counts]
 }

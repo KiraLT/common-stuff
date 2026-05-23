@@ -3,6 +3,8 @@ import test from 'node:test'
 
 import {
     chunk,
+    compact,
+    countBy,
     deduplicate,
     deduplicateBy,
     difference,
@@ -22,9 +24,7 @@ import { assertType } from './_types.ts'
 test('sortBy', async (t) => {
     await t.test('types', () => {
         assertType<number[]>()(sortBy([1, 2, 3]))
-        assertType<{ a: number }[]>()(
-            sortBy([{ a: 1 }, { a: 2 }], (v) => v.a),
-        )
+        assertType<{ a: number }[]>()(sortBy([{ a: 1 }, { a: 2 }], (v) => v.a))
         // Readonly input preserves readonly result
         assertType<readonly number[]>()(sortBy([1, 2, 3] as readonly number[]))
     })
@@ -132,37 +132,51 @@ test('flatten', async (t) => {
 
 test('groupBy', async (t) => {
     await t.test('types', () => {
-        // Returns [key, values[]] pairs
+        // Returns [G, T[]][] (entries form)
         assertType<[number, string[]][]>()(
             groupBy(['a', 'bb'], (v) => v.length),
         )
-        // Key can be any type
-        assertType<[boolean, number[]][]>()(
-            groupBy([1, 2, 3], (v) => v > 1),
-        )
+        assertType<[boolean, number[]][]>()(groupBy([1, 2, 3], (v) => v > 1))
     })
 
-    await t.test('groups by number (insertion order)', () => {
+    await t.test('groups by primitive key (insertion order)', () => {
         assert.deepEqual(groupBy([6.1, 4.2, 6.3], Math.floor), [
             [6, [6.1, 6.3]],
             [4, [4.2]],
         ])
     })
 
-    await t.test('groups by multiple conditions (insertion order)', () => {
-        assert.deepEqual(
-            groupBy(['one', 'two', 'three'], (v) => [
+    await t.test(
+        'identity keys: distinct object instances are distinct groups',
+        () => {
+            // Each call to the callback creates a new array → each item is its
+            // own group. Callers who want value-based grouping should return a
+            // primitive key (string/number).
+            const out = groupBy(['one', 'two', 'three'], (v) => [
                 v.length,
                 v.includes('a'),
-            ]),
-            [
-                [
-                    [3, false],
-                    ['one', 'two'],
-                ],
-                [[5, false], ['three']],
-            ],
-        )
+            ])
+            assert.equal(out.length, 3)
+        },
+    )
+
+    await t.test('does not crash on circular references', () => {
+        const a: { self?: unknown } = {}
+        a.self = a
+        // Would throw in the v1 JSON.stringify-based implementation.
+        const out = groupBy([{ ref: a }, { ref: a }], (v) => v.ref)
+        assert.equal(out.length, 1)
+        assert.equal(out[0]?.[1].length, 2)
+    })
+
+    await t.test('handles function/symbol keys without collision', () => {
+        const fnA = () => 1
+        const fnB = () => 2
+        const out = groupBy([1, 2, 3], (v) => (v < 3 ? fnA : fnB))
+        assert.deepEqual(out, [
+            [fnA, [1, 2]],
+            [fnB, [3]],
+        ])
     })
 })
 
@@ -184,7 +198,7 @@ test('indexBy', async (t) => {
         )
     })
 
-    await t.test('supports array', async (t) => {
+    await t.test('supports array', async () => {
         assert.deepEqual(
             indexBy(['one', 'two', 'three'], (v) => [v.length, v.length + 1]),
             {
@@ -472,3 +486,76 @@ test('findIndex', async (t) => {
     })
 })
 
+test('compact', async (t) => {
+    await t.test('types', () => {
+        // Narrows element type via NonNullable<T>
+        assertType<number[]>()(
+            compact([1, null, 2, undefined] as (number | null | undefined)[]),
+        )
+        assertType<string[]>()(compact(['a', null] as (string | null)[]))
+        // Non-null/undefined falsy values are preserved
+        // @ts-expect-error — `0` is still in the result
+        assertType<never[]>()(compact([0, null]))
+    })
+
+    await t.test('removes null and undefined', () => {
+        assert.deepEqual(compact([1, null, 2, undefined, 3]), [1, 2, 3])
+    })
+
+    await t.test('preserves other falsy values', () => {
+        assert.deepEqual(compact([0, '', false, null, undefined]), [
+            0,
+            '',
+            false,
+        ])
+    })
+
+    await t.test('empty input yields empty output', () => {
+        assert.deepEqual(compact([]), [])
+    })
+})
+
+test('countBy', async (t) => {
+    await t.test('types', () => {
+        assertType<[number, number][]>()(countBy(['a', 'bb'], (v) => v.length))
+        assertType<[boolean, number][]>()(countBy([1, 2, 3], (v) => v > 1))
+    })
+
+    await t.test('counts occurrences by primitive key', () => {
+        assert.deepEqual(
+            countBy(['apple', 'banana', 'avocado'], (v) => v[0]),
+            [
+                ['a', 2],
+                ['b', 1],
+            ],
+        )
+    })
+
+    await t.test('preserves first-seen order', () => {
+        assert.deepEqual(
+            countBy([1, 2, 1, 3, 2, 1], (v) => v),
+            [
+                [1, 3],
+                [2, 2],
+                [3, 1],
+            ],
+        )
+    })
+
+    await t.test('handles function/symbol keys', () => {
+        const fnA = () => 1
+        const fnB = () => 2
+        const out = countBy([1, 2, 3, 4], (v) => (v < 3 ? fnA : fnB))
+        assert.deepEqual(out, [
+            [fnA, 2],
+            [fnB, 2],
+        ])
+    })
+
+    await t.test('empty input yields empty output', () => {
+        assert.deepEqual(
+            countBy([] as number[], (v) => v),
+            [],
+        )
+    })
+})

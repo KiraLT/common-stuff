@@ -134,72 +134,113 @@ export function filterRecord<K extends PropertyKey, V>(
 }
 
 /**
+ * Options accepted by [[merge]].
+ *
+ * @group Object
+ */
+export type MergeOptions = {
+    /**
+     * When `source` has `null` or `undefined` value, do not overwrite `target`
+     *
+     * @default false
+     */
+    skipNulls?: boolean
+    /**
+     * Array merge policy, default is `overwrite`
+     *
+     * Available policies:
+     * * `overwrite` - always replace `target` array with `source`
+     * * `merge` - merge `target` and `source` array values
+     * * `(target, source) => result` - custom array merge function
+     *
+     * @default 'overwrite'
+     */
+    arrayPolicy?:
+        | 'overwrite'
+        | 'merge'
+        | ((target: unknown[], source: unknown[]) => unknown)
+}
+
+/**
+ * Computes the [[merge]] return type. Arrays are special-cased on
+ * `arrayPolicy`; everything else falls back to `A & B` (which deeply
+ * intersects nested objects).
+ */
+type MergeResult<A, B, O> = A extends readonly unknown[]
+    ? B extends readonly unknown[]
+        ? O extends { arrayPolicy: 'merge' }
+            ? (A[number] | B[number])[]
+            : O extends {
+                    arrayPolicy: (
+                        target: unknown[],
+                        source: unknown[],
+                    ) => infer R
+                }
+              ? R
+              : B
+        : A & B
+    : A & B
+
+/**
  * Merges `source` to `target` recursively.
  *
- * The return type is inferred as `A & B`. For nested objects TS intersects each
- * branch (so `merge({ a: { x: 1 } }, { a: { y: 2 } })` is typed as
- * `{ a: { x: number; y: number } }`). Array merging may produce an intersection
- * of element types that doesn't match the runtime — supply an explicit return
- * type via cast if you need precise array typing.
+ * The return type is inferred from the inputs. For objects it's `A & B`
+ * (which deeply intersects nested objects, so
+ * `merge({ a: { x: 1 } }, { a: { y: 2 } })` is typed as
+ * `{ a: { x: number; y: number } }`). For arrays the result depends on
+ * `arrayPolicy`:
+ *
+ * * `'overwrite'` (default) → `B`
+ * * `'merge'` → `(A[number] | B[number])[]`
+ * * `(t, s) => …` → the function's return type
  *
  * @example
  * ```
  * merge({ a: 1 }, { b: 2 })
- * // { a: 1, b: 2 } typed as { a: number; b: number }
+ * // { a: number; b: number }
+ *
+ * merge([1, 2], ['a'], { arrayPolicy: 'merge' })
+ * // (number | string)[]
  * ```
  * @group Object
  */
-export function merge<A, B>(
+export function merge<A, B, const O extends MergeOptions = MergeOptions>(
     target: A,
     source: B,
-    options?: {
-        /**
-         * When `source` has `null` or `undefined` value, do not overwrite `target`
-         *
-         * @default false
-         */
-        skipNulls?: boolean
-        /**
-         * Array merge policy, default is `overwrite`
-         *
-         * Available policies:
-         * * `overwrite` - always replace `target` array with `source`
-         * * `merge` - merge `target` and `source` array values
-         * * `(target, source) => source` - custom array merge function
-         *
-         * @default 'overwrite'
-         */
-        arrayPolicy?:
-            | 'overwrite'
-            | 'merge'
-            | ((target: unknown[], source: unknown[]) => unknown)
-    },
-): A & B {
+    options?: O,
+): MergeResult<A, B, O> {
     const { skipNulls = false, arrayPolicy = 'overwrite' } = options ?? {}
 
     if (isPlainObject(target) && isPlainObject(source)) {
-        const result = { ...target } as Record<string | number | symbol, unknown>
+        const result = { ...target } as Record<
+            string | number | symbol,
+            unknown
+        >
         for (const [key, value] of Object.entries(source)) {
             result[key] = merge(result[key], value, options)
         }
-        return result as unknown as A & B
+        return result as unknown as MergeResult<A, B, O>
     }
 
     if (Array.isArray(target) && Array.isArray(source)) {
         if (arrayPolicy === 'merge') {
-            return target.concat(source) as unknown as A & B
+            return target.concat(source) as unknown as MergeResult<A, B, O>
         } else if (typeof arrayPolicy === 'function') {
-            return arrayPolicy(target, source) as unknown as A & B
+            return arrayPolicy(target, source) as unknown as MergeResult<
+                A,
+                B,
+                O
+            >
         } else {
-            return source as unknown as A & B
+            return source as unknown as MergeResult<A, B, O>
         }
     }
 
     if (skipNulls && source == null) {
-        return target as unknown as A & B
+        return target as unknown as MergeResult<A, B, O>
     }
 
-    return source as unknown as A & B
+    return source as unknown as MergeResult<A, B, O>
 }
 
 /**
@@ -252,6 +293,56 @@ export function clone<T>(value: T, recursive = true): T {
     }
 
     return value
+}
+
+/**
+ * Returns a new object containing only the given keys from `obj`.
+ *
+ * Missing keys are omitted from the result rather than producing
+ * `undefined`-valued properties.
+ *
+ * @example
+ * ```
+ * pick({ a: 1, b: 2, c: 3 }, ['a', 'c'])
+ * // { a: 1, c: 3 }
+ * ```
+ * @group Object
+ */
+export function pick<T extends object, K extends keyof T>(
+    obj: T,
+    keys: ReadonlyArray<K>,
+): Pick<T, K> {
+    const out = {} as Pick<T, K>
+    for (const key of keys) {
+        if (Object.hasOwn(obj, key)) {
+            out[key] = obj[key]
+        }
+    }
+    return out
+}
+
+/**
+ * Returns a new object with the given keys removed from `obj`.
+ *
+ * Own enumerable properties are copied. Inherited properties are not.
+ *
+ * @example
+ * ```
+ * omit({ a: 1, b: 2, c: 3 }, ['b'])
+ * // { a: 1, c: 3 }
+ * ```
+ * @group Object
+ */
+export function omit<T extends object, K extends keyof T>(
+    obj: T,
+    keys: ReadonlyArray<K>,
+): Omit<T, K> {
+    const drop = new Set<PropertyKey>(keys as ReadonlyArray<PropertyKey>)
+    const out: Record<PropertyKey, unknown> = {}
+    for (const [k, v] of Object.entries(obj)) {
+        if (!drop.has(k)) out[k] = v
+    }
+    return out as Omit<T, K>
 }
 
 /**

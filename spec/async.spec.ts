@@ -2,12 +2,12 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 
 import {
-    TimeoutError,
     debounce,
     delay,
     pLimit,
     pSeries,
     retry,
+    TimeoutError,
     throttle,
     timeout,
 } from '../src/index.ts'
@@ -46,9 +46,7 @@ test('debounce', async (t) => {
     await t.test('types', () => {
         // Returned function shares parameter list with input function
         const cb = debounce((_a: number, _b: string) => {}, 100)
-        assertType<[number, string]>()(
-            null as unknown as Parameters<typeof cb>,
-        )
+        assertType<[number, string]>()(null as unknown as Parameters<typeof cb>)
         // .cancel() is exposed on the returned function
         assertType<() => void>()(cb.cancel)
     })
@@ -137,9 +135,7 @@ test('debounce', async (t) => {
 test('throttle', async (t) => {
     await t.test('types', () => {
         const cb = throttle((_a: number) => {}, 100)
-        assertType<[number]>()(
-            null as unknown as Parameters<typeof cb>,
-        )
+        assertType<[number]>()(null as unknown as Parameters<typeof cb>)
         assertType<() => void>()(cb.cancel)
     })
 

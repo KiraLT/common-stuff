@@ -98,21 +98,11 @@ function findIndexMaybeAsync(
  * ```
  * @group Iterable
  */
-export function reduce<
-    I extends Iterable<unknown> | AsyncIterable<unknown>,
-    R,
->(
+export function reduce<I extends Iterable<unknown> | AsyncIterable<unknown>, R>(
     iterable: I,
-    reducer: (
-        acc: IterableItem<I>,
-        value: IterableItem<I>,
-        index: number,
-    ) => R,
+    reducer: (acc: IterableItem<I>, value: IterableItem<I>, index: number) => R,
 ): ReduceResult<I, R>
-export function reduce<
-    I extends Iterable<unknown> | AsyncIterable<unknown>,
-    R,
->(
+export function reduce<I extends Iterable<unknown> | AsyncIterable<unknown>, R>(
     iterable: I,
     reducer: (acc: Awaited<R>, value: IterableItem<I>, index: number) => R,
     initial: Awaited<R>,
@@ -259,21 +249,11 @@ export function map<T, R>(
     input: Iterable<T>,
     mapper: (value: T, index: number) => R,
 ): Iterable<R>
-export function map<
-    K extends PropertyKey,
-    V,
-    K2 extends PropertyKey,
-    V2,
->(
+export function map<K extends PropertyKey, V, K2 extends PropertyKey, V2>(
     input: Record<K, V>,
     mapper: (value: [K, V], index: number) => [K2, V2],
 ): Record<K2, V2>
-export function map<
-    K extends PropertyKey,
-    V,
-    K2 extends PropertyKey,
-    V2,
->(
+export function map<K extends PropertyKey, V, K2 extends PropertyKey, V2>(
     input: Record<K, V>,
     mapper: (value: [K, V], index: number) => Promise<[K2, V2]>,
 ): Promise<Record<K2, V2>>
@@ -305,8 +285,7 @@ export function map(input: unknown, mapper: AnyFn): unknown {
         const resolved = resolveAll(results)
         return isPromise(resolved)
             ? resolved.then(
-                  (entries) =>
-                      new Map(entries as Iterable<[unknown, unknown]>),
+                  (entries) => new Map(entries as Iterable<[unknown, unknown]>),
               )
             : new Map(resolved as Iterable<[unknown, unknown]>)
     }
@@ -387,21 +366,11 @@ export function flatMap<T, R>(
     input: Iterable<T>,
     mapper: (value: T, index: number) => Iterable<R>,
 ): Iterable<R>
-export function flatMap<
-    K extends PropertyKey,
-    V,
-    K2 extends PropertyKey,
-    V2,
->(
+export function flatMap<K extends PropertyKey, V, K2 extends PropertyKey, V2>(
     input: Record<K, V>,
     mapper: (value: [K, V], index: number) => Iterable<[K2, V2]>,
 ): Record<K2, V2>
-export function flatMap<
-    K extends PropertyKey,
-    V,
-    K2 extends PropertyKey,
-    V2,
->(
+export function flatMap<K extends PropertyKey, V, K2 extends PropertyKey, V2>(
     input: Record<K, V>,
     mapper: (value: [K, V], index: number) => Promise<Iterable<[K2, V2]>>,
 ): Promise<Record<K2, V2>>
@@ -451,8 +420,7 @@ export function flatMap(input: unknown, mapper: AnyFn): unknown {
     if (isMap(input)) {
         return isPromise(resolved)
             ? resolved.then(
-                  (g) =>
-                      new Map(flatten(g) as Iterable<[unknown, unknown]>),
+                  (g) => new Map(flatten(g) as Iterable<[unknown, unknown]>),
               )
             : new Map(flatten(resolved) as Iterable<[unknown, unknown]>)
     }
@@ -572,8 +540,7 @@ export function filter(input: unknown, predicate: AnyFn): unknown {
     if (isMap(input)) {
         return isPromise(resolved)
             ? resolved.then(
-                  (d) =>
-                      new Map(select(d) as Iterable<[unknown, unknown]>),
+                  (d) => new Map(select(d) as Iterable<[unknown, unknown]>),
               )
             : new Map(select(resolved) as Iterable<[unknown, unknown]>)
     }
@@ -588,9 +555,7 @@ export function filter(input: unknown, predicate: AnyFn): unknown {
     // Plain object (Record)
     return isPromise(resolved)
         ? resolved.then((d) =>
-              Object.fromEntries(
-                  select(d) as Iterable<[PropertyKey, unknown]>,
-              ),
+              Object.fromEntries(select(d) as Iterable<[PropertyKey, unknown]>),
           )
         : Object.fromEntries(
               select(resolved) as Iterable<[PropertyKey, unknown]>,
@@ -909,9 +874,7 @@ export function toArray<V>(input: V[] | Set<V>): V[]
 export function toArray<K, V>(input: Map<K, V>): [K, V][]
 export function toArray<T>(input: AsyncIterable<T>): Promise<T[]>
 export function toArray<T>(input: Iterable<T>): T[]
-export function toArray<K extends PropertyKey, V>(
-    input: Record<K, V>,
-): [K, V][]
+export function toArray<K extends PropertyKey, V>(input: Record<K, V>): [K, V][]
 export function toArray(input: unknown): unknown {
     if (isArray(input)) return input.slice()
     if (isSet(input)) return Array.from(input)
@@ -1318,9 +1281,7 @@ export function partition(input: unknown, predicate: AnyFn): unknown {
     const decisions = items.map(predicate)
     const resolved = resolveAll(decisions)
 
-    const split = (
-        kept: ReadonlyArray<unknown>,
-    ): [unknown[], unknown[]] => {
+    const split = (kept: ReadonlyArray<unknown>): [unknown[], unknown[]] => {
         const yes: unknown[] = []
         const no: unknown[] = []
         items.forEach((v, i) => {
@@ -1337,10 +1298,10 @@ export function partition(input: unknown, predicate: AnyFn): unknown {
     }
 
     if (isSet(input)) {
-        const wrap = ([y, n]: [unknown[], unknown[]]): [Set<unknown>, Set<unknown>] => [
-            new Set(y),
-            new Set(n),
-        ]
+        const wrap = ([y, n]: [unknown[], unknown[]]): [
+            Set<unknown>,
+            Set<unknown>,
+        ] => [new Set(y), new Set(n)]
         return isPromise(resolved)
             ? resolved.then((d) => wrap(split(d)))
             : wrap(split(resolved))
@@ -1413,10 +1374,11 @@ export function zip(
             const out: unknown[][] = []
             while (true) {
                 const results = await Promise.all(
-                    iters.map((it) =>
-                        Promise.resolve(it.next()) as Promise<
-                            IteratorResult<unknown>
-                        >,
+                    iters.map(
+                        (it) =>
+                            Promise.resolve(it.next()) as Promise<
+                                IteratorResult<unknown>
+                            >,
                     ),
                 )
                 if (results.some((r) => r.done)) return out

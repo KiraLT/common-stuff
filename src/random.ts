@@ -91,17 +91,14 @@ export function shuffle<T>(array: ReadonlyArray<T>): T[] {
     let currentIndex = arrayCopy.length
     let randomIndex = 0
 
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-        // Pick a remaining element...
+    // Fisher–Yates shuffle: swap each element with a random earlier index.
+    while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex)
         currentIndex--
 
-        // And swap it with the current element.
-        ;[arrayCopy[currentIndex], arrayCopy[randomIndex]] = [
-            arrayCopy[randomIndex]!,
-            arrayCopy[currentIndex]!,
-        ]
+        const tmp = arrayCopy[currentIndex] as T
+        arrayCopy[currentIndex] = arrayCopy[randomIndex] as T
+        arrayCopy[randomIndex] = tmp
     }
 
     return arrayCopy

@@ -250,6 +250,22 @@ test('parseQueryString', async (t) => {
     await t.test('removes values without keys', () => {
         assert.deepEqual(parseQueryString('?=1&limit=20'), { limit: ['20'] })
     })
+    await t.test('repeated keys collect into an array', () => {
+        assert.deepEqual(parseQueryString('tag=a&tag=b&tag=c'), {
+            tag: ['a', 'b', 'c'],
+        })
+    })
+    await t.test('ignores parts without `=`', () => {
+        assert.deepEqual(parseQueryString('a=1&novalue&b=2'), {
+            a: ['1'],
+            b: ['2'],
+        })
+    })
+    await t.test('decodes `+` as space', () => {
+        assert.deepEqual(parseQueryString('q=hello+world'), {
+            q: ['hello world'],
+        })
+    })
 })
 
 test('generateQueryString', async (t) => {

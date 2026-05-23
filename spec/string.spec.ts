@@ -168,7 +168,10 @@ test('slugify', async (t) => {
 
     await t.test('strips accents and punctuation', () => {
         assert.equal(slugify('Hello, World!'), 'hello-world')
-        assert.equal(slugify('Árvíztűrő tükörfúrógép'), 'arvizturo-tukorfurogep')
+        assert.equal(
+            slugify('Árvíztűrő tükörfúrógép'),
+            'arvizturo-tukorfurogep',
+        )
     })
     await t.test('camelCase becomes dashed', () => {
         assert.equal(slugify('fooBar'), 'foo-bar')

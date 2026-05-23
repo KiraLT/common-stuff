@@ -110,7 +110,9 @@ test('isNumber', async (t) => {
             assertType<number>()(v)
         }
         // Works as Array.prototype.filter type predicate
-        assertType<number[]>()(([1, 'a', 2] as (number | string)[]).filter(isNumber))
+        assertType<number[]>()(
+            ([1, 'a', 2] as (number | string)[]).filter(isNumber),
+        )
         // Negative: narrowing only fires inside the if-branch
         function check(x: number | string) {
             // @ts-expect-error — outside the guard, x is still number | string
@@ -196,7 +198,7 @@ test('isUndefined', async (t) => {
 
 test('isNullOrUndefined', async (t) => {
     await t.test('types', () => {
-        const v = (5 as number | null | undefined)
+        const v = 5 as number | null | undefined
         if (isNullOrUndefined(v)) {
             assertType<null | undefined>()(v)
         }
@@ -390,10 +392,7 @@ test('isPromise', async (t) => {
     await t.test('rejects thenable that is not a real Promise', () => {
         // biome-ignore lint/suspicious/noThenProperty: deliberate thenable for guard test
         const thenable = { then() {} }
-        assert.equal(
-            isPromise(thenable as unknown as Promise<unknown>),
-            false,
-        )
+        assert.equal(isPromise(thenable as unknown as Promise<unknown>), false)
     })
 })
 
@@ -457,9 +456,15 @@ test('isFunction', async (t) => {
     })
 
     await t.test('checks if is function', () => {
-        assert.equal(isFunction(() => 1), true)
-        // biome-ignore lint/complexity/useArrowFunction: testing recognition of `function` expressions
-        assert.equal(isFunction(function () {}), true)
+        assert.equal(
+            isFunction(() => 1),
+            true,
+        )
+        assert.equal(
+            // biome-ignore lint/complexity/useArrowFunction: testing recognition of `function` expressions
+            isFunction(function () {}),
+            true,
+        )
         assert.equal(isFunction(class {}), true)
         assert.equal(isFunction('fn' as unknown), false)
         assert.equal(isFunction(null as unknown), false)
@@ -513,5 +518,3 @@ test('isInteger', async (t) => {
         assert.equal(isInteger('1' as unknown), false)
     })
 })
-
-

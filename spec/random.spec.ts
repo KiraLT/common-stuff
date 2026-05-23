@@ -74,9 +74,7 @@ test('shuffle', async (t) => {
     await t.test('types', () => {
         assertType<number[]>()(shuffle([1, 2, 3]))
         // Readonly input preserves readonly result
-        assertType<readonly number[]>()(
-            shuffle([1, 2, 3] as readonly number[]),
-        )
+        assertType<readonly number[]>()(shuffle([1, 2, 3] as readonly number[]))
     })
 
     await t.test('shuffles array', () => {

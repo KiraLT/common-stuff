@@ -280,12 +280,16 @@ export function ensureError(value: unknown): Error {
  * ```
  * @group Guard
  */
-export function hasKeys<T, Key extends string | number | symbol>(
+export function hasKeys<T, Key extends PropertyKey>(
     obj: T,
     keys: ReadonlyArray<Key>,
+    // biome-ignore-start lint/suspicious/noExplicitAny: `any` is required here —
+    // `Extract<{ [K]: unknown }, T>` collapses to `never`, but
+    // `Extract<{ [K]: any }, T>` correctly filters union members that contain the keys
 ): obj is T extends { [K in Key]: any }
     ? Extract<{ [K in Key]: any }, T>
     : Extract<{ [K in Key]: unknown }, T> {
+    // biome-ignore-end lint/suspicious/noExplicitAny: see above
     if (isPlainObject(obj) && keys.every((v) => v in obj)) {
         return true
     }

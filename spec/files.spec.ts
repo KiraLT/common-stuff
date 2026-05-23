@@ -51,9 +51,12 @@ test('parseSize', async (t) => {
     await t.test('parses bytes', () => {
         assert.equal(parseSize('10 Bytes'), 10)
     })
-    await t.test('returns undefined when input does not match <number> <unit>', () => {
-        assert.equal(parseSize('zero bytes'), undefined)
-    })
+    await t.test(
+        'returns undefined when input does not match <number> <unit>',
+        () => {
+            assert.equal(parseSize('zero bytes'), undefined)
+        },
+    )
     await t.test('returns undefined for unknown unit', () => {
         assert.equal(parseSize('10 zorps'), undefined)
     })

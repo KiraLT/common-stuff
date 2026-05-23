@@ -43,6 +43,16 @@ test('toFloat', async (t) => {
         assert.equal(toFloat(Number.POSITIVE_INFINITY), undefined)
         assert.equal(toFloat(Number.NEGATIVE_INFINITY), undefined)
     })
+
+    await t.test('returns undefined for unexpected runtime types', () => {
+        // TS forbids these, but JS callers might pass them — function should
+        // not throw and should return `undefined`.
+        assert.equal(toFloat(null as unknown as number), undefined)
+        assert.equal(toFloat(undefined as unknown as number), undefined)
+        assert.equal(toFloat({} as unknown as number), undefined)
+        assert.equal(toFloat([] as unknown as number), undefined)
+        assert.equal(toFloat(true as unknown as number), undefined)
+    })
 })
 
 test('toInt', async (t) => {

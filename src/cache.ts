@@ -74,14 +74,16 @@ export function cache<F extends (...args: any[]) => any>(
         const key = hashCode(args)
         const existing = entries.get(key)
 
-        if (existing && (ttl === undefined || existing.expiresAt > Date.now())) {
+        if (
+            existing &&
+            (ttl === undefined || existing.expiresAt > Date.now())
+        ) {
             touch(key, existing)
             return existing.value
         }
 
         const result = func.apply(this, args)
-        const expiresAt =
-            ttl === undefined ? Infinity : Date.now() + ttl
+        const expiresAt = ttl === undefined ? Infinity : Date.now() + ttl
 
         if (isPromise(result)) {
             // Store the inflight Promise immediately so concurrent calls share it.

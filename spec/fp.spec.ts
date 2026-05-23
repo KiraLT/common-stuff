@@ -24,7 +24,11 @@ test('pipe', async (t) => {
         // Negative: a step that expects `string` when the previous step
         // returned `number` fails overload resolution.
         // @ts-expect-error — incompatible step input type
-        pipe(5, (n) => n + 1, (s: string) => s.length)
+        pipe(
+            5,
+            (n) => n + 1,
+            (s: string) => s.length,
+        )
     })
 
     await t.test('applies pipe', () => {
@@ -176,12 +180,9 @@ test('tryCatch', async (t) => {
         assert.ok((await value) instanceof Error)
     })
     await t.test('default value can differ in type', () => {
-        const value = tryCatch(
-            () => {
-                throw new Error('x')
-            },
-            null as null,
-        )
+        const value = tryCatch(() => {
+            throw new Error('x')
+        }, null as null)
         assert.equal(value, null)
     })
     await t.test('wraps non-Error throw values', () => {
@@ -197,4 +198,3 @@ test('tryCatch', async (t) => {
         assert.equal(await result, 42)
     })
 })
-

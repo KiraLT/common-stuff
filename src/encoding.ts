@@ -4,7 +4,10 @@
  */
 type RuntimeGlobals = {
     Buffer?: {
-        from(input: string, encoding: string): {
+        from(
+            input: string,
+            encoding: string,
+        ): {
             toString(encoding: string): string
         }
     }

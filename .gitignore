@@ -111,3 +111,6 @@ dist
 # Editors
 .idea
 .vscode
+
+# Tests Coverage
+lcov.info

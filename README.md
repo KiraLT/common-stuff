@@ -3,9 +3,11 @@
 [![codecov](https://codecov.io/gh/KiraLT/common-stuff/branch/main/graph/badge.svg?token=E599EPAOPM)](https://codecov.io/gh/KiraLT/common-stuff)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiralt/common-stuff/badge)](https://www.codefactor.io/repository/github/kiralt/common-stuff)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![code style: Biome](https://img.shields.io/badge/code_style-biome-60a5fa.svg)](https://biomejs.dev/)
 
 JavaScript and NodeJS are missing a lot of core functionalities. The goal of this library is to bring a variety of useful helpers on both NodeJS & Browser with strong **TypeScript** typing and **zero dependencies**.
+
+The package is **isomorphic** — every helper runs in browsers, Node, Deno, Bun, and workers. Runtime-specific APIs (e.g. `Buffer`) are feature-detected with portable fallbacks. The build is ESM with `"sideEffects": false`, so unused exports are tree-shaken.
 
 Missing something? Create [feature request](https://github.com/KiraLT/common-stuff/issues/new?assignees=&labels=enhancement&template=feature_request.md&title=)!
 
@@ -28,50 +30,72 @@ yarn add common-stuff
 Import what you need:
 
 ```typescript
-import { isEqual } from 'common-stuff'
+import { isEqual } from "common-stuff";
 
-if (isEqual({'a': 1}, {'a': 1})) {
-    console.log('Hello')
+if (isEqual({ a: 1 }, { a: 1 })) {
+    console.log("Hello");
 }
 ```
 
 > Always import only what is necessary to take full advantage of [tree shaking](https://developers.google.com/web/fundamentals/performance/optimizing-javascript/tree-shaking).
 
-## Load directly in the browser
-
-### Include UMD bundle
-
-Include script from CDN and use `commonStuff` global variable:
-
-```html
-<script src="https://unpkg.com/common-stuff"></script>
-<script>
-  if (commonStuff.isEqual({'a': 1}, {'a': 1})) {
-    console.log('Hello')
-  }
-</script>
-```
-
-### Dynamic import
-
-Use [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import) directly in the browser that returns loaded library wrapped in the promise:
-
-```html
-<script>
-  import('https://unpkg.com/common-stuff?module').then(({ isEqual }) => {
-    if (isEqual({'a': 1}, {'a': 1})) {
-      console.log('Hello')
-    }
-  })
-</script>
-```
-
 ## Examples
+
+### Universal iterable helpers
+
+The `iterable` module provides one set of helpers that work across `Array`, `Set`, `Map`, `Record`, generic `Iterable`, and `AsyncIterable` — preserving the input container type and switching to `Promise` automatically when the callback is async.
+
+Available: `map`, `flatMap`, `filter`, `reduce`, `forEach`, `find`, `some`, `every`, `size`, `toArray`, `take`, `drop`, `partition`, `zip`.
+
+```typescript
+import { map, flatMap, filter, reduce, partition, zip } from "common-stuff";
+
+// Array → Array
+map([1, 2, 3], (v) => v * 2);
+// [2, 4, 6]
+
+// Set → Set (preserves container)
+filter(new Set([1, 2, 3, 4]), (v) => v % 2 === 0);
+// Set { 2, 4 }
+
+// Map → Map (callback receives [k, v])
+map(new Map([["a", 1]]), ([k, v]) => [k.toUpperCase(), v * 10]);
+// Map { 'A' => 10 }
+
+// Record → Record (iterated as [k, v] entries)
+flatMap({ a: 1, b: 2 }, ([k, v]) => (v % 2 ? [[k, v]] : []));
+// { a: 1 }
+
+// Async iterable + async mapper
+async function* gen() {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+await reduce(gen(), (a, b) => a + b);
+// 6
+
+// Partition into matching / non-matching halves
+partition([1, 2, 3, 4], (v) => v % 2 === 0);
+// [[2, 4], [1, 3]]
+
+// Zip element-wise, stopping at the shortest
+zip([1, 2, 3], ["a", "b"]);
+// [[1, 'a'], [2, 'b']]
+```
 
 ### Using FP patterns
 
 ```typescript
-import { pipe, sortBy, deduplicateBy, chunk, ensureArray, groupBy } from 'common-stuff'
+import {
+    pipe,
+    sortBy,
+    deduplicateBy,
+    chunk,
+    ensureArray,
+    groupBy,
+    reduce,
+} from "common-stuff";
 
 const result = pipe(
     [{ value: 4 }, { value: 6 }, { value: 8 }],
@@ -80,8 +104,16 @@ const result = pipe(
     (v) => v.map((o) => ensureArray(o.value)),
     (v) => chunk(v, 2),
     (v) => groupBy(v, (o) => o.length)
-)
+);
 // [ [1, [[[ 8 ]]]],[ 2, [[[ 4 ], [ 6 ]]]] ]
+
+// Using reduce with async iterable
+async function* gen() {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+const total = await reduce(gen(), (a, b) => a + b); // 6
 ```
 
 > With arrow functions you can easily use `pipe` with any function
@@ -97,35 +129,38 @@ CONFIG__ALLOWED_IPS='["127.0.0.1", "localhost"]'
 ```
 
 ```typescript
-import { convertToNested, camelCase } from 'common-stuff'
+import { convertToNested, camelCase } from "common-stuff";
 
 const config = convertToNested(process.env, {
-    separator: '__',
-    transformKey: camelCase
-}).config
+    separator: "__",
+    transformKey: camelCase,
+}).config;
 // { privateKey: 'my key', publicKey: 'my key', allowedIps: ['127.0.0.1', 'localhost'] }
 ```
 
 ### Using Http errors
 
 ```typescript
-import { HttpError, HttpStatusCodes } from 'common-stuff'
+import { HttpError, HttpStatusCodes } from "common-stuff";
 
-app.get('/', function (req, res) {
-    throw new HttpError(HttpStatusCodes.INTERNAL_SERVER_ERROR, 'Some secret error message')
-})
+app.get("/", function (req, res) {
+    throw new HttpError(
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        "Some secret error message"
+    );
+});
 
 // Handle unknown errors
 app.use(function (err, req, res, next) {
     if (err instanceof HttpError) {
         // Log full error message
-        console.error(err.message)
+        console.error(err.message);
 
         // Return safe error message without private details
-        return res.status(err.status).send(err.publicMessage)
+        return res.status(err.status).send(err.publicMessage);
     }
-    next()
-})
+    next();
+});
 ```
 
 > This example returns 500 error message with text `Internal Server Error` and logs private message to console.
@@ -134,13 +169,28 @@ app.use(function (err, req, res, next) {
 ### Common browser helpers
 
 ```typescript
-import { parseCookies, generateCookie, parseQueryString } from 'common-stuff'
+import { parseCookies, generateCookie, parseQueryString } from "common-stuff";
 
-parseCookies(document.cookie)
+parseCookies(document.cookie);
 // {session: '26e761be168533cbf0742f8c295176c7'}
 
-document.cookie = generateCookie('name', 'John', { expires: 7 })
+document.cookie = generateCookie("name", "John", { expires: 7 });
 
-parseQueryString(location.search)
+parseQueryString(location.search);
 // { page: ['1'], limit: ['20']}
 ```
+
+## Migrating from v1 to v2
+
+Breaking changes only:
+
+- **ESM-only.** CJS/UMD entry points removed; `require("common-stuff")` no longer works.
+- **`httpErrorHandler` removed** — inline the middleware (it was a thin `instanceof HttpError` wrapper).
+- **`HttpStatusCodes` / `HttpStatusReasons` are `const` objects, not `enum`s** (required by `erasableSyntaxOnly`). Value reads are unchanged; the *type* `HttpStatusCodes` is gone — use `(typeof HttpStatusCodes)[keyof typeof HttpStatusCodes]` if needed.
+- **Array-only `flatMap` removed.** The universal `flatMap` (iterable module) requires callbacks to return an *iterable* and only passes `(item, index)`.
+- **`parseSize`** returns `number | undefined` instead of `-1`.
+- **`merge<A, B>(target, source): A & B`** — return type is inferred. Explicit `merge<MyShape>(a, b)` calls need to pass both generics or cast.
+- **`hashCode`** integers changed (prefixed with `typeof` to avoid falsy collisions). Invalidate any persisted hashes.
+- **`difference` / `intersection` / `union` / `shuffle`** now correctly return `T[]` for mutable inputs (v1 always returned `ReadonlyArray<T>` due to overload order).
+- **`isArray`** narrows readonly inputs to `ReadonlyArray<T>` (v1 narrowed them to mutable `Array<T>`); runtime switched to `Array.isArray` (fixes cross-realm).
+- **`getByKey`** infers the return type from literal paths. Pass `T` explicitly for dynamic paths.

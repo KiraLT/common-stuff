@@ -1,53 +1,119 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
-    randomInt,
     randomChoice,
-    shuffle,
     randomChoices,
+    randomInt,
     randomString,
-} from '../src'
+    shuffle,
+} from '../src/index.ts'
+import { assertType } from './_types.ts'
 
-describe('randomInt', () => {
-    it('generates random int', () => {
-        const value = randomInt(5, 10)
-        expect(value).toBeGreaterThanOrEqual(5)
-        expect(value).toBeLessThanOrEqual(10)
+test('randomInt', async (t) => {
+    await t.test('types', () => {
+        assertType<number>()(randomInt(1, 10))
+    })
+
+    await t.test('generates random int in range', () => {
+        for (let i = 0; i < 100; i++) {
+            const value = randomInt(5, 10)
+            assert.ok(value >= 5 && value <= 10)
+        }
+    })
+    await t.test('produces multiple distinct values', () => {
+        const seen = new Set<number>()
+        for (let i = 0; i < 200; i++) seen.add(randomInt(1, 10))
+        // With 200 samples over 10 buckets, near-certain to see >5 distinct values
+        assert.ok(seen.size > 5, `expected variety, saw ${seen.size}`)
+    })
+    await t.test('hits both min and max boundaries', () => {
+        const seen = new Set<number>()
+        for (let i = 0; i < 500 && seen.size < 2; i++) {
+            const v = randomInt(0, 1)
+            seen.add(v)
+        }
+        assert.deepEqual([...seen].sort(), [0, 1])
+    })
+    await t.test('rejects min > max', () => {
+        assert.throws(() => randomInt(10, 5), RangeError)
+    })
+    await t.test('min === max returns that value', () => {
+        assert.equal(randomInt(7, 7), 7)
     })
 })
 
-describe('randomChoice', () => {
-    it('gets random element from the array', () => {
-        expect([1, 2, 3]).toContain(randomChoice([1, 2, 3]))
+test('randomChoice', async (t) => {
+    await t.test('types', () => {
+        assertType<number | undefined>()(randomChoice([1, 2, 3]))
+        assertType<string | undefined>()(randomChoice(['a', 'b']))
+    })
+
+    await t.test('gets random element from the array', () => {
+        const val = randomChoice([1, 2, 3])
+        assert.notEqual(val, undefined)
+        assert.ok([1, 2, 3].includes(val as number))
     })
 })
 
-describe('randomChoices', () => {
-    it('gets random element from the array', () => {
-        expect(randomChoices([1, 2, 3], 4).length).toBe(4)
+test('randomChoices', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(randomChoices([1, 2, 3], 4))
+        assertType<string[]>()(randomChoices(['a', 'b'], 2))
     })
 
-    it('works with empty array', () => {
-        expect(randomChoices([], 4).length).toEqual(0)
+    await t.test('gets random element from the array', () => {
+        assert.equal(randomChoices([1, 2, 3], 4).length, 4)
+    })
+    await t.test('works with empty array', () => {
+        assert.equal(randomChoices([], 4).length, 0)
     })
 })
 
-describe('shuffle', () => {
-    it('shuffles array', () => {
+test('shuffle', async (t) => {
+    await t.test('types', () => {
+        assertType<number[]>()(shuffle([1, 2, 3]))
+        // Readonly input preserves readonly result
+        assertType<readonly number[]>()(shuffle([1, 2, 3] as readonly number[]))
+    })
+
+    await t.test('shuffles array', () => {
         const value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        expect(shuffle(value)).not.toEqual(value)
-        expect([...shuffle(value)].sort()).toEqual(value.slice().sort())
+        const shuffled = shuffle(value)
+        assert.notDeepEqual(shuffled, value)
+        assert.deepEqual([...shuffle(value)].sort(), value.slice().sort())
+    })
+    await t.test('does not modify original', () => {
+        const value = [1, 2, 3, 4, 5]
+        const snapshot = value.slice()
+        shuffle(value)
+        assert.deepEqual(value, snapshot)
+    })
+    await t.test('empty array returns empty', () => {
+        assert.deepEqual(shuffle([]), [])
     })
 })
 
-describe('randomString', () => {
-    it('generates random string', () => {
-        expect(randomString(5).length).toBe(5)
+test('randomChoice edge cases', async (t) => {
+    await t.test('returns undefined for empty array', () => {
+        assert.equal(randomChoice([]), undefined)
+    })
+    await t.test('single-element array always returns that element', () => {
+        assert.equal(randomChoice([42]), 42)
+    })
+})
+
+test('randomString', async (t) => {
+    await t.test('types', () => {
+        assertType<string>()(randomString(8))
+        assertType<string>()(randomString(8, { chars: 'abc' }))
     })
 
-    it('supports custom chars', () => {
-        expect(
-            randomString(5, {
-                chars: 'abc',
-            }),
-        ).toMatch(/[abc]{5}/)
+    await t.test('generates random string', () => {
+        assert.equal(randomString(5).length, 5)
+    })
+    await t.test('supports custom chars', () => {
+        const str = randomString(5, { chars: 'abc' })
+        assert.match(str, /[abc]{5}/)
     })
 })

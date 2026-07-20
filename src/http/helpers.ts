@@ -1,4 +1,5 @@
-import { flatMap, ensureArray, Primitive, isNullOrUndefined, isNot } from '../'
+import { ensureArray, isNot, isNullOrUndefined } from '../guards.ts'
+import type { Primitive } from '../types.ts'
 
 /**
  * Generates cookie string
@@ -57,7 +58,9 @@ export function generateCookie(
 
     return [
         `${encodeURIComponent(name)}=${encodeURIComponent(value)}`,
-        expires ? `expires=${new Date(expires * 864e5).toUTCString()}` : '',
+        expires !== undefined
+            ? `expires=${new Date(expires * 864e5).toUTCString()}`
+            : '',
         options?.path ? `path=${options.path}` : '',
         options?.domain ? `domain=${options.domain}` : '',
         options?.secure ? 'secure' : '',
@@ -79,7 +82,7 @@ export function generateCookie(
  * @param cookieString `document.cookie` value
  */
 export function parseCookies(cookieString: string): Record<string, string> {
-    return cookieString.split(/; /).reduce(
+    return cookieString.split(/;\s*/).reduce(
         (prev, cur) => {
             const [name, value] = cur.split('=', 2)
             if (name != null && value != null) {
@@ -117,31 +120,26 @@ export function parseQueryString(
 ): Record<string, string[]> {
     const { separator = '&' } = options ?? {}
 
-    return flatMap(
-        (query[0] === '?' ? query.slice(1) : query)
-            .split(separator)
-            .filter((part) => part.indexOf('=') !== -1),
-        (part) => {
-            const [key = '', value = ''] = part.split('=', 2)
-
-            if (key) {
-                return [
-                    [
-                        decodeURIComponent(key),
-                        [decodeURIComponent(value.replace(/\+/g, ' '))],
-                    ],
-                ] as const
+    const body = query[0] === '?' ? query.slice(1) : query
+    return body
+        .split(separator)
+        .reduce<Record<string, string[]>>((acc, part) => {
+            const eqIdx = part.indexOf('=')
+            if (eqIdx === -1) return acc
+            const rawKey = part.slice(0, eqIdx)
+            if (!rawKey) return acc
+            const key = decodeURIComponent(rawKey)
+            const value = decodeURIComponent(
+                part.slice(eqIdx + 1).replace(/\+/g, ' '),
+            )
+            const existing = acc[key]
+            if (existing) {
+                existing.push(value)
+            } else {
+                acc[key] = [value]
             }
-
-            return []
-        },
-    ).reduce<Record<string, string[]>>(
-        (prev, [key, value]) => ({
-            ...prev,
-            [key]: [...(prev[key] || []), ...value],
-        }),
-        {},
-    )
+            return acc
+        }, {})
 }
 
 /**
@@ -167,16 +165,18 @@ export function generateQueryString(
     },
 ): string {
     const { separator = '&' } = options ?? {}
-    return flatMap(Object.entries(query), ([key, values]) =>
-        ensureArray(values)
-            .filter(isNot(isNullOrUndefined))
-            .map(
-                (v) =>
-                    `${encodeURIComponent(key.toString())}=${encodeURIComponent(
-                        v.toString(),
-                    ).replace(/%20/g, '+')}`,
-            ),
-    ).join(separator)
+    return Object.entries(query)
+        .flatMap(([key, values]) =>
+            ensureArray(values)
+                .filter(isNot(isNullOrUndefined))
+                .map(
+                    (v) =>
+                        `${encodeURIComponent(key.toString())}=${encodeURIComponent(
+                            v.toString(),
+                        ).replace(/%20/g, '+')}`,
+                ),
+        )
+        .join(separator)
 }
 
 /**
@@ -189,7 +189,7 @@ export function generateQueryString(
  * ```
  */
 export function urlToRelative(url: string): string {
-    return `/${url.replace(/^(?:\/\/|[^/]+)*\//, '')}`
+    return `/${url.replace(/^(?:\/\/|[^/]+)*\/?/, '')}`
 }
 
 // /**

@@ -1,207 +1,520 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+
 import {
-    isPlainObject,
-    isArray,
-    isBoolean,
-    isNumber,
-    isString,
-    isError,
-    isNot,
-    isNull,
-    isUndefined,
-    isNullOrUndefined,
-    isEmpty,
+    assertNotError,
     ensureArray,
     ensureError,
     hasKeys,
-    assertNotError,
-} from '../src'
+    isArray,
+    isAsyncIterable,
+    isBoolean,
+    isDate,
+    isEmpty,
+    isError,
+    isFunction,
+    isInteger,
+    isIterable,
+    isMap,
+    isNot,
+    isNull,
+    isNullOrUndefined,
+    isNumber,
+    isPlainObject,
+    isPromise,
+    isRegExp,
+    isSet,
+    isString,
+    isUndefined,
+    toAsyncIterable,
+} from '../src/index.ts'
+import { assertType } from './_types.ts'
 
-describe('isPlainObject', () => {
-    it('checks if is plain object', () => {
-        expect(isPlainObject({ a: 1 })).toBeTruthy()
-        expect(isPlainObject({})).toBeTruthy()
-        expect(isPlainObject({ a: [1, {}] })).toBeTruthy()
-        expect(isPlainObject('a')).toBeFalsy()
-        expect(isPlainObject(1)).toBeFalsy()
-        expect(isPlainObject(new Boolean(false))).toBeFalsy()
-        expect(isPlainObject(new Date())).toBeFalsy()
-        expect(isPlainObject([])).toBeFalsy()
-        expect(isPlainObject(null)).toBeFalsy()
-        expect(isPlainObject(undefined)).toBeFalsy()
-        expect(isPlainObject(new (class A {})())).toBeFalsy()
+test('isPlainObject', async (t) => {
+    await t.test('types', () => {
+        // Default narrows to Record<...> (loses any pre-existing specificity)
+        const unk: unknown = { a: 1 }
+        if (isPlainObject(unk)) {
+            assertType<Record<string | number | symbol, unknown>>()(unk)
+        }
+        // Explicit generic narrows to the requested shape (caller's responsibility)
+        const unk2: unknown = { a: 1 }
+        if (isPlainObject<{ a: number }>(unk2)) {
+            assertType<{ a: number }>()(unk2)
+        }
+    })
+
+    await t.test('checks if is plain object', () => {
+        assert.equal(isPlainObject({ a: 1 }), true)
+        assert.equal(isPlainObject({}), true)
+        assert.equal(isPlainObject({ a: [1, {}] }), true)
+        assert.equal(isPlainObject('a' as unknown), false)
+        assert.equal(isPlainObject(1 as unknown), false)
+        assert.equal(isPlainObject(new Boolean(false) as unknown), false)
+        assert.equal(isPlainObject(new Date() as unknown), false)
+        assert.equal(isPlainObject([] as unknown), false)
+        assert.equal(isPlainObject(null as unknown), false)
+        assert.equal(isPlainObject(undefined as unknown), false)
+        assert.equal(isPlainObject(new (class A {})() as unknown), false)
+    })
+    await t.test('handles Object.create(null) without throwing', () => {
+        assert.equal(isPlainObject(Object.create(null) as unknown), true)
+    })
+    await t.test('rejects Map and Set', () => {
+        assert.equal(isPlainObject(new Map() as unknown), false)
+        assert.equal(isPlainObject(new Set() as unknown), false)
     })
 })
 
-describe('isArray', () => {
-    it('checks if is array', () => {
-        expect(isArray(['a'])).toBeTruthy()
-        expect(isArray('a')).toBeFalsy()
-        expect(isArray({})).toBeFalsy()
+test('isArray', async (t) => {
+    await t.test('types', () => {
+        // Readonly arrays narrow to readonly (mutability preserved)
+        const readonlyOrStr: ReadonlyArray<number> | string = [1, 2, 3]
+        if (isArray(readonlyOrStr)) {
+            assertType<ReadonlyArray<number>>()(readonlyOrStr)
+        }
+        // Mutable arrays narrow to mutable
+        const mutableOrStr: number[] | string = [1, 2, 3]
+        if (isArray(mutableOrStr)) {
+            assertType<number[]>()(mutableOrStr)
+        }
+    })
+
+    await t.test('checks if is array', () => {
+        assert.equal(isArray(['a']), true)
+        assert.equal(isArray('a' as unknown), false)
+        assert.equal(isArray({} as unknown), false)
     })
 })
 
-describe('isBoolean', () => {
-    it('checks if is boolean', () => {
-        expect(isBoolean(true)).toBeTruthy()
-        expect(isBoolean(false)).toBeTruthy()
-        expect(isBoolean('a')).toBeFalsy()
-        expect(isBoolean({})).toBeFalsy()
+test('isBoolean', async (t) => {
+    await t.test('types', () => {
+        const v: boolean | null = null as boolean | null
+        if (isBoolean(v)) {
+            assertType<boolean>()(v)
+        }
+    })
+
+    await t.test('checks if is boolean', () => {
+        assert.equal(isBoolean(true), true)
+        assert.equal(isBoolean(false), true)
+        assert.equal(isBoolean('a' as unknown), false)
+        assert.equal(isBoolean({} as unknown), false)
     })
 })
 
-describe('isNumber', () => {
-    it('checks if is number', () => {
-        expect(isNumber(1)).toBeTruthy()
-        expect(isNumber(15.59)).toBeTruthy()
-        expect(isNumber('1')).toBeFalsy()
-        expect(isNumber(new Date())).toBeFalsy()
+test('isNumber', async (t) => {
+    await t.test('types', () => {
+        const v: number | string = 5
+        if (isNumber(v)) {
+            assertType<number>()(v)
+        }
+        // Works as Array.prototype.filter type predicate
+        assertType<number[]>()(
+            ([1, 'a', 2] as (number | string)[]).filter(isNumber),
+        )
+        // Negative: narrowing only fires inside the if-branch
+        function check(x: number | string) {
+            // @ts-expect-error — outside the guard, x is still number | string
+            assertType<number>()(x)
+            if (isNumber(x)) assertType<number>()(x)
+        }
+        void check
+    })
+
+    await t.test('checks if is number', () => {
+        assert.equal(isNumber(1), true)
+        assert.equal(isNumber(15.59), true)
+        assert.equal(isNumber('1' as unknown), false)
+        assert.equal(isNumber(new Date() as unknown), false)
     })
 })
 
-describe('isString', () => {
-    it('checks if is string', () => {
-        expect(isString('aa')).toBeTruthy()
-        expect(isString(String(1))).toBeTruthy()
-        expect(isString(['a'])).toBeFalsy()
-        expect(isString(1)).toBeFalsy()
-        expect(isString(new Date())).toBeFalsy()
+test('isString', async (t) => {
+    await t.test('types', () => {
+        const v: number | string = 'a'
+        if (isString(v)) {
+            assertType<string>()(v)
+        }
+    })
+
+    await t.test('checks if is string', () => {
+        assert.equal(isString('aa'), true)
+        assert.equal(isString(String(1)), true)
+        assert.equal(isString(['a'] as unknown), false)
+        assert.equal(isString(1 as unknown), false)
+        assert.equal(isString(new Date() as unknown), false)
     })
 })
 
-describe('isError', () => {
-    it('checks if is error', () => {
-        expect(isError(new Error('abc'))).toBeTruthy()
-        expect(isError(new Object('abc'))).toBeFalsy()
+test('isError', async (t) => {
+    await t.test('types', () => {
+        const v: Error | string = '' as Error | string
+        if (isError(v)) {
+            assertType<Error>()(v)
+        }
+        // isNot inverts the predicate
+        const arr: (number | string)[] = [1, 'a']
+        assertType<string[]>()(arr.filter(isNot(isNumber)))
     })
 
-    it('supports negative filtering', () => {
+    await t.test('checks if is error', () => {
+        assert.equal(isError(new Error('abc')), true)
+        assert.equal(isError(new Object('abc') as unknown), false)
+    })
+    await t.test('supports negative filtering', () => {
         const err = new Error('ab')
-        expect(['a', 'b', err].filter(isNot(isError))).toEqual(['a', 'b'])
+        assert.deepEqual(['a', 'b', err].filter(isNot(isError)), ['a', 'b'])
     })
 })
 
-describe('isNull', () => {
-    it('checks if is null', () => {
-        expect(isNull(null)).toBeTruthy()
-        expect(isNull(undefined)).toBeFalsy()
+test('isNull', async (t) => {
+    await t.test('types', () => {
+        const v: number | null = null as number | null
+        if (isNull(v)) {
+            assertType<null>()(v)
+        }
+    })
+
+    await t.test('checks if is null', () => {
+        assert.equal(isNull(null), true)
+        assert.equal(isNull(undefined as unknown), false)
     })
 })
 
-describe('isUndefined', () => {
-    it('checks if is undefined', () => {
-        expect(isUndefined(undefined)).toBeTruthy()
-        expect(isUndefined(null)).toBeFalsy()
+test('isUndefined', async (t) => {
+    await t.test('types', () => {
+        const v: number | undefined = undefined
+        if (isUndefined(v)) {
+            assertType<undefined>()(v)
+        }
+    })
+
+    await t.test('checks if is undefined', () => {
+        assert.equal(isUndefined(undefined), true)
+        assert.equal(isUndefined(null as unknown), false)
     })
 })
 
-describe('isNullOrUndefined', () => {
-    it('checks if is null or undefined', () => {
-        expect(isNullOrUndefined(undefined)).toBeTruthy()
-        expect(isNullOrUndefined(null)).toBeTruthy()
-        expect(isNullOrUndefined('')).toBeFalsy()
+test('isNullOrUndefined', async (t) => {
+    await t.test('types', () => {
+        const v = 5 as number | null | undefined
+        if (isNullOrUndefined(v)) {
+            assertType<null | undefined>()(v)
+        }
+    })
+
+    await t.test('checks if is null or undefined', () => {
+        assert.equal(isNullOrUndefined(undefined), true)
+        assert.equal(isNullOrUndefined(null), true)
+        assert.equal(isNullOrUndefined('' as unknown), false)
     })
 })
 
-describe('isEmpty', () => {
-    it('supports null and undefined', () => {
-        expect(isEmpty(null)).toBeFalsy()
-        expect(isEmpty(undefined)).toBeFalsy()
+test('isEmpty', async (t) => {
+    await t.test('types', () => {
+        // Returns boolean (not a type predicate)
+        assertType<boolean>()(isEmpty(0))
+        assertType<boolean>()(isEmpty({}))
     })
 
-    it('supports boolean', () => {
-        expect(isEmpty(false)).toBeTruthy()
-        expect(isEmpty(true)).toBeFalsy()
+    await t.test('null and undefined are empty', () => {
+        assert.equal(isEmpty(null), true)
+        assert.equal(isEmpty(undefined), true)
     })
-
-    it('supports string', () => {
-        expect(isEmpty('')).toBeTruthy()
-        expect(isEmpty(' ')).toBeFalsy()
+    await t.test('Set and Map use .size', () => {
+        assert.equal(isEmpty(new Set()), true)
+        assert.equal(isEmpty(new Set([1])), false)
+        assert.equal(isEmpty(new Map()), true)
+        assert.equal(isEmpty(new Map([['a', 1]])), false)
     })
-
-    it('supports number', () => {
-        expect(isEmpty(0)).toBeTruthy()
-        expect(isEmpty(-1)).toBeFalsy()
+    await t.test('supports boolean', () => {
+        assert.equal(isEmpty(false), true)
+        assert.equal(isEmpty(true), false)
     })
-
-    it('supports array', () => {
-        expect(isEmpty([])).toBeTruthy()
-        expect(isEmpty([1])).toBeFalsy()
+    await t.test('supports string', () => {
+        assert.equal(isEmpty(''), true)
+        assert.equal(isEmpty(' '), false)
     })
-
-    it('supports object', () => {
-        expect(isEmpty({})).toBeTruthy()
-        expect(isEmpty({ a: 1 })).toBeFalsy()
+    await t.test('supports number', () => {
+        assert.equal(isEmpty(0), true)
+        assert.equal(isEmpty(-1 as unknown), false)
     })
-
-    it('supports other', () => {
-        expect(isEmpty(new Date())).toBeFalsy()
+    await t.test('supports array', () => {
+        assert.equal(isEmpty([]), true)
+        assert.equal(isEmpty([1]), false)
+    })
+    await t.test('supports object', () => {
+        assert.equal(isEmpty({}), true)
+        assert.equal(isEmpty({ a: 1 }), false)
+    })
+    await t.test('supports other', () => {
+        assert.equal(isEmpty(new Date() as unknown), false)
     })
 })
 
-describe('ensureArray', () => {
-    it('returns original value if array', () => {
+test('ensureArray', async (t) => {
+    await t.test('types', () => {
+        assertType<string[]>()(ensureArray('hi'))
+        assertType<string[]>()(ensureArray(['a', 'b']))
+        assertType<number[]>()(ensureArray(5 as number | number[]))
+    })
+
+    await t.test('returns original value if array', () => {
         const value = [1]
-        expect(ensureArray(value)).toBe(value)
+        assert.equal(ensureArray(value), value)
     })
-
-    it('wraps to array if value is not an array', () => {
-        expect(ensureArray(1)).toEqual([1])
+    await t.test('wraps to array if value is not an array', () => {
+        assert.deepEqual(ensureArray(1), [1])
     })
 })
 
-describe('ensureError', () => {
-    it('returns original value if error', () => {
+test('ensureError', async (t) => {
+    await t.test('types', () => {
+        assertType<Error>()(ensureError('boom'))
+        assertType<Error>()(ensureError(new Error('x')))
+    })
+
+    await t.test('returns original value if error', () => {
         const value = new Error()
-        expect(ensureError(value)).toBe(value)
+        assert.equal(ensureError(value), value)
     })
-
-    it('wraps to error if value is not an error', () => {
-        expect(ensureError('a')).toBeInstanceOf(Error)
+    await t.test('wraps to error if value is not an error', () => {
+        assert.ok(ensureError('a') instanceof Error)
     })
 })
 
-describe('hasKeys', () => {
-    it('checks object keys', () => {
-        expect(hasKeys({ a: 1, b: 1 }, ['a', 'b'])).toBeTruthy()
-        expect(hasKeys({ a: 1, b: 1 }, ['c', 'b'])).toBeFalsy()
+test('hasKeys', async (t) => {
+    await t.test('types', () => {
+        const obj: unknown = { a: 1, b: 2 }
+        if (hasKeys(obj, ['a', 'b'])) {
+            assertType<{ a: unknown; b: unknown }>()(obj)
+        }
+        // Narrows discriminated unions
+        const union: { a: number } | { b: number } = { a: 1 }
+        if (hasKeys(union, ['a'])) {
+            assertType<{ a: number }>()(union)
+        }
     })
 
-    it('Supports object', () => {
+    await t.test('checks object keys', () => {
+        assert.equal(hasKeys({ a: 1, b: 1 }, ['a', 'b']), true)
+        assert.equal(hasKeys({ a: 1, b: 1 }, ['c', 'b']), false)
+    })
+    await t.test('Supports object', () => {
         const a = { a: 1, b: 1 }
-
         if (hasKeys(a, ['a', 'b'])) {
-            expect(a.a.toFixed(1)).toBe(a.b.toFixed(1))
+            assert.equal(a.a.toFixed(1), a.b.toFixed(1))
         }
     })
-
-    it('Supports unknown', () => {
+    await t.test('Supports unknown', () => {
         const a = { a: 1, b: 1 } as unknown
-
         if (hasKeys(a, ['a', 'b'])) {
-            expect(a.a).toBe(a.b)
-
-            // @ts-expect-error
-            expect(a.a.toFixed(1)).toBe('1.0')
+            const aObj = a as { a: number; b: number }
+            assert.equal(aObj.a, aObj.b)
+            assert.equal(aObj.a.toFixed(1), '1.0')
         }
     })
-
-    it('Supports unions', () => {
+    await t.test('Supports unions', () => {
         const a = { a: 1, b: 1 } as { a: number } | { b: number }
-
         if (hasKeys(a, ['a'])) {
-            expect(a.a.toFixed(1)).toBe('1.0')
+            assert.equal(a.a.toFixed(1), '1.0')
         }
     })
 })
 
-describe('assertNotError', () => {
-    it('returns original value if not error', () => {
-        const value = new Object()
-
-        expect(assertNotError(value)).toBe(value)
+test('assertNotError', async (t) => {
+    await t.test('types', () => {
+        assertType<number>()(assertNotError(5 as number | Error))
     })
 
-    it('throws value if error', () => {
-        expect(() => assertNotError(new Error('abc'))).toThrowError('abc')
+    await t.test('returns original value if not error', () => {
+        const value = new Object()
+        assert.equal(assertNotError(value), value)
+    })
+    await t.test('throws value if error', () => {
+        assert.throws(() => assertNotError(new Error('abc')), /abc/)
+    })
+})
+
+test('isSet', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isSet(v)) {
+            assertType<Set<unknown>>()(v)
+        }
+    })
+
+    await t.test('checks if is Set', () => {
+        assert.equal(isSet(new Set([1, 2])), true)
+        assert.equal(isSet([1, 2] as unknown), false)
+        assert.equal(isSet(null as unknown), false)
+    })
+})
+
+test('isMap', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isMap(v)) {
+            assertType<Map<unknown, unknown>>()(v)
+        }
+    })
+
+    await t.test('checks if is Map', () => {
+        assert.equal(isMap(new Map()), true)
+        assert.equal(isMap({} as unknown), false)
+        assert.equal(isMap(null as unknown), false)
+    })
+})
+
+test('isPromise', async (t) => {
+    await t.test('types', () => {
+        // Union narrowing preserves the inner T via covariant intersection
+        // (using `declare` to avoid flow-analysis pre-narrowing from the initializer)
+        function check(promiseOrNum: Promise<number> | number) {
+            if (isPromise(promiseOrNum)) {
+                assertType<Promise<number>>()(promiseOrNum)
+            }
+        }
+        void check
+        // Bare unknown narrows to Promise<unknown>
+        const unk: unknown = null
+        if (isPromise(unk)) {
+            assertType<Promise<unknown>>()(unk)
+        }
+    })
+
+    await t.test('checks if is Promise', () => {
+        assert.equal(isPromise(Promise.resolve(5)), true)
+        assert.equal(isPromise(5 as unknown as Promise<number>), false)
+        assert.equal(isPromise({} as unknown as Promise<unknown>), false)
+    })
+    await t.test('rejects thenable that is not a real Promise', () => {
+        // biome-ignore lint/suspicious/noThenProperty: deliberate thenable for guard test
+        const thenable = { then() {} }
+        assert.equal(isPromise(thenable as unknown as Promise<unknown>), false)
+    })
+})
+
+test('isIterable', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isIterable(v)) {
+            assertType<Iterable<unknown>>()(v)
+        }
+    })
+
+    await t.test('checks if is iterable', () => {
+        assert.equal(isIterable([1, 2, 3]), true)
+        assert.equal(isIterable(new Set([1])), true)
+        assert.equal(isIterable('abc'), true)
+        assert.equal(isIterable({} as unknown), false)
+        assert.equal(isIterable(null as unknown), false)
+        assert.equal(isIterable(42 as unknown), false)
+    })
+})
+
+test('isAsyncIterable', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isAsyncIterable(v)) {
+            assertType<AsyncIterable<unknown>>()(v)
+        }
+    })
+
+    await t.test('checks if is async iterable', () => {
+        async function* gen() {
+            yield 1
+        }
+        assert.equal(isAsyncIterable(gen()), true)
+        assert.equal(isAsyncIterable([1, 2, 3] as unknown), false)
+        assert.equal(isAsyncIterable(null as unknown), false)
+    })
+})
+
+test('toAsyncIterable', async (t) => {
+    await t.test('types', () => {
+        assertType<AsyncIterable<number>>()(toAsyncIterable([1, 2, 3]))
+    })
+
+    await t.test('wraps iterable as async iterable', async () => {
+        const out: number[] = []
+        for await (const v of toAsyncIterable([1, 2, 3])) {
+            out.push(v)
+        }
+        assert.deepEqual(out, [1, 2, 3])
+    })
+})
+
+test('isFunction', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isFunction(v)) {
+            // biome-ignore lint/suspicious/noExplicitAny: matches guard signature
+            assertType<(...args: any[]) => any>()(v)
+        }
+    })
+
+    await t.test('checks if is function', () => {
+        assert.equal(
+            isFunction(() => 1),
+            true,
+        )
+        assert.equal(
+            // biome-ignore lint/complexity/useArrowFunction: testing recognition of `function` expressions
+            isFunction(function () {}),
+            true,
+        )
+        assert.equal(isFunction(class {}), true)
+        assert.equal(isFunction('fn' as unknown), false)
+        assert.equal(isFunction(null as unknown), false)
+    })
+})
+
+test('isDate', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isDate(v)) {
+            assertType<Date>()(v)
+        }
+    })
+
+    await t.test('checks if is Date', () => {
+        assert.equal(isDate(new Date()), true)
+        assert.equal(isDate(new Date('invalid')), true) // still a Date instance
+        assert.equal(isDate(Date.now() as unknown), false)
+        assert.equal(isDate('2024' as unknown), false)
+    })
+})
+
+test('isRegExp', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isRegExp(v)) {
+            assertType<RegExp>()(v)
+        }
+    })
+
+    await t.test('checks if is RegExp', () => {
+        assert.equal(isRegExp(/abc/), true)
+        assert.equal(isRegExp('/abc/' as unknown), false)
+    })
+})
+
+test('isInteger', async (t) => {
+    await t.test('types', () => {
+        const v: unknown = null
+        if (isInteger(v)) {
+            assertType<number>()(v)
+        }
+    })
+
+    await t.test('checks if is integer', () => {
+        assert.equal(isInteger(0), true)
+        assert.equal(isInteger(-7), true)
+        assert.equal(isInteger(1.5), false)
+        assert.equal(isInteger(Number.NaN), false)
+        assert.equal(isInteger(Number.POSITIVE_INFINITY), false)
+        assert.equal(isInteger('1' as unknown), false)
     })
 })

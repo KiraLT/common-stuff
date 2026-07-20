@@ -43,6 +43,8 @@ export function isString<T>(value: T | string): value is string {
 /**
  * Checks if value is `array`, acts as a typescript safeguard.
  *
+ * Preserves the readonly/mutable distinction of the narrowed type.
+ *
  * @example
  * ```
  * [[1], ['b'], false].filter(isArray)
@@ -50,10 +52,12 @@ export function isString<T>(value: T | string): value is string {
  * ```
  * @group Guard
  */
+export function isArray<T>(value: T | Array<T>): value is Array<T>
 export function isArray<T>(
-    value: T | Array<T> | ReadonlyArray<T>,
-): value is Array<T> {
-    return value instanceof Array
+    value: T | ReadonlyArray<T>,
+): value is ReadonlyArray<T>
+export function isArray(value: unknown): boolean {
+    return Array.isArray(value)
 }
 
 /**
@@ -127,20 +131,23 @@ export function isNullOrUndefined<T>(
 }
 
 /**
- * Checks if the value is an empty.
+ * Checks if the value is empty.
  *
- * Supports following types:
- * * Object - `false` if object is empty
- * * Array - `false` if array is empty
- * * Boolean - `false` if boolean is `false`
- * * Number - `false` if string is `''`
- * * Number - `false` if number is `0`
+ * Supported types and what counts as empty:
+ * * `null` / `undefined` — empty
+ * * `boolean` — `false` is empty
+ * * `string` — `''` is empty
+ * * `number` — `0` is empty (`NaN` is not)
+ * * `Array` — empty array
+ * * `Set` / `Map` — `.size === 0`
+ * * Plain object — no own enumerable keys
+ * * Anything else — not empty
  *
  * @group Guard
  */
 export function isEmpty<T>(value: T): boolean {
     if (value == null) {
-        return false
+        return true
     }
 
     if (typeof value === 'boolean') {
@@ -155,8 +162,12 @@ export function isEmpty<T>(value: T): boolean {
         return value === 0
     }
 
-    if (value instanceof Array) {
+    if (Array.isArray(value)) {
         return value.length === 0
+    }
+
+    if (value instanceof Set || value instanceof Map) {
+        return value.size === 0
     }
 
     if (isPlainObject(value)) {
@@ -199,23 +210,10 @@ export function isNot<T, S extends T>(
 export function isPlainObject<T = Record<string | number | symbol, unknown>>(
     value: unknown,
 ): value is T {
-    const isObject = (v: unknown): v is object =>
-        String(v) === '[object Object]'
+    if (value === null || typeof value !== 'object') return false
 
-    if (!isObject(value)) return false
-
-    const constructor = value.constructor
-    if (constructor === undefined) return true
-
-    const prototype = constructor.prototype
-    if (!isObject(prototype)) return false
-
-    // Checks if it is not a class
-    if (!prototype.hasOwnProperty('isPrototypeOf')) {
-        return false
-    }
-
-    return true
+    const proto = Object.getPrototypeOf(value)
+    return proto === null || proto === Object.prototype
 }
 
 /**
@@ -254,7 +252,7 @@ export function assertNotError<T>(value: Error | T): T {
 export function ensureArray<T>(value: T | T[]): T[]
 export function ensureArray<T>(value: T | ReadonlyArray<T>): ReadonlyArray<T>
 export function ensureArray<T>(value: T | readonly T[]): ReadonlyArray<T> {
-    return value instanceof Array ? value : [value]
+    return Array.isArray(value) ? value : [value as T]
 }
 
 /**
@@ -282,18 +280,162 @@ export function ensureError(value: unknown): Error {
  * ```
  * @group Guard
  */
-export function hasKeys<
-    T extends unknown,
-    Key extends string | number | symbol,
->(
+export function hasKeys<T, Key extends PropertyKey>(
     obj: T,
     keys: ReadonlyArray<Key>,
+    // biome-ignore-start lint/suspicious/noExplicitAny: `any` is required here —
+    // `Extract<{ [K]: unknown }, T>` collapses to `never`, but
+    // `Extract<{ [K]: any }, T>` correctly filters union members that contain the keys
 ): obj is T extends { [K in Key]: any }
     ? Extract<{ [K in Key]: any }, T>
     : Extract<{ [K in Key]: unknown }, T> {
+    // biome-ignore-end lint/suspicious/noExplicitAny: see above
     if (isPlainObject(obj) && keys.every((v) => v in obj)) {
         return true
     }
 
     return false
+}
+
+/**
+ * Checks if value is `AsyncIterable`, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isAsyncIterable((async function* () { yield 5 })())
+ * // true
+ * isAsyncIterable([1, 2, 3])
+ * // false
+ * ```
+ */
+export function isAsyncIterable<T = unknown>(
+    v: unknown,
+): v is AsyncIterable<T> {
+    return (
+        !!v &&
+        typeof (v as { [Symbol.asyncIterator]?: unknown })[
+            Symbol.asyncIterator
+        ] === 'function'
+    )
+}
+
+export async function* toAsyncIterable<T>(
+    iterable: Iterable<T>,
+): AsyncIterable<T> {
+    for (const item of iterable) {
+        yield item
+    }
+}
+
+/**
+ * Checks if value is `Iterable`, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isIterable([1, 2, 3])
+ * // true
+ * isIterable((async function* () { yield 5 })())
+ * // false
+ * ```
+ */
+export function isIterable<T = unknown>(v: unknown): v is Iterable<T> {
+    return (
+        !!v &&
+        typeof (v as { [Symbol.iterator]?: unknown })[Symbol.iterator] ===
+            'function'
+    )
+}
+
+/**
+ * Checks if value is `Promise`, acts as a typescript safeguard.
+ *
+ * Narrows `T | Promise<T>` to `Promise<T>` cleanly in normal usage; works
+ * with `Array.prototype.filter` to extract promises from a mixed array.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isPromise(Promise.resolve(5))   // true
+ * isPromise(5)                    // false
+ *
+ * function check(v: Promise<number> | number) {
+ *     if (isPromise(v)) {
+ *         // v: Promise<number>
+ *     }
+ * }
+ *
+ * const arr: (Promise<number> | number)[] = [...]
+ * arr.filter(isPromise) // Promise<number>[]
+ * ```
+ */
+export function isPromise<T>(v: T | Promise<T>): v is Promise<T> {
+    return v instanceof Promise
+}
+
+export function isSet<T = unknown>(v: unknown): v is Set<T> {
+    return v instanceof Set
+}
+
+export function isMap<K = unknown, V = unknown>(v: unknown): v is Map<K, V> {
+    return v instanceof Map
+}
+
+/**
+ * Checks if value is a function, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isFunction(() => 1)  // true
+ * isFunction('abc')    // false
+ * ```
+ */
+// biome-ignore lint/suspicious/noExplicitAny: function guard accepts any function shape
+export function isFunction(v: unknown): v is (...args: any[]) => any {
+    return typeof v === 'function'
+}
+
+/**
+ * Checks if value is a `Date` instance, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isDate(new Date())  // true
+ * isDate('2024')      // false
+ * ```
+ */
+export function isDate(v: unknown): v is Date {
+    return v instanceof Date
+}
+
+/**
+ * Checks if value is a `RegExp`, acts as a typescript safeguard.
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isRegExp(/abc/)   // true
+ * isRegExp('/abc/') // false
+ * ```
+ */
+export function isRegExp(v: unknown): v is RegExp {
+    return v instanceof RegExp
+}
+
+/**
+ * Checks if value is an integer (whole, finite number).
+ *
+ * @group Guard
+ * @example
+ * ```
+ * isInteger(42)    // true
+ * isInteger(1.5)   // false
+ * isInteger('42')  // false
+ * ```
+ */
+export function isInteger(v: unknown): v is number {
+    return Number.isInteger(v)
 }

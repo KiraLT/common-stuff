@@ -1,18 +1,27 @@
-import { createDummyLogger, Logger } from '../src'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 
-describe('createDummyLogger', () => {
-    it('does nothing', () => {
+import { createDummyLogger, type Logger } from '../src/index.ts'
+import { assertType } from './_types.ts'
+
+test('createDummyLogger', async (t) => {
+    await t.test('types', () => {
         const logger = createDummyLogger()
+        assertType<Logger>()(logger)
+    })
 
-        expect(logger.debug('Hello')).toBeUndefined()
-        expect(logger.error('Hello')).toBeUndefined()
-        expect(logger.info('Hello')).toBeUndefined()
-        expect(logger.warn('Hello')).toBeUndefined()
+    await t.test('does nothing', () => {
+        const logger = createDummyLogger()
+        assert.equal(logger.debug('Hello'), undefined)
+        assert.equal(logger.error('Hello'), undefined)
+        assert.equal(logger.info('Hello'), undefined)
+        assert.equal(logger.warn('Hello'), undefined)
     })
 })
 
-describe('Logger', () => {
-    it('support console', () => {
+test('Logger', async (t) => {
+    await t.test('support console', () => {
         const _logger: Logger = console
+        assert.ok(_logger)
     })
 })

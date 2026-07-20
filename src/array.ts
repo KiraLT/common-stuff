@@ -1,4 +1,4 @@
-import { hashCode, ensureArray } from '.'
+import { ensureArray } from './guards.ts'
 
 /**
  * Creates sort callback which can be used for `array.sort` input.
@@ -35,7 +35,7 @@ export function sortByCb<T>(
                 return doCompare(keyA.getTime(), keyB.getTime())
             }
 
-            if (keyA instanceof Array && keyB instanceof Array) {
+            if (Array.isArray(keyA) && Array.isArray(keyB)) {
                 const res = keyA
                     .map((v, i) => doCompare(v, keyB[i]))
                     .filter((v) => v !== 0)
@@ -76,14 +76,14 @@ export function sortBy<T>(
     arr: readonly T[],
     key?: (item: T) => unknown,
 ): readonly T[]
-export function sortBy<T, A extends ReadonlyArray<T>>(
-    arr: A,
+export function sortBy<T>(
+    arr: ReadonlyArray<T>,
     key: (item: T) => unknown = (v) => v,
-): A {
+): T[] {
     return arr
         .map((v, i) => [v, i] as const)
         .sort(sortByCb(([v, i]) => [key(v), i]))
-        .map((v) => v[0]) as unknown as A
+        .map((v) => v[0])
 }
 
 /**
@@ -148,6 +148,10 @@ export function generateRange(
         step = 1
     }
 
+    if (step === 0) {
+        throw new RangeError('generateRange step must not be 0')
+    }
+
     if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
         return []
     }
@@ -158,56 +162,6 @@ export function generateRange(
     }
 
     return result
-}
-
-/**
- * Calls a defined callback function on each element of an array. Then, flattens the result into
- * a new array.
- * This is identical to a map followed by flat with depth 1.
- *
- * Use [Array.flatMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap) if possible or polyfill globally:
- *
- * ```
- * Array.prototype.flatMap = function(callback) {
- *     return flatMap(this, callback)
- * }
- * ```
- *
- * @example
- * ```
- * const arr1 = [1, 2, 3, 4]
- *
- * arr1.map(x => [x * 2])
- * // [[2], [4], [6], [8]]
- *
- * flatMap(arr1, x => [x * 2])
- * // [2, 4, 6, 8]
- *
- * // only one level is flattened
- * flatMap(arr1, x => [[x * 2]])
- * // [[2], [4], [6], [8]]
- * ```
- * @group Array
- * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
- * @param array any array
- * @param callback A function that accepts up to three arguments. The flatMap method calls the callback function one time for each element in the array.
- */
-export function flatMap<T, U>(
-    array: T[],
-    callback: (item: T, index: number, array: T[]) => U | readonly U[],
-): U[]
-export function flatMap<T, U>(
-    array: readonly T[],
-    callback: (item: T, index: number, array: readonly T[]) => U | readonly U[],
-): readonly U[]
-export function flatMap<T, U>(
-    array: readonly T[],
-    callback: (item: T, index: number, array: T[]) => U | readonly U[],
-): readonly U[] {
-    return array.reduce(
-        (acc, v, index) => acc.concat(callback(v, index, array as T[])),
-        [] as U[],
-    )
 }
 
 type FlatArray<Arr, Depth extends number> = {
@@ -266,7 +220,7 @@ type FlatArray<Arr, Depth extends number> = {
  * // [1, 2, 3, 4, 5, 6]
  * ```
  * @group Array
- * @tutorial https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat
  * @param depth The maximum recursion depth
  */
 export function flatten<A extends unknown[], D extends number = 1>(
@@ -286,7 +240,7 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
     if (d > 0) {
         return array.reduce<unknown[]>(
             (acc, val) =>
-                acc.concat(val instanceof Array ? flatten(val, d - 1) : val),
+                acc.concat(Array.isArray(val) ? flatten(val, d - 1) : val),
             [],
         ) as FlatArray<A, D>[]
     }
@@ -307,10 +261,13 @@ export function flatten<A extends readonly unknown[], D extends number = 1>(
  */
 export function chunk<T>(array: T[], size: number): T[][]
 export function chunk<T>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     size: number,
-): ReadonlyArray<ReadonlyArray<T>>
+): readonly (readonly T[])[]
 export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
+    if (size < 1 || !Number.isInteger(size)) {
+        throw new RangeError('chunk size must be a positive integer')
+    }
     return array.reduce((acc, _, i) => {
         if (i % size === 0) {
             acc.push(array.slice(i, i + size))
@@ -320,15 +277,20 @@ export function chunk<T>(array: ReadonlyArray<T>, size: number): T[][] {
 }
 
 /**
- * Groups an array based on callback return value
+ * Groups an array's items into `[key, values]` entries, keyed by the
+ * callback's return value.
+ *
+ * Internally backed by a `Map` keyed on the raw callback value, so:
+ *
+ * - Object/array keys use identity (two equal-but-different object instances
+ *   are distinct groups). For value equality, return a primitive key.
+ * - Functions, symbols, and circular references work (no `JSON.stringify`).
+ * - Entries are returned in first-seen order.
  *
  * @example
  * ```
  * groupBy([6.1, 4.2, 6.3], Math.floor)
- * // [ [4, [4.2]], [6, [6.1, 6.3]] ]
- *
- * groupBy(['one', 'two', 'three'], v => [v.length, v.includes('a')])
- * // [ [[5, false], ['three']], [[3, false], ['one', 'two']] ]
+ * // [ [6, [6.1, 6.3]], [4, [4.2]] ]
  * ```
  * @group Array
  */
@@ -337,30 +299,24 @@ export function groupBy<T, G>(
     keyCallback: (value: T) => G,
 ): [G, T[]][]
 export function groupBy<T, G>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     keyCallback: (value: T) => G,
-): ReadonlyArray<[G, T[]]>
+): readonly [G, readonly T[]][]
 export function groupBy<T, G>(
     array: ReadonlyArray<T>,
     keyCallback: (value: T) => G,
 ): [G, T[]][] {
-    return Object.values(
-        array.reduce(
-            (prev, cur) => {
-                const key = keyCallback(cur)
-                const keyHash = hashCode(keyCallback(cur))
-
-                if (keyHash in prev) {
-                    prev[keyHash]?.[1].push(cur)
-                } else {
-                    prev[keyHash] = [key, [cur]]
-                }
-
-                return prev
-            },
-            {} as Record<number, [G, T[]]>,
-        ),
-    )
+    const groups = new Map<G, T[]>()
+    for (const item of array) {
+        const key = keyCallback(item)
+        const existing = groups.get(key)
+        if (existing) {
+            existing.push(item)
+        } else {
+            groups.set(key, [item])
+        }
+    }
+    return [...groups]
 }
 
 /**
@@ -383,25 +339,24 @@ export function indexBy<T>(
     keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
 ): Record<string, T[]>
 export function indexBy<T>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
-): Record<string, ReadonlyArray<T>>
+): Record<string, readonly T[]>
 export function indexBy<T>(
     array: ReadonlyArray<T>,
     keyCallback: (value: T) => string | number | ReadonlyArray<string | number>,
 ): Record<string, T[]> {
     return array.reduce(
-        (prev, cur) => {
-            return ensureArray(keyCallback(cur)).reduce((prev2, key) => {
-                if (key in prev) {
-                    prev2[key]?.push(cur)
+        (acc, cur) =>
+            ensureArray(keyCallback(cur)).reduce((acc2, key) => {
+                const existing = acc2[key]
+                if (existing) {
+                    existing.push(cur)
                 } else {
-                    prev2[key] = [cur]
+                    acc2[key] = [cur]
                 }
-
-                return prev
-            }, prev)
-        },
+                return acc2
+            }, acc),
         {} as Record<string, T[]>,
     )
 }
@@ -417,9 +372,9 @@ export function indexBy<T>(
  * @group Array
  */
 export function deduplicate<T>(array: T[]): T[]
-export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T>
-export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
-    return deduplicateBy(array, (v) => v)
+export function deduplicate<T>(array: readonly T[]): readonly T[]
+export function deduplicate<T>(array: ReadonlyArray<T>): T[] {
+    return deduplicateBy(array as T[], (v) => v)
 }
 
 /**
@@ -434,17 +389,13 @@ export function deduplicate<T>(array: ReadonlyArray<T>): ReadonlyArray<T> {
  */
 export function deduplicateBy<T>(array: T[], key: (value: T) => unknown): T[]
 export function deduplicateBy<T>(
-    array: ReadonlyArray<T>,
+    array: readonly T[],
     key: (value: T) => unknown,
-): ReadonlyArray<T>
+): readonly T[]
 export function deduplicateBy<T>(
     array: ReadonlyArray<T>,
     key: (value: T) => unknown,
-): ReadonlyArray<T>
-export function deduplicateBy<T>(
-    array: ReadonlyArray<T>,
-    key: (value: T) => unknown,
-): ReadonlyArray<T> {
+): T[] {
     const prims = {
         boolean: {} as Record<string | number | symbol, boolean>,
         number: {} as Record<string | number | symbol, boolean>,
@@ -458,14 +409,13 @@ export function deduplicateBy<T>(
         const item = key(rawItem) as string | number | symbol
         const type = typeof item
         if (type in prims) {
-            if (item in prims[type as Prim]) {
-                return false
-            } else {
-                return (prims[type as Prim][item] = true)
-            }
-        } else {
-            return objs.indexOf(item) !== -1 ? false : objs.push(item)
+            if (item in prims[type as Prim]) return false
+            prims[type as Prim][item] = true
+            return true
         }
+        if (objs.indexOf(item) !== -1) return false
+        objs.push(item)
+        return true
     })
 }
 
@@ -483,15 +433,15 @@ export function deduplicateBy<T>(
  * @group Array
  */
 export function difference<T, T2>(
-    array: ReadonlyArray<T>,
+    array: T[],
     values: ReadonlyArray<T2>,
     key?: (value: T | T2) => unknown,
-): ReadonlyArray<T>
-export function difference<T, T2>(
-    array: T[],
-    values: T2[],
-    key?: (value: T) => unknown,
 ): T[]
+export function difference<T, T2>(
+    array: readonly T[],
+    values: ReadonlyArray<T2>,
+    key?: (value: T | T2) => unknown,
+): readonly T[]
 export function difference<T, T2>(
     array: ReadonlyArray<T>,
     values: ReadonlyArray<T2>,
@@ -510,11 +460,11 @@ export function difference<T, T2>(
  * ```
  * @group Array
  */
+export function intersection<T>(values: T[][], key?: (value: T) => unknown): T[]
 export function intersection<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key?: (value: T) => unknown,
-): ReadonlyArray<T>
-export function intersection<T>(values: T[][], key?: (value: T) => unknown): T[]
+): readonly T[]
 export function intersection<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key: (value: T) => unknown = (v) => v,
@@ -537,11 +487,11 @@ export function intersection<T>(
  * ```
  * @group Array
  */
+export function union<T>(values: T[][], key?: (value: T) => unknown): T[]
 export function union<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key?: (value: T) => unknown,
-): ReadonlyArray<T>
-export function union<T>(values: T[][], key?: (value: T) => unknown): T[]
+): readonly T[]
 export function union<T>(
     values: ReadonlyArray<ReadonlyArray<T>>,
     key: (value: T) => unknown = (v) => v,
@@ -601,7 +551,7 @@ export function includesAll<T, T2>(
  * const index = findIndex(obj, v => v.name = 'abc')
  * // 0
  * ```
- * @param predicate find calls predicate once for each element of the array, in ascending
+ * @param compare find calls predicate once for each element of the array, in ascending
  * order, until it finds one where predicate returns true. If such an element is found,
  * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
  * @group Array
@@ -617,4 +567,47 @@ export function findIndex<T>(
     }
 
     return -1
+}
+
+/**
+ * Returns a new array with `null` and `undefined` values removed.
+ *
+ * The element type is narrowed via `NonNullable<T>`. Other falsy values
+ * (`0`, `''`, `false`, `NaN`) are preserved — use `array.filter(Boolean)`
+ * or a custom predicate if you want full falsy removal.
+ *
+ * @example
+ * ```
+ * compact([1, null, 2, undefined, 3])
+ * // [1, 2, 3]
+ * ```
+ * @group Array
+ */
+export function compact<T>(array: ReadonlyArray<T>): NonNullable<T>[] {
+    return array.filter((v): v is NonNullable<T> => v != null)
+}
+
+/**
+ * Counts the number of items grouped by the callback's return value.
+ *
+ * Internally backed by a `Map` keyed on the raw callback value — same
+ * identity semantics as [[groupBy]].
+ *
+ * @example
+ * ```
+ * countBy(['apple', 'banana', 'avocado'], v => v[0])
+ * // [ ['a', 2], ['b', 1] ]
+ * ```
+ * @group Array
+ */
+export function countBy<T, G>(
+    array: ReadonlyArray<T>,
+    keyCallback: (value: T) => G,
+): [G, number][] {
+    const counts = new Map<G, number>()
+    for (const item of array) {
+        const key = keyCallback(item)
+        counts.set(key, (counts.get(key) ?? 0) + 1)
+    }
+    return [...counts]
 }

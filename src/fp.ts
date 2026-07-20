@@ -1,4 +1,4 @@
-import { ensureError } from '.'
+import { ensureError } from './guards.ts'
 
 class Placeholder {
     __PLACEHOLDER__ = '__PLACEHOLDER__'
@@ -631,9 +631,10 @@ export function tryCatch<T, T2>(
 export function tryCatch<T, T2>(callback: () => T, defaultValue: T2): T | T2
 export function tryCatch<T, T2>(
     callback: () => T,
-    defaultValue?: T2,
+    ...rest: [T2?]
 ): T | T2 | Error | Promise<T | T2 | Error> {
-    const defaultValueProvided = arguments.length === 2
+    const defaultValueProvided = rest.length > 0
+    const defaultValue = rest[0]
 
     const handleError = (err: unknown) => {
         const error = ensureError(err)
@@ -645,7 +646,7 @@ export function tryCatch<T, T2>(
 
     try {
         const result = callback()
-        if (typeof Promise !== 'undefined' && result instanceof Promise) {
+        if (result instanceof Promise) {
             return result.catch(handleError)
         }
 

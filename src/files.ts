@@ -1,4 +1,4 @@
-import { findIndex } from '.'
+import { findIndex } from './array.ts'
 
 /**
  * Converts bytes number to string representation (e.g. `15.25 GB`).
@@ -10,15 +10,16 @@ import { findIndex } from '.'
  * ```
  */
 export function formatBytes(bytes: number, decimals: number = 2): string {
-    if (bytes <= 0) return '0 Bytes'
+    if (!Number.isFinite(bytes) || bytes <= 0) return '0 Bytes'
 
     const k = 1024
     const dm = decimals < 0 ? 0 : decimals
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    const rawIndex = Math.floor(Math.log(bytes) / Math.log(k))
+    const i = Math.min(Math.max(rawIndex, 0), sizes.length - 1)
 
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+    return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`
 }
 
 /**
@@ -26,14 +27,18 @@ export function formatBytes(bytes: number, decimals: number = 2): string {
  *
  * @example
  * ```
- * parseSize('15.53 MB')
- * // 16288832
+ * parseSize('15.53 MB')      // 16288832
+ * parseSize('zero bytes')    // undefined
+ * parseSize('10 zorps')      // undefined
  * ```
- * @returns parsed bytes or `-1` on fail
+ * @returns parsed bytes, or `undefined` if the input doesn't match
+ * `<number> <unit>` or the unit is unknown
  */
-export function parseSize(value: string): number {
+export function parseSize(value: string): number | undefined {
     const [_, rawSize, rawUnit] =
         value.match(/^(\d+(?:[.]\d+|))\s*([a-z]+)$/i) ?? []
+
+    if (!rawSize || !rawUnit) return undefined
 
     const k = 1024
     const units = [
@@ -48,22 +53,18 @@ export function parseSize(value: string): number {
         ['yb'],
     ]
 
-    if (rawSize && rawUnit) {
-        const size = parseFloat(rawSize)
-        const unit = rawUnit.toLowerCase()
+    const size = parseFloat(rawSize)
+    const unit = rawUnit.toLowerCase()
+    let index = findIndex(units, (v) => v.indexOf(unit) !== -1)
+    if (index === -1) return undefined
 
-        let index = findIndex(units, (v) => v.indexOf(unit) !== -1)
-
-        let bytes = size
-        while (index > 0) {
-            bytes = bytes * k
-            index--
-        }
-
-        return bytes
+    let bytes = size
+    while (index > 0) {
+        bytes = bytes * k
+        index--
     }
 
-    return 0
+    return bytes
 }
 
 /**
